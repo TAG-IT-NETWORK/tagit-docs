@@ -19,7 +19,7 @@ Status: Planning | In Progress | Review | Complete
 
 ## Verification
 - [ ] Build passes
-- [ ] Tests pass
+- [ ] Tests pass  
 - [ ] Coverage ≥85%
 - [ ] Slither clean
 
