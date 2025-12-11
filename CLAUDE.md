@@ -1,618 +1,338 @@
-# CLAUDE.md — Master Prompt for Claude Code
+# CLAUDE.md — tagit-docs
 
-[**CLAUDE.md**](http://CLAUDE.md) | TAG IT Network | **Version 3.0** | December 2025 | *Federated Multi-Repo Edition*
-
----
-
-# 📋 HOW TO USE THIS FILE
+> Project memory file for Claude Code. Automatically loaded on every session.
 
 ---
 
-# 🌐 MULTI-REPO CONTEXT (FEDERATED MODEL)
+## Project Identity
 
-<aside>
-🔗
-
-**MASTER PROMPT**: This file is the central source of truth hosted in `tagit-docs`. Each of the 12 repos inherits these rules. Repo-specific behavior is loaded from agent modules in `tagit-docs/agents/`.
-
-</aside>
-
-## Repo Detection
-
-**First action in any session:** Identify which repo you're in from the file tree.
-
-| If you're in... | Your focus is... | Agent Module |
-| --- | --- | --- |
-| tagit-contracts | Smart contracts, Foundry, Solidity | [`contracts-agent.md`](http://contracts-agent.md) |
-| tagit-l2 | OP Stack infra, Docker, devops | [`l2-agent.md`](http://l2-agent.md) |
-| tagit-bridge | CCIP adapters, cross-chain | [`bridge-agent.md`](http://bridge-agent.md) |
-| tagit-services | Backend APIs, TypeScript, auth | [`services-agent.md`](http://services-agent.md) |
-| tagit-indexer | Event indexing, Graph/Goldsky | [`indexer-agent.md`](http://indexer-agent.md) |
-| tagit-security | Audits, slither, threat models | [`security-agent.md`](http://security-agent.md) |
-| tagit-dashboard | Admin console, React, governance UI | [`dashboard-agent.md`](http://dashboard-agent.md) |
-| tagit-mobile | ORACULAR scanner, Kotlin/Swift | [`mobile-agent.md`](http://mobile-agent.md) |
-| tagit-sdk | JS/Kotlin/Swift SDKs, CLI tools | [`sdk-agent.md`](http://sdk-agent.md) |
-| tagit-hardware | NFC/PQC specs, hardware protocols | [`hardware-agent.md`](http://hardware-agent.md) |
-| tagit-docs | Markdown, diagrams, Wiki exports | [`docs-agent.md`](http://docs-agent.md) |
-| tagit-governance | SOPs, RFCs, policies | [`governance-agent.md`](http://governance-agent.md) |
-
-## Agent Inheritance
-
-```
-tagit-docs/[CLAUDE.md](http://CLAUDE.md) (this file — MASTER)
-    ↓ inherits
-tagit-docs/agents/{repo}-[agent.md](http://agent.md) (specialized rules)
-    ↓ referenced by
-{repo}/[CLAUDE.md](http://CLAUDE.md) (thin local pointer)
-```
-
-**Rule:** Agent modules **extend** this master prompt — they never override security requirements.
+| Field | Value |
+|-------|-------|
+| **Repository** | `tagit-docs` |
+| **Role** | Support Repo #5 of 12 |
+| **Purpose** | Documentation + examples for TAG IT Network / ORACULS stack |
+| **Primary Language** | Markdown |
+| **Code Samples** | Solidity, TypeScript, Kotlin, Swift, Bash |
+| **Doc Framework** | Docusaurus / MkDocs (TBD) |
 
 ---
 
-# 🔗 CROSS-REPO COMMUNICATION
+## Architecture Context
 
-<aside>
-⚠️
+TAG IT Network is a **Web3 supply-chain authentication platform** using NFC-bound Digital Twins for verifiable authenticity, ownership, and status tracking.
 
-**COORDINATION PROTOCOL**: When your task touches multiple repos, follow this protocol to prevent drift and blocked work.
-
-</aside>
-
-## When Working Across Repos
-
-1. **Document the dependency** in your local `tasks/[TODO.md](http://TODO.md)`
-2. **Create GitHub issue** in target repo with label `cross-repo`
-3. **Reference format**: `Blocked by: tagit-{repo}#{issue}`
-4. **Never assume** another repo's state — verify via GitHub
-
-## TODO Hierarchy
+### ORACULS Stack
 
 ```
-1. Check tasks/[TODO.md](http://TODO.md) in THIS repo first
-2. Cross-reference: tagit-docs/todos/[MASTER-TODO.md](http://MASTER-TODO.md)
-3. If blocked, check upstream dependencies in GitHub issues
+┌─────────────────────────────────────────────────────────────────┐
+│                        ORACULS STACK                            │
+│   Oracle-Augmented Chain for Universal Logistics Security       │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
+│  │  TAGIT L2   │  │   EigenDA   │  │     CCIP Interop        │  │
+│  │  (OP Stack) │  │     (DA)    │  │   (Cross-chain)         │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                    Ethereum Settlement Layer                     │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌───────────────────────┐  ┌─────────────────────────────────┐ │
+│  │    Private Registry   │  │       Public Registry           │ │
+│  │   (Defense/Gov Data)  │  │    (Consumer Products)          │ │
+│  └───────────────────────┘  └─────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## Central TODO Aggregation
+### Deployment Targets
 
-The master TODO lives in `tagit-docs/todos/[MASTER-TODO.md](http://MASTER-TODO.md)` and is auto-synced weekly from all repos via GitHub Action.
+| Environment | Network | Purpose |
+|-------------|---------|---------|
+| **Dev** | OP Sepolia | Local development + testing |
+| **Stage** | OP Sepolia | Production-like integration testing |
+| **Prod** | OP Mainnet | Live deployment (future) |
 
 ---
 
-# 🧠 AGENT WORKFLOW (FOLLOW THIS ORDER)
+## Repository Map (12 Consolidated)
 
-<aside>
-⚠️
+### Core Repositories (6)
 
-**CRITICAL**: Claude Code performs best when you **plan before coding**. Never jump straight to implementation. Follow this workflow for every task.
+| Repo | Purpose | Key Outputs |
+|------|---------|-------------|
+| `tagit-contracts` | All smart contracts | Solidity, ABIs, deploy scripts |
+| `tagit-l2` | OP Stack rollup infrastructure | Chain config, sequencer |
+| `tagit-bridge` | CCIP cross-chain adapters | Bridge contracts, relayers |
+| `tagit-services` | Backend APIs + AI orchestrator | REST/GraphQL APIs |
+| `tagit-indexer` | Event indexing (Graph/Goldsky) | Subgraphs, queries |
+| `tagit-security` | Audits, formal verification | Audit reports, proofs |
 
-</aside>
+### Support Repositories (6)
 
-## Phase 1: UNDERSTAND (Read First, Code Never)
-
-```
-1. Read relevant files (use tab-completion for paths)
-2. Ask clarifying questions if requirements are ambiguous
-3. Use subagents to investigate specific questions
-4. DO NOT write any code yet
-```
-
-## Phase 2: PLAN (Think Hard)
-
-```
-1. Create a written plan in a scratchpad file (tasks/[TODO.md](http://TODO.md))
-2. Use "think hard" or "ultrathink" for complex problems
-3. Identify attack vectors and edge cases BEFORE coding
-4. Get human approval on the plan
-5. STILL no code — just the plan
-```
-
-## Phase 3: IMPLEMENT (One File at a Time)
-
-```
-1. Implement solution following the approved plan
-2. Write tests FIRST (TDD) when possible
-3. Run tests after each file change
-4. Commit frequently with descriptive messages
-5. Use subagents to verify implementations
-```
-
-## Phase 4: VERIFY (Never Trust First Output)
-
-```
-1. Run full test suite
-2. Run slither for security analysis
-3. Check gas targets
-4. Have a subagent review for STRIDE threats
-5. Update [TODO.md](http://TODO.md) with completion status
-```
+| Repo | Purpose | Key Outputs |
+|------|---------|-------------|
+| `tagit-dashboard` | Admin console + governance | React app |
+| `tagit-mobile` | ORACULAR mobile scanner app | iOS/Android apps |
+| `tagit-sdk` | JS/Kotlin/Swift SDKs + CLI | NPM/Maven/Swift packages |
+| `tagit-hardware` | NFC/PQC specifications | Hardware specs, firmware |
+| `tagit-docs` | Documentation + examples | **YOU ARE HERE** |
+| `tagit-governance` | SOPs, RFCs, policies | Process documents |
 
 ---
 
-# 📁 PROJECT STRUCTURE
+## Smart Contract Modules (6)
 
-<aside>
-📂
-
-**REPO-SPECIFIC**: The structure below varies by repo. Detect which repo you're in and reference the appropriate layout from `tagit-docs/wiki/[02-repository-organization.md](http://02-repository-organization.md)`.
-
-</aside>
-
-## Common Layout Pattern
-
-```
-tagit-{repo}/
-├── [CLAUDE.md](http://CLAUDE.md)              ← Thin pointer to master (tagit-docs)
-├── tasks/
-│   └── [TODO.md](http://TODO.md)            ← Local scratchpad
-├── src/                   ← Source code
-├── test/                  ← Tests
-├── script/                ← Deployment scripts (if applicable)
-├── docs/                  ← Local docs
-└── 
-```
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| **TAGITCore** | Asset NFT + Lifecycle + Verification | `mint()`, `bind()`, `verify()`, `transfer()` |
+| **TAGITAccess** | BIDGES badges + role-based access | `grantRole()`, `revokeRole()`, `hasRole()` |
+| **TAGITRecovery** | AIRP + quarantine | `initiateRecovery()`, `quarantine()`, `release()` |
+| **TAGITGovernor** | Multi-house DAO governance | `propose()`, `vote()`, `execute()` |
+| **TAGITTreasury** | Protocol funds management | `deposit()`, `withdraw()`, `allocate()` |
+| **TAGITPrograms** | Rewards, Customs, Recalls | `createProgram()`, `enroll()`, `claim()` |
 
 ---
 
-# 🎯 MISSION CONTEXT
+## Asset Lifecycle States
 
-## What TAG IT Does
-
-- Creates **Digital Twins** (NFTs) representing physical assets
-- Binds NFC/hardware tags to on-chain identity via cryptographic hashes
-- Tracks asset lifecycle: manufacture → distribution → ownership → end-of-life
-- Enables multi-signal verification (5+ signals required per check)
-- Serves defense, enterprise, and consumer supply chain use cases
-
-## The ORACULS Stack
-
-```
-Applications    → ORACULAR mobile app, Admin Console, Partner APIs
-Gateway         → tagit-services (Auth, API routing, AI orchestration)
-Ledger (L2)     → TAGIT L2 (OP Stack + EigenDA) ← YOU ARE HERE
-Settlement      → Ethereum L1 (escrow, timelocks)
-Interop         → Chainlink CCIP (cross-chain messaging)
-Private Ledger  → Hyperledger Besu (gov/mil data)
+```mermaid
+stateDiagram-v2
+    [*] --> MINTED
+    MINTED --> BOUND: NFC chip assigned
+    BOUND --> ACTIVATED: Chip verified
+    ACTIVATED --> CLAIMED: Ownership transfer
+    CLAIMED --> RECYCLED: End of life
+    BOUND --> FLAGGED: Dispute
+    ACTIVATED --> FLAGGED: Dispute
+    CLAIMED --> FLAGGED: Dispute
+    FLAGGED --> ACTIVATED: Resolved - cleared
+    FLAGGED --> RECYCLED: Resolved - decommission
 ```
 
-## Key Terminology (MEMORIZE)
+### State Definitions
+
+| State | Description | Triggers |
+|-------|-------------|----------|
+| **MINTED** | NFT exists on-chain, no physical binding yet | `mint()` called |
+| **BOUND** | Cryptographically linked to NFC chip | `bind()` with chip signature |
+| **ACTIVATED** | Chip verified, asset operational | First successful `verify()` |
+| **CLAIMED** | Ownership transferred to end user | `transfer()` completed |
+| **FLAGGED** | Frozen due to fraud/dispute/recall | `flag()` by authorized role |
+| **RECYCLED** | Permanently deactivated (terminal) | `recycle()` — irreversible |
+
+---
+
+## Glossary (Key Terminology)
 
 | Term | Definition |
-| --- | --- |
-| **Digital Twin** | NFT representing a physical asset's on-chain identity |
-| **ORACULAR** | Mobile/web verification scanner app |
-| **BIDGES** | Badge system for identity + capability management |
-| **AIRP** | AI Recovery Protocol for lost/stolen asset handling |
-| **PQC** | Post-Quantum Cryptography (future hooks, not MVP) |
+|------|------------|
+| **ORACULS** | Oracle-Augmented Chain for Universal Logistics Security — full stack name |
+| **Digital Twin** | Cryptographic NFT representing a physical asset's identity, state, and history |
+| **BIDGES** | Badge-based Identity for Decentralized Governance and Enterprise Security |
+| **ORACULAR** | Mobile scanner app for NFC verification and asset interaction |
+| **AIRP** | Asset Identity Recovery Protocol — handles lost/stolen/disputed assets |
+| **PQC** | Post-Quantum Cryptography — future-proofing against quantum attacks |
+| **Binding** | Cryptographic linkage between on-chain NFT and physical NFC chip |
+| **Verification** | Challenge-response proof that physical chip matches on-chain record |
 
 ---
 
-# ✅ [TODO.md](http://TODO.md) TEMPLATE (CREATE THIS FILE)
+## Documentation Structure
 
-<aside>
-📝
+```
+tagit-docs/
+├── CLAUDE.md                    # This file (Claude Code context)
+├── README.md                    # Repo overview + quickstart
+├── package.json                 # Dependencies + scripts
+├── tasks/                       # Claude Code task definitions
+│   ├── TODO.md
+│   ├── new-contract-doc.md
+│   ├── new-api-endpoint.md
+│   ├── glossary-update.md
+│   └── architecture-diagram.md
+├── docs/
+│   ├── index.md                 # Landing page
+│   ├── getting-started/
+│   │   ├── quickstart.md        # 5-min setup guide
+│   │   ├── installation.md      # Full installation details
+│   │   └── first-verification.md
+│   ├── architecture/
+│   │   ├── overview.md          # System overview
+│   │   ├── oraculs-stack.md     # Stack deep-dive
+│   │   └── data-flow.md         # Data flow diagrams
+│   ├── contracts/
+│   │   ├── index.md             # Contracts overview
+│   │   ├── tagit-core.md
+│   │   ├── tagit-access.md
+│   │   ├── tagit-recovery.md
+│   │   ├── tagit-governor.md
+│   │   ├── tagit-treasury.md
+│   │   └── tagit-programs.md
+│   ├── api/
+│   │   ├── overview.md
+│   │   ├── authentication.md
+│   │   └── endpoints/
+│   │       ├── assets.md
+│   │       ├── verification.md
+│   │       └── programs.md
+│   ├── sdk/
+│   │   ├── overview.md
+│   │   ├── javascript.md
+│   │   ├── kotlin.md
+│   │   └── swift.md
+│   └── glossary.md
+└── examples/
+    ├── mint-and-bind/
+    │   ├── README.md
+    │   └── index.ts
+    ├── verify-asset/
+    │   ├── README.md
+    │   └── index.ts
+    └── transfer-ownership/
+        ├── README.md
+        └── index.ts
+```
 
-**IMPORTANT**: Create `tasks/[TODO.md](http://TODO.md)` at session start. Use it as your working scratchpad. Check items off as you complete them. This improves Claude's focus on complex tasks.
+---
 
-</aside>
+## Documentation Standards
+
+### Markdown Conventions
+
+| Element | Format | Example |
+|---------|--------|---------|
+| **Diagrams** | Mermaid code blocks | ` ```mermaid ` |
+| **Code** | Language-specified blocks | ` ```solidity ` |
+| **Cross-refs** | Relative paths | `[TAGITCore](./contracts/tagit-core.md)` |
+| **API endpoints** | Method + path | `POST /api/v1/assets/verify` |
+| **Warnings** | Blockquote + emoji | `> **Warning**: ...` |
+| **Tips** | Blockquote + emoji | `> **Tip**: ...` |
+| **Security** | Blockquote + emoji | `> **Security**: ...` |
+
+### Code Sample Template
+
+When documenting a function, use this structure:
 
 ```markdown
-# Current Task: [TASK NAME]
-Date: YYYY-MM-DD
-Status: Planning | In Progress | Review | Complete
+## functionName
 
-## Objective
-[One sentence describing what we're building]
+Brief description of what this function does.
 
-## Plan (Approved: Yes/No)
-- [ ] Step 1: [Description]
-- [ ] Step 2: [Description]
-- [ ] Step 3: [Description]
+### Parameters
 
-## Files to Modify
-- [ ] `src/core/TAGITCore.sol` — [what changes]
-- [ ] `test/unit/TAGITCore.t.sol` — [what tests]
-
-## Security Checklist
-- [ ] STRIDE threat model complete
-- [ ] ReentrancyGuard on all state-changing functions
-- [ ] Checks-Effects-Interactions pattern followed
-- [ ] Custom errors (no string reverts)
-- [ ] Input validation on ALL parameters
-- [ ] Events emit for ALL state changes
-
-## Verification
-- [ ] `forge build` — compiles without warnings
-- [ ] `forge test` — all tests pass
-- [ ] `forge coverage` — ≥85% coverage
-- [ ] `slither .` — 0 high/critical findings
-- [ ] Gas targets met
-
-## Notes
-[Working notes, decisions, blockers]
-```
-
----
-
-# 🔐 SECURITY REQUIREMENTS (NON-NEGOTIABLE)
-
-<aside>
-⛔
-
-**BLOCKING**: Code that violates these rules MUST be rejected. No exceptions. Security review has blocking authority.
-
-</aside>
-
-## 1. Checks-Effects-Interactions (ALWAYS)
-
-```solidity
-function claim(uint256 tokenId, address newOwner) external nonReentrant {
-    // ✅ CHECKS (all validation first)
-    if (!_exists(tokenId)) revert TokenNotFound(tokenId);
-    if (_assets[tokenId].state != State.ACTIVATED) revert InvalidState(tokenId, _assets[tokenId].state, State.ACTIVATED);
-    if (newOwner == address(0)) revert ZeroAddress();
-    
-    // ✅ EFFECTS (state changes before external calls)
-    _assets[tokenId].owner = newOwner;
-    _assets[tokenId].state = State.CLAIMED;
-    _assets[tokenId].claimedAt = uint64(block.timestamp);
-    
-    // ✅ INTERACTIONS (external calls LAST)
-    emit StateChanged(tokenId, State.ACTIVATED, State.CLAIMED, msg.sender);
-}
-```
-
-## 2. ReentrancyGuard on ALL State-Changing Functions
-
-```solidity
-import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
-contract TAGITCore is ERC721, ReentrancyGuard {
-    function mint(...) external nonReentrant { ... }
-    function bindTag(...) external nonReentrant { ... }
-    function transfer(...) external nonReentrant { ... }
-}
-```
-
-## 3. BIDGES Capability Checks (Zero Trust)
-
-```solidity
-modifier onlyWithCapability(uint256 capId) {
-    if (!ITAGITAccess(accessContract).hasCapability(msg.sender, capId)) {
-        revert Unauthorized(msg.sender, capId);
-    }
-    _;
-}
-
-// Usage:
-function mint(...) external onlyWithCapability(CAP_MINT) nonReentrant { ... }
-```
-
-## 4. Custom Errors ONLY (Gas Efficient)
-
-```solidity
-// ❌ NEVER DO THIS
-require(condition, "Some long string error message");
-
-// ✅ ALWAYS DO THIS
-error InvalidState(uint256 tokenId, State current, State required);
-error Unauthorized(address caller, uint256 requiredCapability);
-error TagAlreadyBound(bytes32 tagHash);
-error InvalidTransition(State from, State to);
-```
-
-## 5. Input Validation on EVERY Parameter
-
-```solidity
-function bindTag(uint256 tokenId, bytes32 tagHash) external {
-    if (tokenId == 0) revert InvalidTokenId();
-    if (tagHash == bytes32(0)) revert InvalidTagHash();
-    if (_tagToToken[tagHash] != 0) revert TagAlreadyBound(tagHash);
-    if (!_exists(tokenId)) revert TokenNotFound(tokenId);
-    // ...
-}
-```
-
-## 6. STRIDE Threat Model (Apply to ALL Code)
-
-| Threat | Question | Mitigation |
+| Name | Type | Description |
 | --- | --- | --- |
-| **S**poofing | Can identity be faked? | BIDGES capability checks |
-| **T**ampering | Can data be modified? | Immutable state + events |
-| **R**epudiation | Can actions be denied? | On-chain event logging |
-| **I**nformation Disclosure | Can data leak? | Private chain for sensitive data |
-| **D**enial of Service | Can system be halted? | Gas limits, pausable |
-| **E**levation of Privilege | Can roles be escalated? | Soulbound badges, timelocks |
+| `tokenId` | `uint256` | The asset's token ID |
+| `data` | `bytes` | Optional calldata |
 
----
+### Returns
 
-# 📋 SMART CONTRACT SPECIFICATIONS
-
-## Asset Lifecycle State Machine (LifecycleLib.sol)
-
-```solidity
-enum State {
-    NONE,       // 0 - Default/not created
-    MINTED,     // 1 - NFT exists, no tag
-    BOUND,      // 2 - Tag cryptographically linked
-    ACTIVATED,  // 3 - QA passed, ready for distribution
-    CLAIMED,    // 4 - Owned by end consumer
-    FLAGGED,    // 5 - Lost/stolen/recall
-    RECYCLED    // 6 - End of life
-}
-```
-
-### Valid Transitions ONLY:
-
-```
-NONE → MINTED        (mint)
-MINTED → BOUND       (bindTag)
-BOUND → ACTIVATED    (activate)
-ACTIVATED → CLAIMED  (claim)
-CLAIMED → FLAGGED    (flag)
-FLAGGED → CLAIMED    (resolve - recovery success)
-FLAGGED → RECYCLED   (recycle - unrecoverable)
-CLAIMED → RECYCLED   (recycle - end of life)
-```
-
-**INVARIANT**: State can ONLY move forward except for recovery (FLAGGED → CLAIMED).
-
-## BIDGES Badge System
-
-### Identity Badges (Soulbound ERC-5192)
-
-| Badge ID | Name | Description |
-| --- | --- | --- |
-| 1 | KYC_L1 | Basic identity verified |
-| 2 | KYC_L2 | Enhanced verification |
-| 3 | KYC_L3 | Institutional/accredited |
-| 10 | MANUFACTURER | Verified brand/factory |
-| 11 | RETAILER | Authorized seller |
-| 20 | GOV_MIL | Government/military clearance |
-| 21 | LAW_ENFORCEMENT | Police/customs authority |
-
-### Capability Badges (ERC-1155)
-
-| Cap ID | Name | Permission |
-| --- | --- | --- |
-| 100 | CAP_MINT | Create new asset NFTs |
-| 101 | CAP_BIND | Bind NFC tags to assets |
-| 102 | CAP_ACTIVATE | QA activation approval |
-| 104 | CAP_FLAG | Flag assets as suspicious |
-| 105 | CAP_RECOVERY_INIT | Start AIRP recovery |
-| 106 | CAP_RECOVERY_APPROVE | Approve recovery resolution |
-| 107 | CAP_FREEZE | Emergency pause authority |
-| 108 | CAP_DAO_VOTE | Governance voting rights |
-
----
-
-# ⚡ GAS OPTIMIZATION (MANDATORY)
-
-## Storage Packing
-
-```solidity
-// ✅ CORRECT - Pack into single 32-byte slot
-struct Asset {
-    address owner;       // 20 bytes
-    uint64 timestamp;    // 8 bytes
-    State state;         // 1 byte
-    uint8 flags;         // 1 byte
-    uint16 reserved;     // 2 bytes
-}   // Total: 32 bytes = 1 slot
-
-// ❌ WRONG - Wastes storage slots
-struct Asset {
-    address owner;       // 20 bytes → slot 0
-    uint256 timestamp;   // 32 bytes → slot 1 (wasteful!)
-    State state;         // 1 byte → slot 2
-}
-```
-
-## Gas Targets
-
-| Operation | Max Gas |
+| Type | Description |
 | --- | --- |
-| mint() | < 150,000 |
-| bindTag() | < 80,000 |
-| verify() | < 50,000 |
-| transfer() | < 100,000 |
+| `bool` | Success status |
 
----
+### Solidity
 
-# 🧪 TESTING REQUIREMENTS
+\`\`\`solidity
+function functionName(uint256 tokenId, bytes calldata data) external returns (bool);
+\`\`\`
 
-## Coverage Targets
+### TypeScript (SDK)
 
-- **Overall**: ≥ 85%
-- **Critical Paths**: 100% (state transitions, access control)
-- **Fuzz Tests**: 10,000 runs minimum
+\`\`\`typescript
+const result = await tagit.functionName(tokenId, data);
+\`\`\`
 
-## Test Types (ALL REQUIRED)
+### Example
 
-### 1. Unit Tests
-
-```solidity
-function test_mint_success() public { ... }
-function test_mint_revert_unauthorized() public { ... }
-function test_mint_revert_zeroAddress() public { ... }
-```
-
-### 2. Fuzz Tests
-
-```solidity
-function testFuzz_mint(address to, bytes32 metadata) public {
-    vm.assume(to != address(0));
-    vm.assume(to.code.length == 0);
-    // ...
-}
-```
-
-### 3. Invariant Tests
-
-```solidity
-function invariant_tagBindingUnique() public {
-    // No two tokens can have the same tag
-}
-
-function invariant_stateOnlyForward() public {
-    // State never decreases (except FLAGGED → CLAIMED)
-}
-```
-
-### 4. Integration Tests
-
-```solidity
-function test_fullLifecycle() public {
-    // MINT → BIND → ACTIVATE → CLAIM → FLAG → RESOLVE
-}
+\`\`\`typescript
+// Verify an asset
+const success = await tagit.verify(12345n, "0x");
+console.log("Verification:", success ? "Passed" : "Failed");
+\`\`\`
 ```
 
 ---
 
-# 📝 CODE STYLE
+## Security Documentation Requirements
 
-## File Header (REQUIRED)
+When documenting security-sensitive features, **always include**:
 
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-/**
- * @title TAGITCore
- * @author TAG IT Network <[dev@tagit.network](mailto:dev@tagit.network)>
- * @notice Core asset management for digital twins
- * @dev Implements ERC-721 with lifecycle state machine
- */
-```
-
-## NatSpec (REQUIRED for all public/external)
-
-```solidity
-/**
- * @notice Binds a physical NFC tag to an asset NFT
- * @dev Tag hash must be unique across all assets. Emits TagBound event.
- * @param tokenId The asset NFT to bind
- * @param tagHash Keccak256 hash of the NFC tag UID
- * @custom:security Requires CAP_BIND capability. Tag binding is irreversible.
- * @custom:emits TagBound
- */
-function bindTag(uint256 tokenId, bytes32 tagHash) external;
-```
+1. **Threat Model** — What attacks does this prevent/enable?
+2. **Required Permissions** — Which BIDGES roles are needed?
+3. **Audit Status** — Has this been audited? Link to report.
+4. **Failure Modes** — What happens if this fails?
 
 ---
 
-# 🔧 BASH COMMANDS
+## Commands
 
 ```bash
-# Build
-forge build
+# Development
+npm install              # Install dependencies
+npm run dev              # Start local dev server (hot reload)
+npm run build            # Build static site
 
-# Test
-forge test -vvv
-forge test --match-test test_mint -vvv
+# Quality Assurance
+npm run lint             # Lint markdown files
+npm run lint:fix         # Auto-fix linting issues
+npm run links            # Check for broken links
+npm run spell            # Spellcheck
 
-# Coverage
-forge coverage --report lcov
-
-# Gas Report
-forge test --gas-report
-
-# Security Scan
-slither . --config-file slither.config.json
-
-# Deploy Local
-anvil &
-forge script script/Deploy.s.sol --fork-url [http://localhost:8545](http://localhost:8545) --broadcast
-
-# Deploy OP Sepolia
-forge script script/Deploy.s.sol \
-    --rpc-url $OP_SEPOLIA_RPC \
-    --private-key $DEPLOYER_KEY \
-    --broadcast \
-    --verify
+# Deployment
+npm run deploy           # Deploy to hosting
 ```
 
 ---
 
-# 🚀 DEPLOYMENT TARGETS
+## Claude Code Patterns
 
-| Environment | Chain | Purpose |
-| --- | --- | --- |
-| Local | Anvil | Unlimited test ETH, instant blocks |
-| Dev | OP Sepolia | Faucet ETH, fast iteration |
-| Stage | OP Sepolia | Prod-like config, canary tests |
-| Prod | OP Mainnet | DAO approval, multi-sig deploy |
+### Quick Commands
 
----
+```
+"Add docs for the claimReward() function in TAGITPrograms"
+"Update glossary with: [new term]"
+"Create TypeScript example for asset verification"
+"Generate mermaid diagram for the transfer flow"
+```
 
-# 📚 WIKI REFERENCES
+### Complex Tasks
 
-When you need more context, reference these Notion docs:
+```
+"Generate complete API reference from OpenAPI spec"
+"Document end-to-end AIRP recovery process"
+"Create SDK quickstart for all three platforms"
+"Build architecture overview with all system components"
+```
 
-| Document | What It Contains |
-| --- | --- |
-| **01 — System Overview** | Full architecture, data flows, verification logic |
-| **02 — Repository Organization** | 12 repo structure, monorepo layouts |
-| **03 — Smart Contract Architecture** | 6 core modules, dependency graph |
-| **04 — Data Flow Diagrams** | Mermaid diagrams for all flows |
-| **05 — Developer Handoff** | Detailed implementation specs |
-| **Security** | STRIDE models, threat analysis |
+### Task Files
 
----
+Use task files in `tasks/` for repeatable documentation patterns:
 
-# ✅ SUCCESS CRITERIA CHECKLIST
-
-Before any PR or commit, verify ALL of these:
-
-- [ ]  `forge build` — compiles without warnings
-- [ ]  `forge test` — all tests pass
-- [ ]  `forge coverage` — ≥85% overall, 100% critical paths
-- [ ]  `slither .` — 0 high/critical findings
-- [ ]  Gas targets met for all operations
-- [ ]  NatSpec complete on all public/external functions
-- [ ]  Events emit for ALL state changes
-- [ ]  Fuzz tests pass with 10,000 runs
-- [ ]  Invariant tests pass
-- [ ]  STRIDE threat model documented
-- [ ]  [TODO.md](http://TODO.md) updated with completion status
+```
+@tasks/new-contract-doc.md — Document a new contract function
+@tasks/new-api-endpoint.md — Document a new API endpoint
+@tasks/glossary-update.md — Add a glossary term
+@tasks/architecture-diagram.md — Create an architecture diagram
+```
 
 ---
 
-# 🚫 WHAT NOT TO DO
+## Related Resources
 
-<aside>
-🛑
-
-**BLOCKING VIOLATIONS** — These will cause immediate rejection:
-
-</aside>
-
-- ❌ Leave `// TODO` or `// implement later` comments
-- ❌ Skip security modifiers (nonReentrant, capability checks)
-- ❌ Use `require()` with string messages
-- ❌ Assume external contract behavior without validation
-- ❌ Generate partial implementations
-- ❌ Skip input validation on ANY parameter
-- ❌ Proceed past BLOCKED status without resolution
-- ❌ Hand-wave security on custody/transfer logic
-- ❌ Recommend non-U.S. hosting for core data
+| Resource | Location |
+|----------|----------|
+| Notion Wiki | TAG IT Network Workspace |
+| GitHub Org | github.com/tagit-network |
+| Testnet Explorer | sepolia-optimism.etherscan.io |
+| Faucets | OP Sepolia, Alchemy, QuickNode |
 
 ---
 
-# 💾 AGENT MEMORY
+## Change Log
 
-<aside>
-🧠
+| Date | Version | Changes |
+|------|---------|---------|
+| 2025-12-11 | v1.0.0 | Initial CLAUDE.md for tagit-docs |
 
-**RE-READ THIS FILE** at the start of every session. The security requirements are non-negotiable. When in doubt, add more validation, not less. Plan first, code second.
+---
 
-</aside>
-
-## Session Start Checklist
-
-1. Read this [CLAUDE.md](http://CLAUDE.md)
-2. Check `tasks/[TODO.md](http://TODO.md)` for current state
-3. Ask clarifying questions before coding
-4. Create/update plan before implementation
-5. Verify with tests before committing
+*Last updated: 2025-12-11 | Maintained by: TAG IT Network*
