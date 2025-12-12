@@ -12,7 +12,7 @@ TAGITTreasury manages protocol funds, including fee collection, distribution to 
 |-----------|-----|--------------|
 | Mint | 0.00002 ETH | 70% Treasury, 30% Validators |
 | Verify | 0.00001ETH | 50% Treasury, 50% Validators |
-| Transfer | 0.00005ETH | 80% Treasury, 20% Validators |
+| Transfer | 0.00001ETH | 80% Treasury, 20% Validators |
 
 ## Functions
 
