@@ -1,3 +1,8 @@
+---
+title: TAGITCore
+description: Core asset NFT, lifecycle management, and verification contract
+---
+
 # TAGITCore
 
 Core asset management contract for Digital Twin NFTs.

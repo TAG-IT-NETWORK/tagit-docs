@@ -1,3 +1,8 @@
+---
+title: TAGITRecovery
+description: Asset Identity Recovery Protocol (AIRP) and quarantine management
+---
+
 # TAGITRecovery
 
 AIRP (Asset Identity Recovery Protocol) contract for handling lost, stolen, and disputed assets.

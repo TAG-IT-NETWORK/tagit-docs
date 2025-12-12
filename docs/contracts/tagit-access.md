@@ -1,3 +1,8 @@
+---
+title: TAGITAccess
+description: BIDGES badge-based identity and role-based access control
+---
+
 # TAGITAccess
 
 BIDGES (Badge-based Identity for Decentralized Governance and Enterprise Security) contract.

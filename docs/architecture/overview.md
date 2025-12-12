@@ -1,93 +1,155 @@
+---
+title: Architecture Overview
+description: High-level system architecture of TAG IT Network
+---
+
 # Architecture Overview
 
-High-level architecture of the TAG IT Network platform.
+TAG IT Network is built on the **ORACULS stack** — a modular architecture designed for secure, scalable supply-chain authentication.
 
-## System Overview
+## System Architecture
 
-TAG IT Network is a Web3 supply-chain authentication platform that creates verifiable links between physical assets and their on-chain Digital Twins.
+```mermaid
+flowchart TB
+    subgraph "Client Layer"
+        A[ORACULAR Mobile App]
+        B[Dashboard Web App]
+        C[Third-Party Integrations]
+    end
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           APPLICATION LAYER                              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌─────────────┐  │
-│  │   ORACULAR   │  │   Dashboard  │  │  Partner     │  │    CLI      │  │
-│  │  Mobile App  │  │   Console    │  │    APIs      │  │   Tools     │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  └─────────────┘  │
-├─────────────────────────────────────────────────────────────────────────┤
-│                            GATEWAY LAYER                                 │
-│  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                      tagit-services                                  ││
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐ ││
-│  │  │   Auth   │  │   API    │  │  Event   │  │   AI Orchestrator    │ ││
-│  │  │ Service  │  │ Gateway  │  │  Router  │  │   (Fraud Detection)  │ ││
-│  │  └──────────┘  └──────────┘  └──────────┘  └──────────────────────┘ ││
-│  └─────────────────────────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────────────┤
-│                            LEDGER LAYER                                  │
-│  ┌─────────────────────┐  ┌─────────────────────────────────────────────┐│
-│  │      TAGIT L2       │  │               Smart Contracts               ││
-│  │    (OP Stack)       │  │  ┌────────┐ ┌────────┐ ┌────────┐          ││
-│  │  ┌───────────────┐  │  │  │ Core   │ │ Access │ │Recovery│          ││
-│  │  │   Sequencer   │  │  │  └────────┘ └────────┘ └────────┘          ││
-│  │  │   EigenDA     │  │  │  ┌────────┐ ┌────────┐ ┌────────┐          ││
-│  │  └───────────────┘  │  │  │Governor│ │Treasury│ │Programs│          ││
-│  └─────────────────────┘  │  └────────┘ └────────┘ └────────┘          ││
-│                           └─────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────────────┤
-│                          SETTLEMENT LAYER                                │
-│  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                         Ethereum L1                                  ││
-│  │              Escrow │ Timelocks │ Bridge Anchors                     ││
-│  └─────────────────────────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────────────┤
-│                          INTEROP LAYER                                   │
-│  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                       Chainlink CCIP                                 ││
-│  │              Cross-chain messaging │ Token transfers                 ││
-│  └─────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────┘
+    subgraph "API Layer"
+        D[API Gateway]
+        E[Authentication Service]
+        F[Verification Service]
+    end
+
+    subgraph "Indexing Layer"
+        G[Event Indexer]
+        H[GraphQL API]
+    end
+
+    subgraph "Blockchain Layer"
+        I[TAGIT L2 - OP Stack]
+        J[Smart Contracts]
+    end
+
+    subgraph "Infrastructure"
+        K[EigenDA]
+        L[Ethereum L1]
+        M[CCIP Bridge]
+    end
+
+    A & B & C --> D
+    D --> E & F
+    F --> H
+    G --> H
+    J --> G
+    I --> J
+    I --> K
+    I --> L
+    M --> I
 ```
 
 ## Core Components
 
-### Application Layer
+### 1. Client Layer
 
-| Component | Purpose |
-|-----------|---------|
-| **ORACULAR** | Mobile app for NFC scanning and verification |
-| **Dashboard** | Admin console for managing assets and roles |
-| **Partner APIs** | Integration endpoints for enterprise partners |
-| **CLI Tools** | Developer tools for testing and deployment |
+| Component | Purpose | Technology |
+|-----------|---------|------------|
+| **ORACULAR App** | Mobile NFC scanner for verification | React Native, Kotlin, Swift |
+| **Dashboard** | Admin console & governance UI | Next.js, React |
+| **SDK** | Developer integrations | TypeScript, Kotlin, Swift |
 
-### Gateway Layer
+### 2. API Layer
 
-| Component | Purpose |
-|-----------|---------|
-| **Auth Service** | JWT/API key authentication, BIDGES integration |
-| **API Gateway** | Request routing, rate limiting, caching |
-| **Event Router** | Webhook delivery, event subscriptions |
-| **AI Orchestrator** | Fraud detection, anomaly analysis |
+| Service | Purpose | Endpoints |
+|---------|---------|-----------|
+| **API Gateway** | Request routing, rate limiting | `/api/v1/*` |
+| **Auth Service** | API keys, JWT tokens | `/auth/*` |
+| **Verification Service** | NFC challenge-response | `/verify/*` |
 
-### Ledger Layer
+### 3. Blockchain Layer
 
-| Component | Purpose |
-|-----------|---------|
-| **TAGIT L2** | OP Stack rollup with EigenDA for data availability |
-| **Smart Contracts** | 6 core modules (see [Contracts](../contracts/index.md)) |
+| Component | Purpose | Network |
+|-----------|---------|---------|
+| **TAGIT L2** | OP Stack rollup | OP Sepolia (testnet), OP Mainnet (prod) |
+| **Smart Contracts** | 6 core modules | Solidity, Foundry |
+| **EigenDA** | Data availability | EigenLayer |
 
-### Settlement Layer
+### 4. Indexing Layer
 
-| Component | Purpose |
-|-----------|---------|
-| **Ethereum L1** | Final settlement, high-value escrow |
-| **Bridge Anchors** | Cross-chain state roots |
+| Component | Purpose | Technology |
+|-----------|---------|------------|
+| **Event Indexer** | Chain event processing | The Graph / Goldsky |
+| **GraphQL API** | Queryable asset data | GraphQL |
+
+## Security Architecture
+
+```mermaid
+flowchart LR
+    subgraph "Security Layers"
+        A[TLS 1.3] --> B[API Auth]
+        B --> C[Role-Based Access]
+        C --> D[On-Chain Verification]
+        D --> E[Cryptographic Proofs]
+    end
+```
+
+### Security Principles
+
+1. **Defense in Depth** — Multiple security layers
+2. **Zero Trust** — Verify everything, trust nothing
+3. **Principle of Least Privilege** — Minimal access by default
+4. **Cryptographic Proof** — All claims are verifiable on-chain
+
+### Key Security Features
+
+| Feature | Implementation |
+|---------|---------------|
+| **NFC Binding** | Challenge-response protocol |
+| **Custody Transfer** | Multi-party cryptographic proofs |
+| **Fraud Detection** | On-chain verification events |
+| **Private Registry** | Segregated defense/gov data |
+| **PQC Roadmap** | Post-quantum cryptography ready |
+
+## Network Topology
+
+### Testnet (Current)
+
+```
+┌─────────────────────────────────────────────────┐
+│                   OP Sepolia                    │
+│  ┌─────────────┐  ┌─────────────┐               │
+│  │ TAGITCore   │  │ TAGITAccess │  ...          │
+│  └─────────────┘  └─────────────┘               │
+├─────────────────────────────────────────────────┤
+│              EigenDA (Testnet)                  │
+├─────────────────────────────────────────────────┤
+│            Ethereum Sepolia (L1)                │
+└─────────────────────────────────────────────────┘
+```
+
+### Mainnet (Future)
+
+```
+┌─────────────────────────────────────────────────┐
+│                   OP Mainnet                    │
+│  ┌─────────────┐  ┌─────────────┐               │
+│  │ TAGITCore   │  │ TAGITAccess │  ...          │
+│  └─────────────┘  └─────────────┘               │
+├─────────────────────────────────────────────────┤
+│              EigenDA (Mainnet)                  │
+├─────────────────────────────────────────────────┤
+│            Ethereum Mainnet (L1)                │
+└─────────────────────────────────────────────────┘
+```
 
 ## Data Flow
 
-See [Data Flow Diagrams](./data-flow.md) for detailed request flows.
+See [Data Flow](./data-flow.md) for detailed transaction flows.
 
-## Next Steps
+## Related
 
-- [ORACULS Stack](./oraculs-stack.md) — Deep dive into the technology stack
-- [Data Flow](./data-flow.md) — Request/response flows
-- [Smart Contracts](../contracts/index.md) — Contract architecture
+- [ORACULS Stack Deep-Dive](./oraculs-stack.md)
+- [Smart Contracts Overview](../contracts/index.md)
+- [API Reference](../api/overview.md)

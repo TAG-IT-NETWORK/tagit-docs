@@ -1,53 +1,68 @@
-# Smart Contracts Overview
+---
+title: Smart Contracts
+description: Overview of TAG IT Network smart contract modules
+---
 
-TAG IT Network smart contract architecture and documentation.
+# Smart Contracts
 
-## Contract Modules
+TAG IT Network's on-chain logic is organized into **6 core contract modules**.
 
-TAG IT Network consists of 6 core smart contract modules:
-
-| Module | Purpose | Documentation |
-|--------|---------|---------------|
-| **TAGITCore** | Asset NFTs, lifecycle, verification | [View](./tagit-core.md) |
-| **TAGITAccess** | BIDGES badges, role management | [View](./tagit-access.md) |
-| **TAGITRecovery** | AIRP, quarantine, dispute resolution | [View](./tagit-recovery.md) |
-| **TAGITGovernor** | Multi-house DAO governance | [View](./tagit-governor.md) |
-| **TAGITTreasury** | Protocol funds, fee distribution | [View](./tagit-treasury.md) |
-| **TAGITPrograms** | Rewards, customs, recalls | [View](./tagit-programs.md) |
-
-## Architecture Diagram
+## Module Overview
 
 ```mermaid
-graph TB
-    subgraph Core
-        TAGITCore[TAGITCore<br/>Asset NFTs]
+flowchart TB
+    subgraph "Core Contracts"
+        A[TAGITCore]
+        B[TAGITAccess]
+        C[TAGITRecovery]
+        D[TAGITGovernor]
+        E[TAGITTreasury]
+        F[TAGITPrograms]
     end
 
-    subgraph Access
-        TAGITAccess[TAGITAccess<br/>BIDGES]
-    end
-
-    subgraph Recovery
-        TAGITRecovery[TAGITRecovery<br/>AIRP]
-    end
-
-    subgraph Governance
-        TAGITGovernor[TAGITGovernor<br/>DAO]
-        TAGITTreasury[TAGITTreasury<br/>Funds]
-    end
-
-    subgraph Programs
-        TAGITPrograms[TAGITPrograms<br/>Rewards]
-    end
-
-    TAGITCore --> TAGITAccess
-    TAGITRecovery --> TAGITCore
-    TAGITRecovery --> TAGITAccess
-    TAGITGovernor --> TAGITTreasury
-    TAGITGovernor --> TAGITAccess
-    TAGITPrograms --> TAGITCore
-    TAGITPrograms --> TAGITTreasury
+    A --> B
+    A --> C
+    D --> A
+    D --> E
+    F --> A
+    F --> E
 ```
+
+## Modules
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| [**TAGITCore**](./tagit-core.md) | Asset NFT, lifecycle, verification | `mint`, `bind`, `verify`, `transfer` |
+| [**TAGITAccess**](./tagit-access.md) | BIDGES badges, role-based access | `grantRole`, `revokeRole`, `hasRole` |
+| [**TAGITRecovery**](./tagit-recovery.md) | AIRP protocol, quarantine | `initiateRecovery`, `quarantine`, `release` |
+| [**TAGITGovernor**](./tagit-governor.md) | Multi-house DAO governance | `propose`, `vote`, `execute` |
+| [**TAGITTreasury**](./tagit-treasury.md) | Protocol funds management | `deposit`, `withdraw`, `allocate` |
+| [**TAGITPrograms**](./tagit-programs.md) | Rewards, customs, recalls | `createProgram`, `enroll`, `claim` |
+
+## Access Control Model
+
+```mermaid
+flowchart LR
+    subgraph "Roles (BIDGES)"
+        R1[ADMIN_ROLE]
+        R2[MINTER_ROLE]
+        R3[BINDER_ROLE]
+        R4[VERIFIER_ROLE]
+        R5[FLAGGING_ROLE]
+        R6[RECOVERY_ROLE]
+    end
+
+    R1 --> R2 & R3 & R4 & R5 & R6
+```
+
+| Role | Permissions |
+|------|-------------|
+| `ADMIN_ROLE` | Full system administration |
+| `MINTER_ROLE` | Create new asset NFTs |
+| `BINDER_ROLE` | Bind NFC chips to assets |
+| `VERIFIER_ROLE` | Submit verification proofs |
+| `FLAGGING_ROLE` | Flag assets for disputes |
+| `RECOVERY_ROLE` | Execute AIRP recovery |
 
 ## Deployment Addresses
 
@@ -55,16 +70,45 @@ graph TB
 
 | Contract | Address |
 |----------|---------|
-| TAGITCore | `0x...` |
-| TAGITAccess | `0x...` |
-| TAGITRecovery | `0x...` |
-| TAGITGovernor | `0x...` |
-| TAGITTreasury | `0x...` |
-| TAGITPrograms | `0x...` |
+| TAGITCore | `0x...` (TBD) |
+| TAGITAccess | `0x...` (TBD) |
+| TAGITRecovery | `0x...` (TBD) |
+| TAGITGovernor | `0x...` (TBD) |
+| TAGITTreasury | `0x...` (TBD) |
+| TAGITPrograms | `0x...` (TBD) |
 
 ### OP Mainnet (Production)
 
-*Coming soon*
+> Coming soon
+
+## Development
+
+### Prerequisites
+
+- [Foundry](https://book.getfoundry.sh/)
+- Node.js 18+
+- Git
+
+### Clone & Build
+
+```bash
+git clone https://github.com/tagit-network/tagit-contracts
+cd tagit-contracts
+forge install
+forge build
+```
+
+### Run Tests
+
+```bash
+forge test
+```
+
+### Deploy to Testnet
+
+```bash
+forge script script/Deploy.s.sol --rpc-url op-sepolia --broadcast
+```
 
 ## Security
 
@@ -88,8 +132,8 @@ See [Security Documentation](https://github.com/tagit-network/tagit-security) fo
 | `verify()` | < 50,000 |
 | `transfer()` | < 100,000 |
 
-## Next Steps
+## Related
 
-- [TAGITCore](./tagit-core.md) — Asset management
-- [TAGITAccess](./tagit-access.md) — Permission system
-- [Architecture](../architecture/overview.md) — System design
+- [Architecture Overview](../architecture/overview.md)
+- [API Reference](../api/overview.md)
+- [SDK Documentation](../sdk/overview.md)
