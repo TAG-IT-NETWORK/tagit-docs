@@ -17,7 +17,7 @@ ORACULS (Oracle-Augmented Chain for Universal Logistics Security) is the full te
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    HARDWARE LAYER                        │
+│                    HARDWARE LAYER                       │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
 │  │   NFC Tags   │  │   PQC Chips  │  │   Readers    │   │
 │  │  (NXP DNA)   │  │   (Future)   │  │  (Mobile)    │   │
@@ -33,18 +33,18 @@ ORACULS (Oracle-Augmented Chain for Universal Logistics Security) is the full te
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  SMART CONTRACT LAYER                    │
+│                  SMART CONTRACT LAYER                   │
 │  ┌─────────────────────────────────────────────────────┐│
-│  │                    TAGITCore                         ││
-│  │            Asset NFTs + Lifecycle + Verify           ││
+│  │                    TAGITCore                        ││
+│  │            Asset NFTs + Lifecycle + Verify          ││
 │  └─────────────────────────────────────────────────────┘│
 │  ┌────────────┐  ┌────────────┐  ┌────────────────────┐ │
-│  │TAGITAccess │  │TAGITRecov. │  │   TAGITPrograms    │ │
+│  │ TAGITAccess│  │TAGITRecov. │  │   TAGITPrograms    │ │
 │  │  BIDGES    │  │    AIRP    │  │ Rewards/Customs    │ │
 │  └────────────┘  └────────────┘  └────────────────────┘ │
 │  ┌────────────────────────┐  ┌────────────────────────┐ │
-│  │     TAGITGovernor      │  │     TAGITTreasury     │ │
-│  │    Multi-house DAO     │  │    Protocol Funds     │ │
+│  │     TAGITGovernor      │  │     TAGITTreasury      │ │
+│  │    Multi-house DAO     │  │    Protocol Funds      │ │
 │  └────────────────────────┘  └────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -53,14 +53,14 @@ ORACULS (Oracle-Augmented Chain for Universal Logistics Security) is the full te
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                   ROLLUP LAYER                           │
+│                   ROLLUP LAYER                          │
 │  ┌─────────────────────────────────────────────────────┐│
-│  │                   TAGIT L2                           ││
+│  │                   TAGIT L2                          ││
 │  │  ┌───────────┐  ┌───────────┐  ┌───────────────┐    ││
 │  │  │ Sequencer │  │  Batcher  │  │   Proposer    │    ││
 │  │  └───────────┘  └───────────┘  └───────────────┘    ││
 │  │  ┌─────────────────────────────────────────────┐    ││
-│  │  │              EigenDA (Data Availability)     │    ││
+│  │  │          EigenDA (Data Availability)        │    ││
 │  │  └─────────────────────────────────────────────┘    ││
 │  └─────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────┘
@@ -74,12 +74,12 @@ ORACULS (Oracle-Augmented Chain for Universal Logistics Security) is the full te
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  INTEROP LAYER                           │
+│                     INTEROP LAYER                       │
 │  ┌─────────────────────────────────────────────────────┐│
-│  │                 Chainlink CCIP                       ││
+│  │                 Chainlink CCIP                      ││
 │  │  ┌───────────┐  ┌───────────┐  ┌───────────────┐    ││
-│  │  │  Message  │  │   Token   │  │   Programmable│    ││
-│  │  │  Passing  │  │ Transfers │  │   Transfers   │    ││
+│  │  │  Message  │  │   Token   │  │  Programmable │    ││
+│  │  │  Passing  │  │ Transfers │  │  Transfers    │    ││
 │  │  └───────────┘  └───────────┘  └───────────────┘    ││
 │  └─────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────┘
