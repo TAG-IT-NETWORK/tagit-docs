@@ -1,6 +1,11 @@
+---
+title: Swift SDK
+description: Official Swift SDK for TAG IT Network (iOS)
+---
+
 # Swift SDK
 
-Official Swift SDK for TAG IT Network (iOS).
+Complete reference for the official TAG IT Swift SDK for iOS.
 
 ## Installation
 

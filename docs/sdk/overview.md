@@ -1,6 +1,11 @@
+---
+title: SDK Overview
+description: Official SDKs for TAG IT Network integration
+---
+
 # SDK Overview
 
-Official SDKs for TAG IT Network integration.
+Official SDKs for integrating TAG IT Network into your applications.
 
 ## Available SDKs
 

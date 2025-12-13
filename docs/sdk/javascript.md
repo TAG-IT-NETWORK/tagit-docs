@@ -1,6 +1,11 @@
+---
+title: JavaScript SDK
+description: Official JavaScript/TypeScript SDK for TAG IT Network
+---
+
 # JavaScript SDK
 
-Official JavaScript/TypeScript SDK for TAG IT Network.
+Complete reference for the official TAG IT JavaScript/TypeScript SDK.
 
 ## Installation
 

@@ -1,6 +1,11 @@
+---
+title: First Verification
+description: Complete walkthrough of verifying your first asset with TAG IT
+---
+
 # First Verification
 
-A complete walkthrough of verifying your first asset with TAG IT.
+A step-by-step guide to verifying your first asset using the challenge-response protocol.
 
 ## Overview
 

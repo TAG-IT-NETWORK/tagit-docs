@@ -1,6 +1,11 @@
-# Installation Guide
+---
+title: Installation
+description: Complete installation instructions for TAG IT Network SDKs
+---
 
-Complete installation instructions for TAG IT Network SDKs.
+# Installation
+
+Full installation guide for TAG IT Network SDKs across all platforms.
 
 ## JavaScript / TypeScript
 

@@ -1,6 +1,11 @@
-# Quickstart Guide
+---
+title: Quickstart
+description: Get started with TAG IT Network in 5 minutes
+---
 
-Get started with TAG IT Network in 5 minutes.
+# Quickstart
+
+Get up and running with TAG IT Network in under 5 minutes.
 
 ## Prerequisites
 

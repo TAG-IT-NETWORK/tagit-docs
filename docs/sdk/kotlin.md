@@ -1,6 +1,11 @@
+---
+title: Kotlin SDK
+description: Official Kotlin SDK for TAG IT Network (Android)
+---
+
 # Kotlin SDK
 
-Official Kotlin SDK for TAG IT Network (Android).
+Complete reference for the official TAG IT Kotlin SDK for Android.
 
 ## Installation
 
