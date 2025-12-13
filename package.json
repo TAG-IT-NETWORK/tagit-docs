@@ -1,0 +1,35 @@
+{
+  "name": "tagit-docs",
+  "version": "1.0.0",
+  "description": "TAG IT Network Documentation",
+  "scripts": {
+    "dev": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "lint": "markdownlint 'docs/**/*.md'",
+    "lint:fix": "markdownlint 'docs/**/*.md' --fix",
+    "links": "ts-node scripts/validate-links.ts",
+    "spell": "ts-node scripts/spellcheck.ts",
+    "validate": "npm run lint && npm run links",
+    "deploy": "docusaurus deploy"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/preset-classic": "^3.0.0",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "glob": "^10.0.0",
+    "markdownlint-cli": "^0.38.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

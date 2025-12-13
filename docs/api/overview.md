@@ -1,6 +1,11 @@
+---
+title: API Overview
+description: TAG IT Network REST API reference
+---
+
 # API Overview
 
-REST API documentation for TAG IT Network services.
+The TAG IT API provides programmatic access to all platform features.
 
 ## Base URLs
 
@@ -112,8 +117,38 @@ Official SDKs are available for:
 - [Kotlin (Android)](../sdk/kotlin.md)
 - [Swift (iOS)](../sdk/swift.md)
 
-## Next Steps
+## Health Check
+
+```bash
+GET /health
+```
+
+Response:
+
+```json
+{
+  "status": "ok",
+  "api": true,
+  "blockchain": true,
+  "indexer": true,
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+## Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `UNAUTHORIZED` | 401 | Invalid API key |
+| `FORBIDDEN` | 403 | Insufficient permissions |
+| `NOT_FOUND` | 404 | Resource not found |
+| `VALIDATION_ERROR` | 400 | Invalid input |
+| `RATE_LIMITED` | 429 | Too many requests |
+| `INTERNAL_ERROR` | 500 | Server error |
+
+## Related
 
 - [Authentication](./authentication.md) — API authentication
 - [Assets Endpoint](./endpoints/assets.md) — Asset management
 - [Verification Endpoint](./endpoints/verification.md) — Asset verification
+- [SDK Documentation](../sdk/overview.md) — Official SDKs
