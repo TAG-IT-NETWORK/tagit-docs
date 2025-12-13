@@ -1,3 +1,6 @@
+<img width="1024" height="434" alt="image" src="https://github.com/user-attachments/assets/5232c8af-9dd2-46f4-80b7-b84effe70609" />
+
+
 # tagit-docs
 
 > Official documentation for TAG IT Network — Web3 supply-chain authentication platform.

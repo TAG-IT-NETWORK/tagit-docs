@@ -6,13 +6,13 @@ Protocol treasury and fee distribution contract.
 
 TAGITTreasury manages protocol funds, including fee collection, distribution to stakeholders, and reserve management.
 
-## Fee Structure
+## Fee Structure (Demo)
 
 | Operation | Fee | Distribution |
 |-----------|-----|--------------|
-| Mint | 0.01 ETH | 70% Treasury, 30% Validators |
-| Verify | 0.001 ETH | 50% Treasury, 50% Validators |
-| Transfer | 0.005 ETH | 80% Treasury, 20% Validators |
+| Mint | 0.00002 ETH | 70% Treasury, 30% Validators |
+| Verify | 0.00001ETH | 50% Treasury, 50% Validators |
+| Transfer | 0.00001ETH | 80% Treasury, 20% Validators |
 
 ## Functions
 
