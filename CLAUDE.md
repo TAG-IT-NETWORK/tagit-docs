@@ -33,7 +33,7 @@ TAG IT Network is a **Web3 supply-chain authentication platform** using NFC-boun
 │  │  (OP Stack) │  │     (DA)    │  │   (Cross-chain)         │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
 ├─────────────────────────────────────────────────────────────────┤
-│                    Ethereum Settlement Layer                     │
+│                    Ethereum Settlement Layer                    │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌───────────────────────┐  ┌─────────────────────────────────┐ │
 │  │    Private Registry   │  │       Public Registry           │ │
