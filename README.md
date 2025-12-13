@@ -6,7 +6,7 @@
 > Official documentation for TAG IT Network — Web3 supply-chain authentication platform.
 
 [![Docs](https://img.shields.io/badge/docs-live-brightgreen)](https://docs.tagit.network)
-[![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 ## Quick Start
 
@@ -73,7 +73,11 @@ npm run links      # Check broken links
 
 ## License
 
-MIT License — see [LICENSE](./LICENSE) for details.
+This documentation is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).
+
+You are free to share and adapt this material for any purpose, including commercial, as long as you give appropriate credit to TAG IT Network.
+
+See [ATTRIBUTION.md](./ATTRIBUTION.md) for attribution guidelines.
 
 ---
 
