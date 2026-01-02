@@ -1,17 +1,17 @@
 ---
 title: Smart Contracts
-description: Overview of TAG IT Network smart contract modules
+description: Overview of TAG IT Network smart contract modules (15 contracts)
 ---
 
 # Smart Contracts
 
-TAG IT Network's on-chain logic is organized into **6 core contract modules**.
+TAG IT Network's on-chain logic is organized into **15 contract modules** across 4 categories.
 
 ## Module Overview
 
 ```mermaid
 flowchart TB
-    subgraph "Core Contracts"
+    subgraph "Core (6)"
         A[TAGITCore]
         B[TAGITAccess]
         C[TAGITRecovery]
@@ -20,15 +20,35 @@ flowchart TB
         F[TAGITPrograms]
     end
 
+    subgraph "Token (5)"
+        G[TAGITToken]
+        H[TAGITEmissions]
+        I[TAGITBurner]
+        J[TAGITVesting]
+        K[TAGITStaking]
+    end
+
+    subgraph "Account Abstraction (3)"
+        L[TAGITPaymaster]
+        M[TAGITAccountFactory]
+        N[TAGITAccount]
+    end
+
+    subgraph "Bridge (1)"
+        O[CCIPAdapter]
+    end
+
     A --> B
     A --> C
-    D --> A
-    D --> E
-    F --> A
-    F --> E
+    D --> A & E
+    F --> A & E
+    G --> H & I & K
+    D --> G
+    L --> M --> N
+    O --> A
 ```
 
-## Modules
+## Core Contracts (6)
 
 | Module | Purpose | Key Functions |
 |--------|---------|---------------|
@@ -38,6 +58,57 @@ flowchart TB
 | [**TAGITGovernor**](./tagit-governor.md) | Multi-house DAO governance | `propose`, `vote`, `execute` |
 | [**TAGITTreasury**](./tagit-treasury.md) | Protocol funds management | `deposit`, `withdraw`, `allocate` |
 | [**TAGITPrograms**](./tagit-programs.md) | Rewards, customs, recalls | `createProgram`, `enroll`, `claim` |
+
+## Token Contracts (5)
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| [**TAGITToken**](./tagit-token.md) | ERC-20 governance token | `transfer`, `delegate`, `getVotes` |
+| [**TAGITEmissions**](./tagit-emissions.md) | Inflation schedule, rewards | `emit`, `claimRewards`, `setRate` |
+| [**TAGITBurner**](./tagit-burner.md) | Deflationary burns | `burn`, `burnFrom`, `totalBurned` |
+| [**TAGITVesting**](./tagit-vesting.md) | Token vesting schedules | `createVest`, `release`, `revoke` |
+| [**TAGITStaking**](./tagit-staking.md) | Stake tokens, earn rewards | `stake`, `unstake`, `claimRewards` |
+
+## Account Abstraction (3)
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| [**TAGITPaymaster**](./tagit-paymaster.md) | ERC-4337 gas sponsorship | `validatePaymasterUserOp`, `postOp` |
+| [**TAGITAccountFactory**](./tagit-account-factory.md) | Create smart wallets | `createAccount`, `getAddress` |
+| [**TAGITAccount**](./tagit-account.md) | ERC-4337 smart wallet | `execute`, `validateUserOp` |
+
+## Bridge Contract (1)
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| [**CCIPAdapter**](./ccip-adapter.md) | Chainlink CCIP bridge | `sendMessage`, `receiveMessage` |
+
+## Deployment Addresses
+
+### OP Sepolia (Testnet) — VERIFIED
+
+| Contract | Address |
+|----------|---------|
+| TAGITCore | `0x6a58eE8f2d500981b1793868C55072789c58fba6` |
+| TAGITAccess | `0xf7efefc59E81540408b4c9c2a09417Ddb10b4936` |
+| IdentityBadge | `0xb3f757fca307a7febA5CA210Cd7D840EC0999be8` |
+| CapabilityBadge | `0xfa7E212efc6E9214c5dE5bd29C9f1e4ef089486` |
+| TAGITRecovery | TBD |
+| TAGITGovernor | TBD |
+| TAGITTreasury | TBD |
+| TAGITPrograms | TBD |
+| TAGITToken | TBD |
+| TAGITEmissions | TBD |
+| TAGITBurner | TBD |
+| TAGITVesting | TBD |
+| TAGITStaking | TBD |
+| TAGITPaymaster | TBD |
+| TAGITAccountFactory | TBD |
+| CCIPAdapter | TBD |
+
+### OP Mainnet (Production)
+
+> Coming soon
 
 ## Access Control Model
 
@@ -63,23 +134,6 @@ flowchart LR
 | `VERIFIER_ROLE` | Submit verification proofs |
 | `FLAGGING_ROLE` | Flag assets for disputes |
 | `RECOVERY_ROLE` | Execute AIRP recovery |
-
-## Deployment Addresses
-
-### OP Sepolia (Testnet)
-
-| Contract | Address |
-|----------|---------|
-| TAGITCore | `0x...` (TBD) |
-| TAGITAccess | `0x...` (TBD) |
-| TAGITRecovery | `0x...` (TBD) |
-| TAGITGovernor | `0x...` (TBD) |
-| TAGITTreasury | `0x...` (TBD) |
-| TAGITPrograms | `0x...` (TBD) |
-
-### OP Mainnet (Production)
-
-> Coming soon
 
 ## Development
 
@@ -121,7 +175,7 @@ All contracts follow these security requirements:
 - **Events** for all state changes
 - **BIDGES capability checks** for access control
 
-See [Security Documentation](https://github.com/tagit-network/tagit-security) for audit reports.
+See [Security Documentation](../security/threat-model.md) for threat analysis.
 
 ## Gas Optimization
 
@@ -135,5 +189,6 @@ See [Security Documentation](https://github.com/tagit-network/tagit-security) fo
 ## Related
 
 - [Architecture Overview](../architecture/overview.md)
+- [Token Documentation](../token/tokenomics.md)
 - [API Reference](../api/overview.md)
 - [SDK Documentation](../sdk/overview.md)
