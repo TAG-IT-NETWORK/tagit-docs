@@ -150,19 +150,21 @@ When you design for:
 ```mermaid
 flowchart TB
     subgraph HARVEST["⚡ QUAD-SOURCE ENERGY HARVESTING"]
-        RF["📡 RF\n13.56MHz"]
-        SOLAR["☀️ Solar\n0.1-10μW"]
-        THERMAL["🌡️ Thermal\nΔT > 5°C"]
-        KINETIC["🔄 Kinetic\nPiezo"]
+        direction LR
+        RF["📡 RF<br>13.56MHz"]
+        SOLAR["☀️ Solar<br>0.1-10μW"]
+        THERMAL["🌡️ Thermal<br>ΔT 5°C"]
+        KINETIC["🔄 Kinetic<br>Piezo"]
     end
 
     subgraph POWER["🔋 POWER MANAGEMENT"]
+        direction LR
         MGMT["Power Controller"]
-        CAP["Supercapacitor\n100μF"]
+        CAP["Supercapacitor<br>100μF"]
     end
 
     subgraph CORE["🛡️ SECURE CORE"]
-        SIGMA["SIGMA BOY\nPQC Engine"]
+        SIGMA["SIGMA BOY<br>PQC Engine"]
     end
 
     RF --> MGMT
