@@ -62,24 +62,27 @@ The most hostile environments demand the most resilient technology:
 Every transformative commercial technology began as a military requirement:
 
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph MILITARY["🎖️ MILITARY ORIGIN"]
-        GPS["GPS\n(Navigation)"]
-        INTERNET["ARPANET\n(Internet)"]
-        CRYPTO["AES/RSA\n(Encryption)"]
+        direction LR
+        GPS["GPS<br>(Navigation)"]
+        INTERNET["ARPANET<br>(Internet)"]
+        CRYPTO["AES/RSA<br>(Encryption)"]
     end
 
     subgraph SIGMA["🛡️ SIGMA BOY"]
+        direction LR
         PQC["PQC Crypto"]
         RAD["Radiation Hardening"]
         HARVEST["Energy Harvesting"]
     end
 
     subgraph COMMERCIAL["🏪 COMMERCIAL FUTURE"]
-        SPACE_TOURISM["Space Tourism\nAsset Tracking"]
-        NUCLEAR["Nuclear Plant\nInventory"]
-        PHARMA["Pharma\nCold Chain"]
-        LUXURY["Ultra-Premium\nAuthentication"]
+        direction LR
+        SPACE["Space Tourism"]
+        NUCLEAR["Nuclear"]
+        PHARMA["Pharma"]
+        LUXURY["Luxury Auth"]
     end
 
     MILITARY --> SIGMA
