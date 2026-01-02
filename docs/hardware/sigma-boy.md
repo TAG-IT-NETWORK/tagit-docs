@@ -147,6 +147,8 @@ When you design for:
 
 ### Energy Harvesting (Quad-Source)
 
+Four independent power sources ensure operation in any environment:
+
 ```mermaid
 flowchart TB
     subgraph HARVEST["⚡ ENERGY SOURCES"]
