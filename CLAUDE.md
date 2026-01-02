@@ -1,4 +1,5 @@
-# CLAUDE.md — tagit-docs
+# CLAUDE.md | TAG IT Network | Version 3.0 | January 2026
+# Federated Multi-Repo Edition
 
 > Project memory file for Claude Code. Automatically loaded on every session.
 
@@ -416,9 +417,9 @@ Use task files in `tasks/` for repeatable documentation patterns:
 
 | Date | Version | Changes |
 |------|---------|---------|
-| 2025-01-02 | v1.1.0 | Added mission, priority tasks, security requirements |
+| 2026-01-02 | v3.0.0 | Federated multi-repo edition, 15-contract architecture |
 | 2025-12-11 | v1.0.0 | Initial CLAUDE.md for tagit-docs |
 
 ---
 
-*Last updated: 2025-01-02 | Maintained by: TAG IT Network*
+*Last updated: 2026-01-02 | Maintained by: TAG IT Network*
