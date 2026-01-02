@@ -4,7 +4,8 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Update CLAUDE.md with mission and priority tasks\n\n- Add mission statement for MVP documentation \\(OP Sepolia\\)\n- Add 5 priority tasks: contract addresses, security section,\n  API auth, NFC binding, AIRP recovery\n- Add security requirements section\n- Add related repos cross-reference\n- Update documentation structure to include security folder\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Add TAGITToken contract documentation\n\n- Create docs/contracts/tagit-token.md with ERC-20 token specs\n- Document token utility: governance, staking, fees, rewards\n- Add placeholder tokenomics distribution table\n- Include contract interface and cross-references\n- Update CLAUDE.md with Priority Task #6 for tokenomics\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
