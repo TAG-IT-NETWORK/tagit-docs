@@ -4,6 +4,48 @@
 
 ---
 
+## Your Mission
+
+Update and expand documentation to match the current MVP state (OP Sepolia testnet).
+
+---
+
+## Priority Tasks
+
+### 1. Contract Address Update
+**File:** `docs/contracts/index.md`
+**Action:** Replace TBD addresses with deployed OP Sepolia addresses from `tagit-contracts` deployments.
+
+### 2. Create Security Section
+**Create:** `docs/security/` folder with:
+- `threat-model.md` — STRIDE analysis for custody/transfer/verification
+- `pqc-roadmap.md` — Post-quantum cryptography migration plan
+- `private-registry.md` — Defense/gov data isolation architecture
+
+### 3. API Authentication Docs
+**File:** `docs/api/authentication.md`
+**Content needed:**
+- API key generation flow
+- JWT token structure and refresh
+- Scope definitions (read, write, admin)
+- Rate limit tiers by auth level
+
+### 4. NFC Binding Protocol
+**File:** `docs/architecture/nfc-binding.md`
+**Content needed:**
+- Challenge-response protocol spec
+- Cryptographic requirements
+- Hardware integration flow
+
+### 5. AIRP Recovery Documentation
+**File:** `docs/contracts/tagit-recovery.md`
+**Expand with:**
+- Quarantine state machine
+- Multi-party cryptographic proofs
+- Recovery authorization flow
+
+---
+
 ## Project Identity
 
 | Field | Value |
@@ -178,6 +220,10 @@ tagit-docs/
 │   │   ├── javascript.md
 │   │   ├── kotlin.md
 │   │   └── swift.md
+│   ├── security/              # [CREATE] Security documentation
+│   │   ├── threat-model.md    # STRIDE analysis
+│   │   ├── pqc-roadmap.md     # Post-quantum migration
+│   │   └── private-registry.md # Defense/gov isolation
 │   └── glossary.md
 └── examples/
     ├── mint-and-bind/
@@ -327,12 +373,32 @@ Use task files in `tasks/` for repeatable documentation patterns:
 
 ---
 
+## Security Requirements (Always Apply)
+
+- Never document private keys or secrets
+- All custody/transfer logic must reference threat model
+- U.S. hosting requirement for core data must be stated
+- Flag any security gaps you find during documentation
+
+---
+
+## Related Repos (for cross-reference)
+
+| Repo | Purpose |
+|------|---------|
+| `tagit-contracts` | Source of truth for Solidity interfaces |
+| `tagit-security` | Audit reports to reference |
+| `tagit-governance` | SOPs and RFCs to link |
+
+---
+
 ## Change Log
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2025-01-02 | v1.1.0 | Added mission, priority tasks, security requirements |
 | 2025-12-11 | v1.0.0 | Initial CLAUDE.md for tagit-docs |
 
 ---
 
-*Last updated: 2025-12-11 | Maintained by: TAG IT Network*
+*Last updated: 2025-01-02 | Maintained by: TAG IT Network*
