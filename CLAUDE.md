@@ -44,6 +44,26 @@ Update and expand documentation to match the current MVP state (OP Sepolia testn
 - Multi-party cryptographic proofs
 - Recovery authorization flow
 
+### 6. TAGIT Token Documentation
+**Created:** `docs/contracts/tagit-token.md`
+**Content needed:**
+- ERC-20 token specifications (symbol, decimals, supply)
+- Token utility mapping (governance, staking, fees, rewards)
+- Distribution/tokenomics table (get from team if available)
+- Staking mechanics and validator rewards
+- Fee payment flows
+- Contract address once deployed
+
+**Create:** `docs/tokenomics/` folder with:
+- `distribution.md` — Initial allocation and vesting
+- `emissions.md` — Reward emission schedule
+- `staking.md` — Validator staking mechanics
+
+**Cross-reference:**
+- Link from TAGITGovernor (voting power)
+- Link from TAGITTreasury (fee distribution)
+- Link from TAGITPrograms (reward payouts)
+
 ---
 
 ## Project Identity
