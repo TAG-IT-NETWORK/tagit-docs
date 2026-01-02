@@ -149,7 +149,7 @@ When you design for:
 
 ```mermaid
 flowchart TB
-    subgraph HARVEST["⚡ QUAD-SOURCE HARVESTING"]
+    subgraph HARVEST["⚡ ENERGY SOURCES"]
         direction LR
         RF["📡 RF<br>13.56MHz"]
         SOLAR["☀️ Solar<br>0.1-10μW"]
