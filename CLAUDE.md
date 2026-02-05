@@ -13,9 +13,9 @@ Update and expand documentation to match the current MVP state (OP Sepolia testn
 
 ## Priority Tasks
 
-### 1. Contract Address Update
+### 1. ~~Contract Address Update~~ ✅ DONE (Feb 5, 2026)
 **File:** `docs/contracts/index.md`
-**Action:** Replace TBD addresses with deployed OP Sepolia addresses from `tagit-contracts` deployments.
+**Completed:** All 12 live OP Sepolia addresses added. Individual contract docs updated with address sections.
 
 ### 2. Create Security Section
 **Create:** `docs/security/` folder with:
@@ -417,6 +417,7 @@ Use task files in `tasks/` for repeatable documentation patterns:
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-02-05 | v3.1.0 | Contract addresses updated for all 12 live OP Sepolia contracts |
 | 2026-01-02 | v3.0.0 | Federated multi-repo edition, 15-contract architecture |
 | 2025-12-11 | v1.0.0 | Initial CLAUDE.md for tagit-docs |
 
