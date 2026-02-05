@@ -85,26 +85,51 @@ flowchart TB
 
 ## Deployment Addresses
 
-### OP Sepolia (Testnet) — VERIFIED
+### OP Sepolia (Testnet) — Chain ID: 11155420
 
-| Contract | Address |
-|----------|---------|
-| TAGITCore | `0x6a58eE8f2d500981b1793868C55072789c58fba6` |
-| TAGITAccess | `0xf7efefc59E81540408b4c9c2a09417Ddb10b4936` |
-| IdentityBadge | `0xb3f757fca307a7febA5CA210Cd7D840EC0999be8` |
-| CapabilityBadge | `0xfa7E212efc6E9214c5dE5bd29C9f1e4ef089486` |
-| TAGITRecovery | TBD |
-| TAGITGovernor | TBD |
-| TAGITTreasury | TBD |
-| TAGITPrograms | TBD |
-| TAGITToken | TBD |
-| TAGITEmissions | TBD |
-| TAGITBurner | TBD |
-| TAGITVesting | TBD |
-| TAGITStaking | TBD |
-| TAGITPaymaster | TBD |
-| TAGITAccountFactory | TBD |
-| CCIPAdapter | TBD |
+> **Last Updated:** February 5, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
+
+#### Core Contracts
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| TAGITCore | `0x8B02b62FD388b2d7e3dF5Ec666D68Ac7c7ca02Fe` | ✅ LIVE |
+| TAGITAccess | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | ✅ LIVE |
+| IdentityBadge | `0x26F2EBb84664EF1eF8554e15777EBEc6611256A6` | ✅ LIVE |
+| CapabilityBadge | `0x5e190F6Ebde4BD1e11a5566a1e81a933cdDf3505` | ✅ LIVE |
+
+#### NIST Phase 3 Contracts (ERC-1967 Proxies)
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| TAGITRecovery | `0x6138a80c06A5e6a3CB6cc491A3a2c4DF4adD1600` | ✅ LIVE |
+| TAGITPaymaster | `0x4339c46D63231063250834D9b3fa4E51FdB8026e` | ✅ LIVE |
+| TAGITTreasury | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE |
+| TAGITPrograms | `0xe78DB7702FF5190DAc2F3E09213Ff84bF9efE32b` | ✅ LIVE |
+| TAGITStaking | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
+
+#### Account Abstraction (ERC-4337)
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| TAGITAccount | `0xC159FDec7a8fDc0d98571C89c342e28bB405e682` | ✅ LIVE |
+| TAGITAccountFactory | `0x8D27B612a9D3e45d51D2234B2f4e03dCC5ca844b` | ✅ LIVE |
+
+#### Cross-Chain Bridge
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| CCIPAdapter | `0x8dA6D7ffCD4cc0F2c9FfD6411CeD7C9c573C9E88` | ✅ LIVE |
+
+#### Token Contracts (Pending Deployment)
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| TAGITToken | TBD | 🔜 Pending |
+| TAGITEmissions | TBD | 🔜 Pending |
+| TAGITBurner | TBD | 🔜 Pending |
+| TAGITVesting | TBD | 🔜 Pending |
+| TAGITGovernor | TBD | 🔜 Pending |
 
 ### OP Mainnet (Production)
 

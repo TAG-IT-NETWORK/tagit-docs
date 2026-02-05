@@ -2,6 +2,13 @@
 
 Protocol treasury and fee distribution contract.
 
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE |
+| OP Mainnet | TBD | 🔜 Pending |
+
 ## Overview
 
 TAGITTreasury manages protocol funds, including fee collection, distribution to stakeholders, and reserve management.

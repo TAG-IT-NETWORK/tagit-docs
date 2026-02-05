@@ -2,6 +2,13 @@
 
 Rewards, customs integration, and recall management contract.
 
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | `0xe78DB7702FF5190DAc2F3E09213Ff84bF9efE32b` | ✅ LIVE |
+| OP Mainnet | TBD | 🔜 Pending |
+
 ## Overview
 
 TAGITPrograms manages various incentive and compliance programs including loyalty rewards, customs clearance, and product recalls.

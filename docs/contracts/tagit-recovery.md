@@ -7,6 +7,13 @@ description: Asset Identity Recovery Protocol (AIRP) and quarantine management
 
 AIRP (Asset Identity Recovery Protocol) contract for handling lost, stolen, and disputed assets.
 
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | `0x6138a80c06A5e6a3CB6cc491A3a2c4DF4adD1600` | ✅ LIVE |
+| OP Mainnet | TBD | 🔜 Pending |
+
 ## Overview
 
 TAGITRecovery manages the recovery process for assets that have been flagged. It handles quarantine, investigation, and resolution workflows.

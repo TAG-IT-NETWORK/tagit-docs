@@ -7,6 +7,13 @@ description: Core asset NFT, lifecycle management, and verification contract
 
 Core asset management contract for Digital Twin NFTs.
 
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | `0x8B02b62FD388b2d7e3dF5Ec666D68Ac7c7ca02Fe` | ✅ LIVE |
+| OP Mainnet | TBD | 🔜 Pending |
+
 ## Overview
 
 TAGITCore is the central contract managing asset NFTs, their lifecycle states, and verification logic. It implements ERC-721 with extensions for the TAG IT lifecycle state machine.

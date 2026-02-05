@@ -7,6 +7,13 @@ description: Token staking for rewards and governance power
 
 Enables token holders to stake TAGIT for rewards and enhanced governance power.
 
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
+| OP Mainnet | TBD | 🔜 Pending |
+
 ## Overview
 
 TAGITStaking allows users to lock their tokens to earn staking rewards from protocol emissions and gain voting power in governance.
