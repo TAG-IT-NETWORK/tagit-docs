@@ -11,6 +11,14 @@ Comprehensive definitions of key terms used in TAG IT Network documentation.
 
 ## A
 
+### Agent Wallet
+
+The operational wallet address bound to an AI agent's on-chain identity. Verified via EIP-712 typed data signatures to prevent unauthorized binding.
+
+**See also**: [TAGITAgentIdentity](./contracts/agent-identity.md), [Technosphere](./architecture/technosphere.md)
+
+---
+
 ### AIRP
 
 **Asset Identity Recovery Protocol**
@@ -80,6 +88,14 @@ Asset lifecycle state indicating ownership has been transferred to an end user/c
 
 ## D
 
+### Defense-Grade Validation
+
+A multi-party validation mode requiring **3-of-5** independent validator consensus. Used for military, government, and critical infrastructure agents where a single validator is insufficient.
+
+**See also**: [TAGITAgentValidation](./contracts/agent-validation.md), [Technosphere](./architecture/technosphere.md)
+
+---
+
 ### Digital Twin
 
 A cryptographic NFT representing a physical asset's identity, state, and history. The on-chain counterpart to a physical product.
@@ -93,6 +109,16 @@ A cryptographic NFT representing a physical asset's identity, state, and history
 ---
 
 ## E
+
+### ERC-8004
+
+**Trustless Agent Infrastructure Standard**
+
+An Ethereum standard defining on-chain identity, reputation, and validation for AI agents. Implemented by TAG IT's Technosphere layer using soulbound ERC-721 identity, time-weighted feedback scoring, and multi-party proof verification.
+
+**See also**: [Technosphere](./architecture/technosphere.md)
+
+---
 
 ### EigenDA
 
@@ -162,6 +188,24 @@ Cryptographic algorithms resistant to quantum computer attacks. Part of TAG IT's
 
 ---
 
+## S
+
+### Sage
+
+TAG IT's primary analysis agent — the first AI agent registered in the Technosphere (Agent #1). Powered by Claude Opus 4.6, it provides blockchain intelligence and asset verification services.
+
+**See also**: [Technosphere](./architecture/technosphere.md)
+
+---
+
+### Soulbound Token
+
+A non-transferable NFT (following ERC-5192 principles) that permanently binds to the minting address. Used by TAGITAgentIdentity to ensure agent identities cannot be sold, traded, or duplicated.
+
+**See also**: [TAGITAgentIdentity](./contracts/agent-identity.md)
+
+---
+
 ## R
 
 ### Recycled
@@ -171,6 +215,22 @@ Terminal asset lifecycle state. Asset is permanently deactivated and cannot be r
 ---
 
 ## T
+
+### Technosphere
+
+TAG IT's AI agent infrastructure layer built on the ERC-8004 standard. Enables AI agents to operate as first-class on-chain citizens with verifiable identity, trackable reputation, and multi-party validation.
+
+**See also**: [Technosphere Architecture](./architecture/technosphere.md)
+
+---
+
+### Time-Weighted Scoring
+
+A reputation algorithm where recent feedback carries more weight than older feedback. Uses the formula `weight = DECAY_PERIOD / (DECAY_PERIOD + age)` with a 90-day decay period. At 90 days, feedback contributes 50% weight; at 180 days, ~33%.
+
+**See also**: [TAGITAgentReputation](./contracts/agent-reputation.md)
+
+---
 
 ### TAGIT L2
 
@@ -190,4 +250,4 @@ The process of authenticating an asset by:
 
 ---
 
-*Last updated: 2025-12-12*
+*Last updated: 2026-02-16*
