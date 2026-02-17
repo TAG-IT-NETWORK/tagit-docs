@@ -33,6 +33,12 @@ flowchart TB
         J[Smart Contracts]
     end
 
+    subgraph "Technosphere (ERC-8004)"
+        N[Agent Identity]
+        O[Agent Reputation]
+        P[Agent Validation]
+    end
+
     subgraph "Infrastructure"
         K[EigenDA]
         L[Ethereum L1]
@@ -48,6 +54,7 @@ flowchart TB
     I --> K
     I --> L
     M --> I
+    J --> N & O & P
 ```
 
 ## Core Components
@@ -73,10 +80,20 @@ flowchart TB
 | Component | Purpose | Network |
 |-----------|---------|---------|
 | **TAGIT L2** | OP Stack rollup | OP Sepolia (testnet), OP Mainnet (prod) |
-| **Smart Contracts** | 6 core modules | Solidity, Foundry |
+| **Smart Contracts** | 6 core + 3 agent modules | Solidity, Foundry |
 | **EigenDA** | Data availability | EigenLayer |
 
-### 4. Indexing Layer
+### 4. Technosphere (AI Agent Layer)
+
+| Component | Purpose | Standard |
+|-----------|---------|----------|
+| **AgentIdentity** | Soulbound ERC-721 agent registry | ERC-8004 |
+| **AgentReputation** | Time-weighted feedback scoring | ERC-8004 |
+| **AgentValidation** | Multi-party proof verification (3-of-5) | ERC-8004 |
+
+See [Technosphere Architecture](./technosphere.md) for the full ERC-8004 deep-dive.
+
+### 5. Indexing Layer
 
 | Component | Purpose | Technology |
 |-----------|---------|------------|
@@ -111,6 +128,7 @@ flowchart LR
 | **Fraud Detection** | On-chain verification events |
 | **Private Registry** | Segregated defense/gov data |
 | **PQC Roadmap** | Post-quantum cryptography ready |
+| **Agent Validation** | Multi-party consensus (3-of-5) for AI agents |
 
 ## Network Topology
 
@@ -150,6 +168,7 @@ See [Data Flow](./data-flow.md) for detailed transaction flows.
 
 ## Related
 
+- [Technosphere Architecture](./technosphere.md)
 - [ORACULS Stack Deep-Dive](./oraculs-stack.md)
 - [Smart Contracts Overview](../contracts/index.md)
 - [API Reference](../api/overview.md)
