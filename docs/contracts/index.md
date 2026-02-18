@@ -1,11 +1,11 @@
 ---
 title: Smart Contracts
-description: Overview of TAG IT Network smart contract modules (15 contracts)
+description: Overview of TAG IT Network smart contract modules (18 contracts)
 ---
 
 # Smart Contracts
 
-TAG IT Network's on-chain logic is organized into **15 contract modules** across 4 categories.
+TAG IT Network's on-chain logic is organized into **18 contract modules** across 5 categories.
 
 ## Module Overview
 
@@ -34,6 +34,12 @@ flowchart TB
         N[TAGITAccount]
     end
 
+    subgraph "Agent Infrastructure (3)"
+        P[TAGITAgentIdentity]
+        Q[TAGITAgentReputation]
+        R[TAGITAgentValidation]
+    end
+
     subgraph "Bridge (1)"
         O[CCIPAdapter]
     end
@@ -46,6 +52,8 @@ flowchart TB
     D --> G
     L --> M --> N
     O --> A
+    B --> P
+    P --> Q & R
 ```
 
 ## Core Contracts (6)
@@ -77,6 +85,16 @@ flowchart TB
 | [**TAGITAccountFactory**](./tagit-account-factory.md) | Create smart wallets | `createAccount`, `getAddress` |
 | [**TAGITAccount**](./tagit-account.md) | ERC-4337 smart wallet | `execute`, `validateUserOp` |
 
+## Agent Infrastructure (3) — ERC-8004
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| [**TAGITAgentIdentity**](./agent-identity.md) | Soulbound agent registry | `register`, `setMetadata`, `setAgentWallet` |
+| [**TAGITAgentReputation**](./agent-reputation.md) | Feedback & time-weighted scoring | `giveFeedback`, `revokeFeedback`, `getSummary` |
+| [**TAGITAgentValidation**](./agent-validation.md) | Multi-party proof verification | `validationRequest`, `validationResponse` |
+
+See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-8004 deep-dive.
+
 ## Bridge Contract (1)
 
 | Module | Purpose | Key Functions |
@@ -87,7 +105,7 @@ flowchart TB
 
 ### OP Sepolia (Testnet) — Chain ID: 11155420
 
-> **Last Updated:** February 5, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
+> **Last Updated:** February 16, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
 
 #### Core Contracts
 
@@ -120,6 +138,14 @@ flowchart TB
 | Contract | Address | Status |
 |----------|---------|--------|
 | CCIPAdapter | `0x8dA6D7ffCD4cc0F2c9FfD6411CeD7C9c573C9E88` | ✅ LIVE |
+
+#### Agent Infrastructure (ERC-8004)
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| TAGITAgentIdentity | `0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D` | ✅ LIVE |
+| TAGITAgentReputation | `0x57CCa1974DFE29593FBD24fdAEE1cD614Bfd6E4a` | ✅ LIVE |
+| TAGITAgentValidation | `0x9806919185F98Bd07a64F7BC7F264e91939e86b7` | ✅ LIVE |
 
 #### Token Contracts (Pending Deployment)
 
@@ -213,6 +239,7 @@ See [Security Documentation](../security/threat-model.md) for threat analysis.
 
 ## Related
 
+- [Technosphere Architecture](../architecture/technosphere.md)
 - [Architecture Overview](../architecture/overview.md)
 - [Token Documentation](../token/tokenomics.md)
 - [API Reference](../api/overview.md)
