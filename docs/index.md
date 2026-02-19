@@ -32,7 +32,9 @@ flowchart LR
 - [Asset Lifecycle](./architecture/data-flow.md) — State transitions
 
 ### Developer Reference
-- [Smart Contracts](./contracts/index.md) — 6 core contract modules
+- [Smart Contracts](./contracts/index.md) — 18 contract modules across 5 categories
+- [Agent Gateway](./services/agent-gateway.md) — A2A, MCP, REST, x402 protocols
+- [Subgraph Indexer](./indexer/overview.md) — Graph Protocol indexer for ERC-8004 agent events
 - [REST API](./api/overview.md) — Backend API reference
 - [SDKs](./sdk/overview.md) — JavaScript, Kotlin, Swift
 
