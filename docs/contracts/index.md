@@ -105,13 +105,13 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 ### OP Sepolia (Testnet) — Chain ID: 11155420
 
-> **Last Updated:** February 16, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
+> **Last Updated:** February 24, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
 
 #### Core Contracts
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITCore | `0x8B02b62FD388b2d7e3dF5Ec666D68Ac7c7ca02Fe` | ✅ LIVE |
+| TAGITCore | `0x8bde22da889306d422802728cb98b6da42ed8e1a` | ✅ LIVE (UUPS Proxy) |
 | TAGITAccess | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | ✅ LIVE |
 | IdentityBadge | `0x26F2EBb84664EF1eF8554e15777EBEc6611256A6` | ✅ LIVE |
 | CapabilityBadge | `0x5e190F6Ebde4BD1e11a5566a1e81a933cdDf3505` | ✅ LIVE |

@@ -11,21 +11,37 @@ Core asset management contract for Digital Twin NFTs.
 
 | Network | Address | Status |
 |---------|---------|--------|
-| OP Sepolia | `0x8B02b62FD388b2d7e3dF5Ec666D68Ac7c7ca02Fe` | ✅ LIVE |
+| OP Sepolia | `0x8bde22da889306d422802728cb98b6da42ed8e1a` | ✅ LIVE (UUPS Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview
 
 TAGITCore is the central contract managing asset NFTs, their lifecycle states, and verification logic. It implements ERC-721 with extensions for the TAG IT lifecycle state machine.
 
+As of T20 (February 24, 2026), TAGITCore uses a **UUPS proxy pattern** (ERC-1967) for upgradeability. The proxy is governed by a TimelockController owned by a Gnosis Safe multisig.
+
 ## Contract Details
 
 | Property | Value |
 |----------|-------|
-| **Standard** | ERC-721 + Extensions |
-| **Inherits** | ERC721, ReentrancyGuard, Pausable |
+| **Standard** | ERC-721 + Extensions (UUPS Proxy) |
+| **Inherits** | ERC721Upgradeable, UUPSUpgradeable, Initializable, ReentrancyGuardUpgradeable, PausableUpgradeable |
+| **Proxy** | `0x8bde22da889306d422802728cb98b6da42ed8e1a` |
+| **Implementation** | `0x92c8e84a32d24b26b5cf07d9a8ced4da8c055192` |
+| **TimelockController** | `0x1b2bdd6f0a3c9127397de51c36dc237b097410a8` |
+| **Gnosis Safe** | `0xAaA33C556C9c97a5430D180A1f72e8cf0fe0354e` |
 | **License** | MIT |
 | **Solidity** | ^0.8.20 |
+
+### Upgrade Architecture
+
+```
+Gnosis Safe (multisig) → TimelockController (48h delay) → UUPS Proxy → Implementation
+```
+
+- `initialize(address initialOwner)` replaces the constructor
+- Upgrades require `upgradeToAndCall()` through the TimelockController
+- The proxy emits `Upgraded(address implementation)` on each upgrade
 
 ## Asset Lifecycle
 
@@ -234,6 +250,8 @@ error ZeroAddress();
 - Chip binding is **irreversible**
 - Only `CAP_FLAG` holders can flag assets
 - Flagged assets cannot be transferred
+- UUPS upgrades gated by TimelockController (48h delay) owned by Gnosis Safe multisig
+- `_authorizeUpgrade()` restricted to TimelockController address
 
 ## Next Steps
 
