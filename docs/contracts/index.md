@@ -105,7 +105,7 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 ### OP Sepolia (Testnet) — Chain ID: 11155420
 
-> **Last Updated:** February 24, 2026 | All contracts verified on [Blockscout](https://optimism-sepolia.blockscout.com)
+> **Last Updated:** February 27, 2026 | SEC-AUD-001 fully remediated | [Blockscout](https://optimism-sepolia.blockscout.com)
 
 #### Core Contracts
 
@@ -118,13 +118,13 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 #### NIST Phase 3 Contracts (ERC-1967 Proxies)
 
-| Contract | Address | Status |
-|----------|---------|--------|
-| TAGITRecovery | `0x6138a80c06A5e6a3CB6cc491A3a2c4DF4adD1600` | ✅ LIVE |
-| TAGITPaymaster | `0x4339c46D63231063250834D9b3fa4E51FdB8026e` | ✅ LIVE |
-| TAGITTreasury | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE |
-| TAGITPrograms | `0xe78DB7702FF5190DAc2F3E09213Ff84bF9efE32b` | ✅ LIVE |
-| TAGITStaking | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
+| Contract | Proxy | Implementation | Status |
+|----------|-------|----------------|--------|
+| TAGITRecovery | `0x17c0af6B37aBD06587303f1695a06A668F8A5A8c` | `0x8d8a5300e8c5E8BaBebd73175954ce01a427CDCe` | ✅ LIVE (v1.1.0) |
+| TAGITPaymaster | `0x670DC1C7821E0A717CFf5Cc949B05EC01b532104` | `0x4339c46D63231063250834D9b3fa4E51FdB8026e` | ✅ LIVE |
+| TAGITTreasury | `0x018b5c4b5550Bcc0ffe53e2FD0a5D9d1046cad78` | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE (redeployed) |
+| TAGITPrograms | `0x4d1007eB4823a5a13905A0361478C339421ce4C9` | `0x066FB866C0345115FA27a27cC704e8eaC61A565f` | ✅ LIVE (v1.1.0) |
+| TAGITStaking | `0xe500CDfbA693CE1f39A6F05CfB4614971370Ee93` | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
 
 #### Account Abstraction (ERC-4337)
 
@@ -147,15 +147,15 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 | TAGITAgentReputation | `0x57CCa1974DFE29593FBD24fdAEE1cD614Bfd6E4a` | ✅ LIVE |
 | TAGITAgentValidation | `0x9806919185F98Bd07a64F7BC7F264e91939e86b7` | ✅ LIVE |
 
-#### Token Contracts (Pending Deployment)
+#### Token & Governance Contracts
 
-| Contract | Address | Status |
-|----------|---------|--------|
-| TAGITToken | TBD | 🔜 Pending |
-| TAGITEmissions | TBD | 🔜 Pending |
-| TAGITBurner | TBD | 🔜 Pending |
-| TAGITVesting | TBD | 🔜 Pending |
-| TAGITGovernor | TBD | 🔜 Pending |
+| Contract | Proxy | Implementation | Status |
+|----------|-------|----------------|--------|
+| TAGITToken | `0xEe8f9544f0fC0be05408F4d0fa557be99a1cED94` | `0xa6620502d99e00b65dB65daea5bf6fb29B937BC9` | ✅ LIVE (UUPS) |
+| TAGITGovernor | `0x53F88a7fa2A7F2062A74c5FeB2Bab1Df29348DD8` | `0xFBbae8ED8EE66CDCf7b528106D66f5254d28E192` | ✅ LIVE (UUPS) |
+| TAGITEmissions | TBD | — | 🔜 Pending |
+| TAGITBurner | TBD | — | 🔜 Pending |
+| TAGITVesting | TBD | — | 🔜 Pending |
 
 ### OP Mainnet (Production)
 

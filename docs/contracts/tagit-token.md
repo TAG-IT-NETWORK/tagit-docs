@@ -18,8 +18,9 @@ TAGIT is the native token powering governance, staking, and fee distribution acr
 | Standard | ERC-20 |
 | Symbol | TAGIT |
 | Decimals | 18 |
-| Max Supply | TBD |
-| Initial Distribution | TBD |
+| Max Supply | 7,777,777,333 TAGIT |
+| Genesis Supply | 7,777,777,333 TAGIT (minted to deployer) |
+| Proxy Pattern | UUPS (ERC1967Proxy) |
 
 ## Utility
 
@@ -79,7 +80,7 @@ Earn tokens from verification activities and fraud reporting.
 | Community | X% | Emissions schedule |
 | Investors | X% | TBD |
 
-> **Note:** Final tokenomics to be published before mainnet launch.
+> **Note:** Final tokenomics to be published before mainnet launch. Genesis supply (7.77B) is currently held by the deployer wallet pending distribution setup via TAGITEmissions and TAGITVesting contracts.
 
 ## Contract Interface
 
@@ -105,12 +106,15 @@ interface ITAGITToken {
 }
 ```
 
-## Contract Address
+## Contract Addresses
 
-| Network | Address |
-|---------|---------|
-| OP Sepolia | TBD |
-| OP Mainnet | Coming soon |
+| Network | Type | Address |
+|---------|------|---------|
+| OP Sepolia | Proxy | `0xEe8f9544f0fC0be05408F4d0fa557be99a1cED94` |
+| OP Sepolia | Implementation | `0xa6620502d99e00b65dB65daea5bf6fb29B937BC9` |
+| OP Mainnet | — | Coming soon |
+
+> **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation.
 
 ## Related
 

@@ -137,8 +137,28 @@ event ProposalQueued(uint256 indexed proposalId, uint256 eta);
 event ProposalExecuted(uint256 indexed proposalId);
 ```
 
+## Contract Addresses
+
+| Network | Type | Address |
+|---------|------|---------|
+| OP Sepolia | Proxy | `0x53F88a7fa2A7F2062A74c5FeB2Bab1Df29348DD8` |
+| OP Sepolia | Implementation | `0xFBbae8ED8EE66CDCf7b528106D66f5254d28E192` |
+| OP Mainnet | — | Coming soon |
+
+> **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation. Uses UUPS proxy pattern.
+
+## Dependencies
+
+| Contract | Role |
+|----------|------|
+| TAGITToken | Voting power source (IVotes) |
+| TimelockController | Execution delay (`0x1B2bdd6f0a3C9127397dE51C36Dc237b097410a8`) |
+| TAGITAccess | Permission checks for proposal creation |
+| TAGITStaking | Stake threshold validation |
+
 ## Next Steps
 
+- [TAGITToken](./tagit-token.md) — Governance token
 - [TAGITTreasury](./tagit-treasury.md) — Protocol funds
 - [TAGITAccess](./tagit-access.md) — Permission system
 - [Contracts Overview](./index.md) — All contracts
