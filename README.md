@@ -40,7 +40,7 @@ Open http://localhost:3000 to view the docs.
 
 ### Core (6)
 - `tagit-contracts` — Smart contracts
-- `tagit-l2` — OP Stack rollup
+- `tagit-l2` — Stack rollup
 - `tagit-bridge` — CCIP adapters
 - `tagit-services` — Backend APIs
 - `tagit-indexer` — Event indexing
