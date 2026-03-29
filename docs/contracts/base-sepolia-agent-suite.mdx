@@ -1,0 +1,147 @@
+---
+title: Agent Suite — Base Sepolia Deployment
+description: Live contract addresses and configuration for the ERC-8004 Agent Suite on Base Sepolia testnet (chain 84532)
+---
+
+import { Callout } from '@/components/ui'
+
+# Agent Suite — Base Sepolia Deployment
+
+Deployed on **2026-03-29** via `DeployAgentSuite.s.sol` (single-broadcast). All three ERC-8004 Agent
+infrastructure contracts are live on Base Sepolia (chainId `84532`) and verified on Basescan.
+
+> **Related:** [Deploy Agent Suite Guide](../guides/deploy-agent-suite.mdx) ·
+> [Notion Wiki](https://www.notion.so/3314e3e9a2d38129876cf3a34095f933) ·
+> [GitHub Wiki — Agent Suite Base Sepolia](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Agent-Suite-Base-Sepolia)
+
+---
+
+## Deployed Contracts
+
+| Contract | Address | Basescan |
+|---|---|---|
+| `TAGITAgentIdentity` | `0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4` | [View ↗](https://sepolia.basescan.org/address/0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4) |
+| `TAGITAgentReputation` | `0x3DE2718FA22d831c09F358c5B28e06D51dDE3A28` | [View ↗](https://sepolia.basescan.org/address/0x3DE2718FA22d831c09F358c5B28e06D51dDE3A28) |
+| `TAGITAgentValidation` | `0x0162D48c6c4C2b51868E6f62dB83B29C696AD911` | [View ↗](https://sepolia.basescan.org/address/0x0162D48c6c4C2b51868E6f62dB83B29C696AD911) |
+
+### Deployment Metadata
+
+| Property | Value |
+|---|---|
+| **Network** | Base Sepolia |
+| **Chain ID** | `84532` |
+| **Block** | `39514005` |
+| **Deployer** | `0x458B4d0c3a55006965Fd13D6af7B8509De51Cb3D` |
+| **Deploy Script** | `script/deploy/DeployAgentSuite.s.sol` |
+| **Broadcast File** | `broadcast/DeployAgentSuite.s.sol/84532/run-latest.json` |
+| **Verification** | ✅ All three contracts verified on Basescan |
+| **Test Results** | ✅ 97/97 agent tests pass (71 unit + 16 security + 10 integration) |
+
+---
+
+## Wiring Configuration
+
+The suite script wires all contracts inline during the single broadcast.
+No post-deploy wiring step is required.
+
+| Setting | Value |
+|---|---|
+| `TAGITAgentIdentity.accessController` | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` (TAGITAccess) |
+| `TAGITAgentReputation.accessController` | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` (TAGITAccess) |
+| `TAGITAgentReputation.identityRegistry` | `0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4` (TAGITAgentIdentity) |
+| `TAGITAgentValidation.accessController` | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` (TAGITAccess) |
+| `TAGITAgentValidation.identityRegistry` | `0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4` (TAGITAgentIdentity) |
+
+---
+
+## Deployment Transaction Hashes
+
+| Contract | Tx Hash |
+|---|---|
+| `TAGITAgentIdentity` | [`0xf8d52e34...`](https://sepolia.basescan.org/tx/0xf8d52e34e58c90ee4c0d4ea536cb6f526e928ad1904d374622d3e9179efc0187) |
+| `TAGITAgentReputation` | [`0xd70036eb...`](https://sepolia.basescan.org/tx/0xd70036eb029f57aabfe6a4c74c2fa48e05d205045268c741fed6ae8b501b9643) |
+| `TAGITAgentValidation` | [`0xcc23fe52...`](https://sepolia.basescan.org/tx/0xcc23fe525cf0ca7287a61aec20b7265f16e7387a00c4458ff52426f36c563919) |
+
+---
+
+## Deploying to Base Sepolia
+
+To reproduce this deployment from scratch:
+
+```bash
+# 1. Set env vars
+export BASE_SEPOLIA_RPC_URL=https://base-sepolia.g.alchemy.com/v2/YOUR_KEY
+export BASESCAN_API_KEY=YOUR_BASESCAN_API_KEY
+export PRIVATE_KEY=0x...
+export TAGIT_ACCESS=0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9
+
+# 2. Dry-run (no broadcast)
+forge script script/deploy/DeployAgentSuite.s.sol \
+  --rpc-url $BASE_SEPOLIA_RPC_URL
+
+# 3. Live deploy + verify
+forge script script/deploy/DeployAgentSuite.s.sol \
+  --rpc-url $BASE_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+<Callout type="info">
+The suite script deploys all three contracts in a single broadcast with automatic wiring.
+`TAGIT_ACCESS` must point to a pre-deployed `TAGITAccess` controller.
+</Callout>
+
+---
+
+## Environment Variables (Post-Deploy)
+
+After deployment, update your `.env` with the live addresses:
+
+```dotenv
+# Base Sepolia Agent Suite
+AGENT_IDENTITY_ADDRESS=0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4
+AGENT_REPUTATION_ADDRESS=0x3DE2718FA22d831c09F358c5B28e06D51dDE3A28
+AGENT_VALIDATION_ADDRESS=0x0162D48c6c4C2b51868E6f62dB83B29C696AD911
+```
+
+---
+
+## Post-Deploy Checklist
+
+- [x] All three contracts deployed in single broadcast
+- [x] Contracts verified on Basescan
+- [x] 97/97 agent tests pass
+- [x] `setAccessController()` wired inline — no manual step needed
+- [x] `setIdentityRegistry()` wired inline on Reputation and Validation
+- [ ] Review MEDIUM-severity advisory items before mainnet promotion (see [PR #2](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/2))
+- [ ] Add pagination guard to `getSummary()` / `readAllFeedback()` before high-volume use
+- [ ] Register Agent #1 via `RegisterSageAgent.s.sol`
+- [ ] Grant `AGENT_VALIDATOR` capability to validator addresses via BIDGES
+
+<Callout type="warning">
+Four MEDIUM-severity advisory items are tracked in PR #2. They must be resolved before promoting
+to mainnet. See the PR review notes for details.
+</Callout>
+
+---
+
+## Open Advisory Items (MEDIUM Severity)
+
+| Location | Issue | Recommended Fix |
+|---|---|---|
+| `TAGITAgentIdentity.sol:289` | Bare `revert()` with no error selector | Replace with `InsufficientFee(uint256 sent, uint256 required)` |
+| `TAGITAgentReputation.sol:284` | `SelfReviewBlocked` reused for duplicate-review guard | Add `AlreadyReviewed(address, uint256)` |
+| `TAGITAgentValidation.sol:51` | `MAX_VALIDATORS = 5` declared but not enforced in `validationResponse()` | Add guard in `validationResponse()` |
+| All 3 contracts | `setAccessController()` / `setIdentityRegistry()` accept `address(0)` | Add `ZeroAddress()` guard |
+
+---
+
+## See Also
+
+- [TAGITAgentIdentity contract reference](./agent-identity.md)
+- [TAGITAgentReputation contract reference](./agent-reputation.md)
+- [TAGITAgentValidation contract reference](./agent-validation.md)
+- [Deploy Agent Suite Guide](../guides/deploy-agent-suite.mdx)
+- [GitHub PR #2 — tagit-contracts](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/2)
+- [Notion Wiki — Agent Suite Base Sepolia Deployment](https://www.notion.so/3314e3e9a2d38129876cf3a34095f933)
+- [GitHub Wiki — Agent Suite Base Sepolia](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Agent-Suite-Base-Sepolia)

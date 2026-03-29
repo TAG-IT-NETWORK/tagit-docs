@@ -11,6 +11,7 @@ Multi-party proof verification for AI agents. Part of the [Technosphere](../arch
 
 | Network | Address | Status |
 |---------|---------|--------|
+| Base Sepolia | `0x0162D48c6c4C2b51868E6f62dB83B29C696AD911` | [Verified ↗](https://sepolia.basescan.org/address/0x0162D48c6c4C2b51868E6f62dB83B29C696AD911) |
 | OP Sepolia | `0x9806919185F98Bd07a64F7BC7F264e91939e86b7` | Verified |
 | OP Mainnet | TBD | Pending |
 

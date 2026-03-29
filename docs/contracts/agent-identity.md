@@ -11,6 +11,7 @@ Soulbound ERC-721 registry for AI agent identity. Part of the [Technosphere](../
 
 | Network | Address | Status |
 |---------|---------|--------|
+| Base Sepolia | `0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4` | [Verified ↗](https://sepolia.basescan.org/address/0xBbB9f7dB1C38Af7998b511d8026042755Eb4F4C4) |
 | OP Sepolia | `0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D` | Verified |
 | OP Mainnet | TBD | Pending |
 

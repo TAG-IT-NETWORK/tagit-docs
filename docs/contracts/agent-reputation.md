@@ -11,6 +11,7 @@ Feedback and reputation scoring system for AI agents. Part of the [Technosphere]
 
 | Network | Address | Status |
 |---------|---------|--------|
+| Base Sepolia | `0x3DE2718FA22d831c09F358c5B28e06D51dDE3A28` | [Verified ↗](https://sepolia.basescan.org/address/0x3DE2718FA22d831c09F358c5B28e06D51dDE3A28) |
 | OP Sepolia | `0x57CCa1974DFE29593FBD24fdAEE1cD614Bfd6E4a` | Verified |
 | OP Mainnet | TBD | Pending |
 
