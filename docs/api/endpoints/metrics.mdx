@@ -1,0 +1,244 @@
+---
+title: Metrics — PRD-017 KPI Tracking
+description: REST API reference for the SUDO AI success-metrics service (PRD-017 KPIs)
+---
+
+import { Callout } from "@/components/callout";
+
+# Metrics — PRD-017 KPI Tracking
+
+The metrics service exposes six on-chain KPIs defined in PRD §Success Metrics. Data is
+sourced from the **tagit-indexer** subgraph (OP Sepolia + Arbitrum Sepolia) and served
+through a TTL cache (300 s, Redis-ready).
+
+<Callout type="info">
+  All endpoints require a valid API key (`Authorization: Bearer <key>`).
+  The `POST /metrics/kpis/invalidate` endpoint additionally requires an **admin-role** API key.
+</Callout>
+
+---
+
+## KPI Definitions
+
+| # | KPI Name | Description | Target |
+|---|----------|-------------|--------|
+| 1 | `totalTagsRegistered` | Total BIDGES minted on Arbitrum core | 100+ |
+| 2 | `uniqueWallets` | Unique addresses with non-zero wTAG balance | — |
+| 3 | `totalScanEvents` | Total SUN message verification requests | — |
+| 4 | `verificationSuccessRate` | % of SUN message validations that passed | — |
+| 5 | `bridgeVolume` | Total escrow volume (USDC) bridged via OP Sepolia | — |
+| 6 | `activeTagsRatio` | % of minted BIDGES in `ACTIVATED` / `CLAIMED` lifecycle states | — |
+
+---
+
+## Endpoints
+
+### GET /metrics/kpis
+
+Returns all six KPI values for a given time window.
+
+**Query Parameters**
+
+| Parameter | Type | Default | Values |
+|-----------|------|---------|--------|
+| `window` | string | `all` | `24h`, `7d`, `30d`, `all` |
+
+**Response**
+
+```json
+{
+  "kpis": [
+    {
+      "name": "totalTagsRegistered",
+      "value": 312,
+      "window": "all",
+      "breakdown": {},
+      "computedAt": "2026-03-29T14:00:00.000Z"
+    }
+  ],
+  "cached": false
+}
+```
+
+**Example**
+
+```bash
+curl "https://api.tagit.network/metrics/kpis?window=7d" \
+  -H "Authorization: Bearer $TAGIT_API_KEY"
+```
+
+---
+
+### GET /metrics/kpis/summary
+
+Returns a dashboard rollup object containing all six KPIs keyed by name.
+
+**Query Parameters**
+
+| Parameter | Type | Default | Values |
+|-----------|------|---------|--------|
+| `window` | string | `all` | `24h`, `7d`, `30d`, `all` |
+
+**Response**
+
+```json
+{
+  "window": "30d",
+  "totalTagsRegistered": 312,
+  "uniqueWallets": 87,
+  "totalScanEvents": 1042,
+  "verificationSuccessRate": 0.94,
+  "bridgeVolume": 4200.50,
+  "activeTagsRatio": 0.71,
+  "computedAt": "2026-03-29T14:00:00.000Z",
+  "cached": false
+}
+```
+
+---
+
+### GET /metrics/kpis/:name
+
+Returns a single KPI by name.
+
+**Path Parameters**
+
+| Parameter | Values |
+|-----------|--------|
+| `name` | `totalTagsRegistered`, `uniqueWallets`, `totalScanEvents`, `verificationSuccessRate`, `bridgeVolume`, `activeTagsRatio` |
+
+**Query Parameters**
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| `window` | string | `all` |
+
+**Response**
+
+```json
+{
+  "name": "uniqueWallets",
+  "value": 87,
+  "window": "all",
+  "breakdown": null,
+  "computedAt": "2026-03-29T14:00:00.000Z",
+  "cached": false
+}
+```
+
+**Error — unknown KPI name**
+
+```json
+{ "error": "KPI 'foo' not found. Available: totalTagsRegistered, uniqueWallets, ..." }
+```
+
+---
+
+### GET /api/v1/metrics/prd017
+
+Legacy endpoint — returns the full PRD-017 on-chain metrics shape including wTAG
+total supply, Voucher NFT mints by tier, and chains deployed count.
+
+**Response shape** (`Prd017Metrics`)
+
+```ts
+interface VoucherTierBreakdown {
+  bronze: number;
+  silver: number;
+  gold: number;
+  platinum: number;
+}
+
+interface Prd017Metrics {
+  uniqueAgentInteractions: number;
+  wtagDistributedTotal: number;
+  voucherNftsMintedByTier: VoucherTierBreakdown;
+  chainsDeployedCount: number;
+  securityIncidentCount: number;    // currently hardcoded 0; tracked in TODO
+  voucherConversionRate: number;    // 0–1
+  computedAt: string;               // ISO-8601
+}
+```
+
+---
+
+### POST /metrics/kpis/invalidate
+
+Flushes the in-memory KPI cache. Requires an **admin-role** API key.
+
+**Response**
+
+```json
+{ "invalidated": true, "clearedAt": "2026-03-29T14:00:05.000Z" }
+```
+
+<Callout type="warning">
+  This endpoint has no additional role check in the current implementation (tracked as a
+  MEDIUM review item in [PR #3](https://github.com/TAG-IT-NETWORK/tagit-services/pull/3)).
+  Do not expose to public traffic until the admin-role guard is in place.
+</Callout>
+
+---
+
+## Caching
+
+| Property | Value |
+|----------|-------|
+| Backend | In-process `Map`; Redis-compatible interface |
+| TTL | 300 seconds (5 minutes) |
+| Key format | `kpi:<name>:<window>` |
+| Cache class | `KpiCache<T>` (`src/metrics/cache.ts`) |
+
+---
+
+## Data Sources
+
+| KPI | Subgraph | Chain |
+|-----|----------|-------|
+| `totalTagsRegistered` | `tagit-core` | Arbitrum Sepolia |
+| `uniqueWallets` | `tagit-token` | OP Sepolia |
+| `totalScanEvents` | `tagit-core` | Arbitrum Sepolia |
+| `verificationSuccessRate` | `tagit-core` | Arbitrum Sepolia |
+| `bridgeVolume` | `tagit-bridge` | OP Sepolia |
+| `activeTagsRatio` | `tagit-core` | Arbitrum Sepolia |
+
+Subgraph endpoints are configured via environment variables:
+
+```env
+SUBGRAPH_URL_OP_SEPOLIA=https://api.goldsky.com/api/public/...
+SUBGRAPH_URL_ARB_SEPOLIA=https://api.goldsky.com/api/public/...
+```
+
+---
+
+## Database Schema
+
+Two Postgres tables managed via **Drizzle ORM**:
+
+```sql
+-- Snapshots persisted from each aggregation run
+CREATE TABLE kpi_snapshots (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT        NOT NULL,
+  value      NUMERIC     NOT NULL,
+  window     TEXT        NOT NULL,
+  breakdown  JSONB,
+  computed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Per-KPI targets for dashboard progress indicators
+CREATE TABLE kpi_targets (
+  name       TEXT PRIMARY KEY,
+  target     NUMERIC NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+```
+
+---
+
+## Related
+
+- [GitHub PR #3 — tagit-services](https://github.com/TAG-IT-NETWORK/tagit-services/pull/3)
+- [wTAG + Voucher Subgraph](../indexer/wtag-voucher-subgraph.mdx)
+- [GitHub Wiki — PRD-017 KPI Tracking Service](https://github.com/TAG-IT-NETWORK/tagit-services/wiki/PRD-017-KPI-Tracking-Service)
+- [Notion Wiki — PRD-017 KPI Tracking](https://www.notion.so/3314e3e9a2d38126b53ccc051c3865bb)
