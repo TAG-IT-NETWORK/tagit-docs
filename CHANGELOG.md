@@ -6,6 +6,9 @@ All notable changes to TAG IT Network documentation are recorded here.
 
 ## [Unreleased]
 
+### Changed
+- `docs/token/wtag.mdx` — Added **Governance Cap** section (PR #5): `setGovernanceCap(uint256)` admin function with owner-only access, `governanceCap()` view returning the current ceiling (`0` = uncapped), `GovernanceCapExceeded(uint256 requested, uint256 available)` custom error, `GovernanceCapUpdated(uint256 oldCap, uint256 newCap)` event, `_enforceGovernanceCap` internal enforcement applied to both `wrap()` and `mint()`. Architecture mermaid diagram updated. Fuzz test coverage table (8 scenarios, 100k runs). Covers task [3314e3e9-a2d3-817a] ([tagit-contracts PR #5](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/5)).
+
 ### Added
 - `docs/token/wtag.mdx` — Full developer reference for `wTAG` (Wrapped TAG): ERC20Votes governance token wrapping TAGIT 1:1 for TAGITGovernor Token House voting. Covers `wrap()`, `unwrap()`, `mint()`, `grantMinter()` / `revokeMinter()` function signatures, ERC20Votes delegation API, event schemas, custom errors, UUPS upgrade wiring, mermaid integration diagram. Phase 3 (OP Sepolia). Covers task [3314e3e9] ([tagit-contracts PR #4](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/4)).
 - `docs/token/voucher.mdx` — Full developer reference for `Voucher` (vTAG): non-transferable ERC-20 reward tokens issued by TAGITCore on qualifying lifecycle actions (activation, claiming). Covers `issue()`, `burnFrom()`, `redeem()` (vTAG → wTAG at configurable basis-point rate), `setRedemptionRate()`, `setRedemptionPaused()`, redemption formula, non-transferable `_update` override, VoucherProposal governance flow, event schemas, custom errors. Phase 3 (OP Sepolia). Covers task [3314e3e9] ([tagit-contracts PR #4](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/4)).

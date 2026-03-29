@@ -1,16 +1,17 @@
 ---
 title: wTAG (Wrapped TAG)
-description: ERC20Votes governance token wrapping TAGIT 1:1 — powers TAGITGovernor Token House voting — Phase 3
+description: ERC20Votes governance token wrapping TAGIT 1:1 — powers TAGITGovernor Token House voting — Phase 3 + governance cap enforcement (PR #5)
 ---
 
 # wTAG (Wrapped TAG)
 
-Wrapped governance token. Users lock TAGIT → receive wTAG at 1:1. wTAG implements ERC20Votes (IVotes) and is the sole voting token for the **Token House** in TAGITGovernor.
+Wrapped governance token. Users lock TAGIT → receive wTAG at 1:1. wTAG implements ERC20Votes (IVotes) and is the sole voting token for the **Token House** in TAGITGovernor. As of PR #5, wTAG enforces an optional **governance cap** — a configurable ceiling on total supply applied at both `wrap()` and `mint()`.
 
 > **Related docs**:
 > [Notion Wiki](https://www.notion.so/3324e3e9a2d38179bec1d238eb0b7509) ·
-> [GitHub Wiki](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Phase3-wTAG-Voucher) ·
-> [tagit-contracts PR #4](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/4)
+> [GitHub Wiki](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Governance-Cap-wTAG) ·
+> [tagit-contracts PR #4](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/4) ·
+> [tagit-contracts PR #5 (governance cap)](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/5)
 
 ---
 
@@ -54,8 +55,11 @@ flowchart LR
     Core[TAGITCore] -->|MINTER_ROLE\nmint rewards| wTAG
     Voucher[Voucher Contract] -->|MINTER_ROLE\nredeem→mint| wTAG
 
+    Cap[Governance Cap\nsetGovernanceCap] -->|_enforceGovernanceCap\nwrap + mint| wTAG
+
     style wTAG fill:#6c3483,color:#fff
     style Governor fill:#1a5276,color:#fff
+    style Cap fill:#922b21,color:#fff
 ```
 
 ---
@@ -150,11 +154,30 @@ Emits: `MinterRevoked(address indexed minter, address indexed revokedBy)`
 
 ---
 
+### `setGovernanceCap` _(PR #5)_
+
+Set the maximum allowed `totalSupply()` for wTAG. Any `wrap()` or `mint()` that would push supply past this ceiling reverts with `GovernanceCapExceeded`. Set to `0` to disable the cap (backward-compatible default).
+
+```solidity
+function setGovernanceCap(uint256 newCap) external; // onlyOwner
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `newCap` | `uint256` | Governance cap in token units (18 decimals). `0` = no cap. |
+
+Emits: `GovernanceCapUpdated(uint256 oldCap, uint256 newCap)`
+
+> **Intent:** Enforces a 5% total TAG supply ceiling on circulating wTAG and caps per-wallet governance power from agent distributions at 1%. Token House only — Council House (BIDGES) is unaffected.
+
+---
+
 ## View Functions
 
 ```solidity
 function isMinter(address account) external view returns (bool);
 function underlyingToken() external view returns (address);
+function governanceCap() external view returns (uint256);  // 0 = uncapped (PR #5)
 function version() external pure returns (string memory);  // "1.0.0"
 ```
 
@@ -191,6 +214,7 @@ TAGITGovernor is initialized with `IVotes(address(wtag))` — it calls `getPastV
 | `MinterMinted` | `(address indexed to, uint256 amount, address indexed minter)` | Reward mint by authorized minter |
 | `MinterGranted` | `(address indexed minter, address indexed grantedBy)` | New minter authorized |
 | `MinterRevoked` | `(address indexed minter, address indexed revokedBy)` | Minter removed |
+| `GovernanceCapUpdated` _(PR #5)_ | `(uint256 oldCap, uint256 newCap)` | Governance cap changed by owner |
 
 ---
 
@@ -202,6 +226,47 @@ TAGITGovernor is initialized with `IVotes(address(wtag))` — it calls `getPastV
 | `ZeroAmount()` | Amount parameter is `0` |
 | `OnlyMinter(address caller)` | Caller lacks `MINTER_ROLE` |
 | `InsufficientBalance(address account, uint256 required, uint256 available)` | Insufficient wTAG balance for unwrap |
+| `GovernanceCapExceeded(uint256 requested, uint256 available)` _(PR #5)_ | `wrap()` or `mint()` would push `totalSupply` past the governance cap |
+
+---
+
+## Governance Cap _(PR #5)_
+
+PR #5 adds an optional supply ceiling to wTAG. When set, no `wrap()` or `mint()` call can push `totalSupply()` past the cap.
+
+### Intent
+
+- Hard-cap circulating wTAG at **5% of total TAG supply**
+- Limit per-wallet governance power from agent distribution to **1%**
+- Token House only — Council House (BIDGES) lifecycle states remain fully isolated
+
+### Enforcement
+
+`_enforceGovernanceCap(uint256 amount)` runs at the top of both `wrap()` and `mint()`:
+
+```solidity
+function _enforceGovernanceCap(uint256 amount) internal view {
+    uint256 cap = governanceCap;
+    if (cap == 0) return;                           // 0 = uncapped
+    uint256 supply = totalSupply();
+    if (supply + amount > cap) {
+        revert GovernanceCapExceeded(amount, cap - supply);
+    }
+}
+```
+
+### Fuzz Coverage (`test/unit/wTAG.t.sol` — 100k runs)
+
+| Test | Scenario |
+|------|----------|
+| `test_governanceCap_defaultsToZero` | Cap defaults to `0` (uncapped) at deploy |
+| `test_setGovernanceCap_success` | Owner sets cap → `GovernanceCapUpdated` emitted |
+| `test_setGovernanceCap_updateEmitsOldAndNew` | Old and new values correctly emitted |
+| `test_setGovernanceCap_reverts_notOwner` | Non-owner cannot set cap |
+| `test_wrap_reverts_aboveCap` | `wrap()` reverts with `GovernanceCapExceeded` |
+| `test_mint_reverts_aboveCap` | `mint()` reverts with `GovernanceCapExceeded` |
+| `test_exactBoundary` | At `supply == cap`, next unit reverts |
+| `test_setGovernanceCap_canDisableBySettingZero` | Setting cap to `0` re-enables uncapped minting |
 
 ---
 
@@ -211,6 +276,7 @@ TAGITGovernor is initialized with `IVotes(address(wtag))` — it calls `getPastV
 - `SafeERC20` for underlying TAGIT transfers (prevents silent failures)
 - CEI pattern in `unwrap`: burn before transfer
 - UUPS upgrade authorization gated to owner (TimelockController)
+- Governance cap enforced **before** state changes in `wrap()` and `mint()` — cannot be bypassed by privileged minters
 
 ---
 
