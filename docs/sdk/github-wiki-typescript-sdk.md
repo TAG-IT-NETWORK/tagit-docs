@@ -6,6 +6,7 @@ Developer reference for the `@tagit/sdk` TypeScript SDK introduced in
 > **See also:**
 > [Notion Wiki](https://www.notion.so/3324e3e9a2d3812f9197cd6f4d8243e8) ·
 > [tagit-docs MDX](https://github.com/TAG-IT-NETWORK/tagit-docs/blob/sudo/docs-3314e3e9/docs/sdk/typescript-sdk-agents.mdx) ·
+> [tagit-docs PR #1](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/1) ·
 > [tagit-sdk PR #3](https://github.com/TAG-IT-NETWORK/tagit-sdk/pull/3)
 
 ---
