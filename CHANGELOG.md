@@ -7,6 +7,7 @@ All notable changes to TAG IT Network documentation are recorded here.
 ## [Unreleased]
 
 ### Added
+- `docs/indexer/wtag-voucher-subgraph.mdx` — Developer reference for the wTAG (`TAGITToken`) and Voucher (`VerificationEscrow`) subgraph schema: 10 new GraphQL entities, 10 event handler signatures, lifecycle states diagram (mermaid), sample queries, and Goldsky deployment guide. Covers task [3314e3e9] ([tagit-indexer PR #1](https://github.com/TAG-IT-NETWORK/tagit-indexer/pull/1)).
 - `docs/contracts/ccip-bridge-adapter.mdx` — Full developer reference for `CCIPBridgeAdapter` and `WrappedTAGIT` (wTAG): dual-mode bridge (LOCK_UNLOCK / BURN_MINT), function signatures, event schemas, mermaid transfer-flow diagram, deployment guide, and testnet chain selectors. Covers task [3314e3e9] ([tagit-bridge PR #1](https://github.com/TAG-IT-NETWORK/tagit-bridge/pull/1)).
 
 ---
