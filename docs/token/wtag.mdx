@@ -1,0 +1,223 @@
+---
+title: wTAG (Wrapped TAG)
+description: ERC20Votes governance token wrapping TAGIT 1:1 — powers TAGITGovernor Token House voting — Phase 3
+---
+
+# wTAG (Wrapped TAG)
+
+Wrapped governance token. Users lock TAGIT → receive wTAG at 1:1. wTAG implements ERC20Votes (IVotes) and is the sole voting token for the **Token House** in TAGITGovernor.
+
+> **Related docs**:
+> [Notion Wiki](https://www.notion.so/3324e3e9a2d38179bec1d238eb0b7509) ·
+> [GitHub Wiki](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Phase3-wTAG-Voucher) ·
+> [tagit-contracts PR #4](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/4)
+
+---
+
+## Overview
+
+`wTAG` is a UUPS-upgradeable ERC-20 that extends `ERC20VotesUpgradeable` (OpenZeppelin). It serves two roles in Phase 3:
+
+| Role | Mechanism |
+|------|-----------|
+| **Governance token** | `IVotes` interface wired to TAGITGovernor for quorum and voting weight |
+| **Reward token** | `MINTER_ROLE` authorized to TAGITCore and Voucher for reward minting |
+
+Council House (BIDGES) governance remains completely isolated — wTAG only grants Token House voting power.
+
+---
+
+## Contract Details
+
+| Property | Value |
+|----------|-------|
+| **Symbol** | `wTAG` |
+| **Name** | `Wrapped TAG` |
+| **Standard** | ERC-20 + ERC20Votes + ERC20Permit |
+| **Proxy Pattern** | UUPS (ERC-1967) |
+| **Network** | OP Sepolia (Phase 3 testnet) |
+| **Source** | `src/token/wTAG.sol` |
+| **Interface** | `src/interfaces/IwTAG.sol` |
+| **Solidity** | `^0.8.20` |
+| **License** | MIT |
+
+---
+
+## Architecture
+
+```mermaid
+flowchart LR
+    TAGIT[TAGIT Token] -->|wrap 1:1| wTAG
+    wTAG -->|unwrap 1:1| TAGIT
+
+    wTAG -->|IVotes| Governor[TAGITGovernor\nToken House]
+    Core[TAGITCore] -->|MINTER_ROLE\nmint rewards| wTAG
+    Voucher[Voucher Contract] -->|MINTER_ROLE\nredeem→mint| wTAG
+
+    style wTAG fill:#6c3483,color:#fff
+    style Governor fill:#1a5276,color:#fff
+```
+
+---
+
+## Initializer
+
+```solidity
+function initialize(
+    address _tagitToken,   // Underlying TAGIT ERC-20 address
+    address _initialOwner  // Owner (should be TimelockController)
+) external initializer;
+```
+
+Initializes `ERC20`, `ERC20Permit`, `ERC20Votes`, `ERC20Burnable`, `Ownable`, and `UUPSUpgradeable`. Sets `tagitToken` storage.
+
+---
+
+## Core Functions
+
+### `wrap`
+
+Lock TAGIT into the contract and receive equal wTAG. Requires prior `approve()` of TAGIT.
+
+```solidity
+function wrap(uint256 amount) external;
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `amount` | `uint256` | Amount of TAGIT to wrap (18 decimals) |
+
+Emits: `Wrapped(address indexed account, uint256 amount)`
+
+---
+
+### `unwrap`
+
+Burn wTAG and receive equal TAGIT back.
+
+```solidity
+function unwrap(uint256 amount) external;
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `amount` | `uint256` | Amount of wTAG to unwrap |
+
+Emits: `Unwrapped(address indexed account, uint256 amount)`
+
+---
+
+### `mint`
+
+Mint wTAG without requiring underlying TAGIT deposit. Restricted to authorized minters (TAGITCore, Voucher contract).
+
+```solidity
+function mint(address to, uint256 amount) external; // onlyMinter
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `to` | `address` | Recipient of minted wTAG |
+| `amount` | `uint256` | Amount to mint |
+
+Emits: `MinterMinted(address indexed to, uint256 amount, address indexed minter)`
+
+---
+
+## Admin Functions
+
+### `grantMinter`
+
+Grant `MINTER_ROLE` to an address. Only callable by owner (TimelockController).
+
+```solidity
+function grantMinter(address minter) external; // onlyOwner
+```
+
+Emits: `MinterGranted(address indexed minter, address indexed grantedBy)`
+
+---
+
+### `revokeMinter`
+
+Revoke `MINTER_ROLE` from an address.
+
+```solidity
+function revokeMinter(address minter) external; // onlyOwner
+```
+
+Emits: `MinterRevoked(address indexed minter, address indexed revokedBy)`
+
+---
+
+## View Functions
+
+```solidity
+function isMinter(address account) external view returns (bool);
+function underlyingToken() external view returns (address);
+function version() external pure returns (string memory);  // "1.0.0"
+```
+
+---
+
+## ERC20Votes Integration
+
+wTAG inherits `ERC20VotesUpgradeable`. Voting power must be **self-delegated** before it counts in governance.
+
+```solidity
+// Activate voting power
+wtag.delegate(msg.sender);
+
+// Check voting power at current block
+uint256 votes = wtag.getVotes(account);
+
+// Check historical voting power (used by governor)
+uint256 pastVotes = wtag.getPastVotes(account, blockNumber);
+
+// Quorum calculation
+uint256 pastSupply = wtag.getPastTotalSupply(blockNumber);
+```
+
+TAGITGovernor is initialized with `IVotes(address(wtag))` — it calls `getPastVotes` and `getPastTotalSupply` for proposal quorum and voting weight.
+
+---
+
+## Event Reference
+
+| Event | Signature | Description |
+|-------|-----------|-------------|
+| `Wrapped` | `(address indexed account, uint256 amount)` | TAGIT wrapped to wTAG |
+| `Unwrapped` | `(address indexed account, uint256 amount)` | wTAG unwrapped to TAGIT |
+| `MinterMinted` | `(address indexed to, uint256 amount, address indexed minter)` | Reward mint by authorized minter |
+| `MinterGranted` | `(address indexed minter, address indexed grantedBy)` | New minter authorized |
+| `MinterRevoked` | `(address indexed minter, address indexed revokedBy)` | Minter removed |
+
+---
+
+## Custom Errors
+
+| Error | Condition |
+|-------|-----------|
+| `ZeroAddress()` | Address parameter is `address(0)` |
+| `ZeroAmount()` | Amount parameter is `0` |
+| `OnlyMinter(address caller)` | Caller lacks `MINTER_ROLE` |
+| `InsufficientBalance(address account, uint256 required, uint256 available)` | Insufficient wTAG balance for unwrap |
+
+---
+
+## Security Notes
+
+- `ReentrancyGuard` on all state-changing functions
+- `SafeERC20` for underlying TAGIT transfers (prevents silent failures)
+- CEI pattern in `unwrap`: burn before transfer
+- UUPS upgrade authorization gated to owner (TimelockController)
+
+---
+
+## Related Contracts
+
+| Contract | Relationship |
+|----------|-------------|
+| [TAGITGovernor](../contracts/tagit-governor.md) | Consumes `IVotes` for Token House voting power |
+| [Voucher](voucher.mdx) | Calls `wTAG.mint()` on redemption (requires `MINTER_ROLE`) |
+| [TAGITCore](../contracts/tagit-core.md) | Granted `MINTER_ROLE` for lifecycle reward minting |
