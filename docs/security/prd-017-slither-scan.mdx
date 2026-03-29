@@ -1,0 +1,124 @@
+---
+title: PRD-017 Slither Static Analysis
+description: Slither 0.11.5 security scan results for all PRD-017 smart contracts — tagit-contracts and tagit-bridge.
+---
+
+# PRD-017 Slither Static Analysis
+
+**Date**: 2026-03-29
+**Slither Version**: 0.11.5
+**Task**: [3314e3e9](https://www.notion.so/3314e3e9a2d38126a6d1f0bcacdcc390)
+**Security PR**: [tagit-security #1](https://github.com/TAG-IT-NETWORK/tagit-security/pull/1)
+**GitHub Wiki**: [PRD-017-Slither-Scan](https://github.com/TAG-IT-NETWORK/tagit-security/wiki/PRD-017-Slither-Scan)
+
+---
+
+## Scope
+
+| Codebase | Files Scanned | Contracts Analyzed | Raw Findings |
+|----------|:---:|:---:|:---:|
+| `tagit-contracts` | 48 `.sol` | 129 | 171 |
+| `tagit-bridge` | 3 `.sol` | 34 | 81 |
+| **Total** | **51** | **163** | **252** |
+
+### PRD-017 Target Contracts
+
+The following six contracts introduced in PRD-017 were the primary acceptance scope:
+
+| Contract | Path |
+|----------|------|
+| `wTAG` | `src/token/wTAG.sol` |
+| `TAGITVoucher` | `src/token/TAGITVoucher.sol` |
+| `AgentRegistry` | `src/agent/AgentRegistry.sol` |
+| `AgentWallet` | `src/agent/AgentWallet.sol` |
+| `AgentEscrow` | `src/agent/AgentEscrow.sol` |
+| `VoucherMigrator` | `src/bridge/VoucherMigrator.sol` |
+
+---
+
+## Triage Summary
+
+| Severity | Count | Remediation Required |
+|----------|:-----:|----------------------|
+| 🔴 High | 4 | Yes — 2 must-fix pre-mainnet, 2 accepted with access-control verification |
+| 🟠 Medium | 8 | Yes — fix before mainnet |
+| 🟡 Low | 12 | Accepted or deferred with documentation |
+| ℹ️ Informational | ~75 | No action required |
+
+Full triage report: [`reports/PRD-017-slither-summary.md`](https://github.com/TAG-IT-NETWORK/tagit-security/blob/sudo/prd-017-slither-scan/reports/PRD-017-slither-summary.md)
+
+---
+
+## High Findings (4)
+
+> Security internals are not published here. See the triage report in the `tagit-security` repo for full details. Access is restricted to authorized contributors.
+
+| ID | Detector | Contract | Remediation |
+|----|----------|----------|-------------|
+| H-1 | `arbitrary-send-eth` | `TAGITTreasury` | Verify governor-only access control on `emergencySweep()` |
+| H-2 | `arbitrary-send-eth` | `CCIPAdapter` | Verify destination validation in `_sendResponse()` |
+| H-3 | `reentrancy-no-eth` | `TAGITEmissions` | Add `nonReentrant` or enforce CEI in `distributeEpoch()` |
+| H-4 | `reentrancy-no-eth` | `TAGITStaking` | Add `nonReentrant` or enforce CEI in `notifyRewardAmount()` |
+
+---
+
+## Medium Findings (8)
+
+| ID | Detector | Contracts | Fix |
+|----|----------|-----------|-----|
+| M-1 | `divide-before-multiply` | `TAGITAgentReputation` | Reorder: multiply before divide |
+| M-2 | `divide-before-multiply` | `TAGITEmissions` | Reorder: multiply before divide |
+| M-3 | `incorrect-equality` | `TAGITStateAnchor` | Use `<= 0` or `== 0` with explicit bounds check |
+| M-4 | `incorrect-equality` | `TAGITVesting` | Review strict equality in `claim()` |
+| M-5 | `uninitialized-local` | `TAGITAgentReputation` | Explicitly initialize 5 local vars in `getSummary()` |
+| M-6 | `uninitialized-local` | `TAGITPaymaster` | Initialize `brandId` in `_validatePaymasterUserOp()` |
+| M-7 | `uninitialized-local` | `TAGITAgentValidation` | Initialize `totalScore` in `_finalize()` |
+| M-8 | `missing-zero-check` | `TAGITAccountFactory` | Add `require(addr != address(0))` to `setEmailVerifier`, `setProtocolGuardian`, `setTagitCore` |
+
+---
+
+## Pre-Mainnet Action Items
+
+### Must Fix
+1. **H-3** — Add `nonReentrant` modifier to `TAGITEmissions.distributeEpoch()` or move state writes before the `token.mint()` external call
+2. **H-4** — Add `nonReentrant` modifier to `TAGITStaking.notifyRewardAmount()` or move state writes before `safeTransferFrom()`
+3. **M-1 / M-2** — Reorder arithmetic to multiply-before-divide in `TAGITAgentReputation` and `TAGITEmissions`
+4. **M-8** — Add zero-address guards to all `TAGITAccountFactory` setters
+
+### Should Fix
+5. **H-1 / H-2** — Confirm governor access control is enforced and document as accepted risk if verified
+6. **M-5 / M-6 / M-7** — Explicit local variable initialization
+7. **L-8 / L-9** — Mark state variables as `immutable` for gas savings (`CCIPBridgeAdapter._router`, `CCIPBridgeAdapter._wTag`, `IntegrationFactory._requiredSignatures`)
+
+---
+
+## EVMbench Audit Suite
+
+As part of this scan, a Claude-powered EVMbench harness was added to `evmbench/` within `tagit-security`. It runs in two modes:
+
+| Mode | Description | Result |
+|------|-------------|--------|
+| **Detect** | Static + AI-assisted vulnerability detection | 15 findings (8 unique actionable, 6 net-new vs Slither) |
+| **Exploit** | Adversarial attack simulation across 5 vectors | 0 successful fund drains |
+
+**Final EVMbench score**: 850 / 1000
+
+---
+
+## Artifacts
+
+All raw reports are committed in `tagit-security` under `reports/`:
+
+- `PRD-017-contracts-slither.txt` — Full Slither output, tagit-contracts (171 findings)
+- `PRD-017-bridge-slither.txt` — Full Slither output, tagit-bridge (81 findings)
+- `PRD-017-slither-summary.md` — Categorized triage
+
+---
+
+## Related
+
+- **Notion task**: [Slither security scan on all PRD-017 contracts](https://www.notion.so/3314e3e9a2d38126a6d1f0bcacdcc390)
+- **GitHub Wiki**: [PRD-017-Slither-Scan](https://github.com/TAG-IT-NETWORK/tagit-security/wiki/PRD-017-Slither-Scan)
+- **Security PR**: [tagit-security #1](https://github.com/TAG-IT-NETWORK/tagit-security/pull/1)
+- **Threat model**: [docs/security/threat-model.md](/security/threat-model)
+- **Security checklist**: [docs/security/checklist.md](/security/checklist)

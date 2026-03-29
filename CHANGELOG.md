@@ -7,6 +7,7 @@ All notable changes to TAG IT Network documentation are recorded here.
 ## [Unreleased]
 
 ### Added
+- `docs/security/prd-017-slither-scan.mdx` — Slither 0.11.5 static analysis report for all PRD-017 contracts: 51 files, 163 contracts, 252 raw findings triaged to 4 High / 8 Medium / 12 Low / Informational. Includes pre-mainnet remediation action items and EVMbench score (850/1000). Covers task [3314e3e9] ([tagit-security PR #1](https://github.com/TAG-IT-NETWORK/tagit-security/pull/1)).
 - `docs/indexer/wtag-voucher-subgraph.mdx` — Developer reference for the wTAG (`TAGITToken`) and Voucher (`VerificationEscrow`) subgraph schema: 10 new GraphQL entities, 10 event handler signatures, lifecycle states diagram (mermaid), sample queries, and Goldsky deployment guide. Covers task [3314e3e9] ([tagit-indexer PR #1](https://github.com/TAG-IT-NETWORK/tagit-indexer/pull/1)).
 - `docs/contracts/ccip-bridge-adapter.mdx` — Full developer reference for `CCIPBridgeAdapter` and `WrappedTAGIT` (wTAG): dual-mode bridge (LOCK_UNLOCK / BURN_MINT), function signatures, event schemas, mermaid transfer-flow diagram, deployment guide, and testnet chain selectors. Covers task [3314e3e9] ([tagit-bridge PR #1](https://github.com/TAG-IT-NETWORK/tagit-bridge/pull/1)).
 
