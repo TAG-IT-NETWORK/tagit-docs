@@ -1,0 +1,226 @@
+---
+title: Deploy Agent Suite
+description: Step-by-step guide for deploying TAGITAgentIdentity, TAGITAgentReputation, and TAGITAgentValidation using Foundry
+---
+
+import { Callout } from '@/components/ui'
+
+# Deploy Agent Suite
+
+This guide covers using the Foundry deploy scripts shipped in `tagit-contracts` to deploy the three
+ERC-8004 Agent infrastructure contracts:
+
+| Contract | Script | Role |
+|---|---|---|
+| `TAGITAgentIdentity` | `DeployAgentIdentity.s.sol` | Soulbound ERC-721 agent registry |
+| `TAGITAgentReputation` | `DeployAgentReputation.s.sol` | Agent feedback & scoring |
+| `TAGITAgentValidation` | `DeployAgentValidation.s.sol` | Agent proof verification |
+| All three | `DeployAgentSuite.s.sol` | Orchestrated single-broadcast deploy |
+
+> **Related contracts:** [`TAGITAgentIdentity`](../contracts/agent-identity.md) ·
+> [`TAGITAgentReputation`](../contracts/agent-reputation.md) ·
+> [`TAGITAgentValidation`](../contracts/agent-validation.md)
+
+---
+
+## Prerequisites
+
+- [Foundry](https://book.getfoundry.sh/getting-started/installation) installed (`forge`, `cast`)
+- A funded deployer wallet (EOA or Safe)
+- An already-deployed `TAGITAccess` controller (see `.env.example`)
+- RPC URL for the target network
+
+---
+
+## Environment Setup
+
+Copy `.env.example` to `.env` and fill in the required values:
+
+```bash
+cp .env.example .env
+```
+
+```dotenv
+# Required for all agent deploy scripts
+PRIVATE_KEY=0x...
+TAGIT_ACCESS=0x...          # Pre-deployed TAGITAccess controller
+
+# Populated after Identity is deployed (required by Reputation & Validation standalone scripts)
+AGENT_IDENTITY_ADDRESS=0x_DEPLOYED_AGENT_IDENTITY
+AGENT_REPUTATION_ADDRESS=0x_DEPLOYED_AGENT_REPUTATION
+AGENT_VALIDATION_ADDRESS=0x_DEPLOYED_AGENT_VALIDATION
+```
+
+<Callout type="warning">
+Never commit a `.env` file with a live private key. Use a hardware wallet or a CI secrets manager.
+</Callout>
+
+---
+
+## Option A — Single-Broadcast Suite Deploy (Recommended)
+
+Deploy all three contracts in one transaction batch:
+
+```bash
+# Dry-run (no broadcast)
+forge script script/deploy/DeployAgentSuite.s.sol \
+  --rpc-url $OP_SEPOLIA_RPC_URL
+
+# Live deploy + verify
+forge script script/deploy/DeployAgentSuite.s.sol \
+  --rpc-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+The suite script deploys in dependency order and wires registry addresses **inline** — no
+pre-deployed addresses needed beyond `TAGIT_ACCESS`.
+
+**Dependency order:**
+1. `TAGITAgentIdentity` — no dependencies
+2. `TAGITAgentReputation` — depends on Identity
+3. `TAGITAgentValidation` — depends on Identity
+
+At the end of the broadcast the console will emit `AGENT_*_ADDRESS` env var hints for
+downstream scripts.
+
+---
+
+## Option B — Standalone Scripts (Step-by-Step)
+
+Use the standalone scripts when deploying to multiple chains separately or when you need
+fine-grained control.
+
+### 1. Deploy Identity
+
+```bash
+forge script script/deploy/DeployAgentIdentity.s.sol \
+  --rpc-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+Copy the printed `TAGITAgentIdentity` address into your `.env`:
+
+```dotenv
+AGENT_IDENTITY_ADDRESS=0x<address>
+```
+
+### 2. Deploy Reputation
+
+```bash
+forge script script/deploy/DeployAgentReputation.s.sol \
+  --rpc-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+Requires `AGENT_IDENTITY_ADDRESS` in env. Automatically calls `setIdentityRegistry()` during
+the broadcast.
+
+### 3. Deploy Validation
+
+```bash
+forge script script/deploy/DeployAgentValidation.s.sol \
+  --rpc-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+Same requirements as Reputation. Calls `setIdentityRegistry()` inline.
+
+---
+
+## Post-Deploy Checklist
+
+After any deploy path, complete the following:
+
+- [ ] Verify all three contracts on the block explorer
+- [ ] Call `setAccessController()` on each contract if `TAGIT_ACCESS` was not set at deploy time
+- [ ] Run `RegisterSageAgent.s.sol` to register Agent #1
+- [ ] Grant `AGENT_VALIDATOR` capability to validator addresses via BIDGES
+- [ ] Transfer contract ownership to the multisig
+
+---
+
+## Script Function Signatures
+
+### `DeployAgentIdentity.run()`
+
+```solidity
+function run() external
+```
+
+| Env Var | Required | Description |
+|---|---|---|
+| `PRIVATE_KEY` | ✅ | Deployer private key |
+| `TAGIT_ACCESS` | ❌ | If set, calls `setAccessController()` post-deploy |
+
+**Emits to console:** `TAGITAgentIdentity` address, owner address, next steps.
+
+---
+
+### `DeployAgentReputation.run()`
+
+```solidity
+function run() external
+```
+
+| Env Var | Required | Description |
+|---|---|---|
+| `PRIVATE_KEY` | ✅ | Deployer private key |
+| `AGENT_IDENTITY_ADDRESS` | ✅ | `TAGITAgentIdentity` address; calls `setIdentityRegistry()` |
+| `TAGIT_ACCESS` | ❌ | If set, calls `setAccessController()` post-deploy |
+
+<Callout type="info">
+**Review note:** A zero-address guard before `setIdentityRegistry()` is flagged as a
+MEDIUM-severity advisory in PR review. Ensure `AGENT_IDENTITY_ADDRESS` is a valid deployed contract.
+</Callout>
+
+---
+
+### `DeployAgentValidation.run()`
+
+```solidity
+function run() external
+```
+
+| Env Var | Required | Description |
+|---|---|---|
+| `PRIVATE_KEY` | ✅ | Deployer private key |
+| `AGENT_IDENTITY_ADDRESS` | ✅ | `TAGITAgentIdentity` address; calls `setIdentityRegistry()` |
+| `TAGIT_ACCESS` | ❌ | If set, calls `setAccessController()` post-deploy |
+
+---
+
+### `DeployAgentSuite.run()`
+
+```solidity
+function run() external
+```
+
+| Env Var | Required | Description |
+|---|---|---|
+| `PRIVATE_KEY` | ✅ | Deployer private key |
+| `TAGIT_ACCESS` | ✅ | Must be pre-deployed; wired to all three contracts |
+
+---
+
+## Supported Networks
+
+| Network | Chain ID | RPC Env Var |
+|---|---|---|
+| OP Sepolia (testnet) | `11155420` | `OP_SEPOLIA_RPC_URL` |
+| OP Mainnet | `10` | `OP_MAINNET_RPC_URL` |
+| Base Sepolia (testnet) | `84532` | `BASE_SEPOLIA_RPC_URL` |
+
+---
+
+## See Also
+
+- [GitHub PR #1 — tagit-contracts](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/1)
+- [Notion Wiki — 15: Agent Suite Deploy Scripts](https://www.notion.so/3324e3e9a2d381d0b154e2a7f2e2dc19)
+- [GitHub Wiki — Agent Suite Deploy Scripts](https://github.com/TAG-IT-NETWORK/tagit-contracts/wiki/Agent-Suite-Deploy-Scripts)
+- [TAGITAgentIdentity contract reference](../contracts/agent-identity.md)
+- [TAGITAgentReputation contract reference](../contracts/agent-reputation.md)
+- [TAGITAgentValidation contract reference](../contracts/agent-validation.md)
