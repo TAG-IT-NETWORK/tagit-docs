@@ -31,8 +31,14 @@ flowchart LR
 - [ORACULS Stack](./architecture/oraculs-stack.md) — Technology deep-dive
 - [Asset Lifecycle](./architecture/data-flow.md) — State transitions
 
+### Developer Guides
+- [Contract Integration](./guides/contract-integration.md) — Direct smart contract interaction with viem
+- [SDK Integration](./guides/sdk-integration.md) — Full SDK usage patterns and error handling
+- [Agent Integration Tutorial](./guides/agent-integration-tutorial.md) — ERC-8004 agent deep-dive
+
 ### Developer Reference
 - [Smart Contracts](./contracts/index.md) — 18 contract modules across 5 categories
+- [Deployment Reference](./contracts/deployment-reference.md) — OP Sepolia addresses, RPC, faucets
 - [Agent Gateway](./services/agent-gateway.md) — A2A, MCP, REST, x402 protocols
 - [Subgraph Indexer](./indexer/overview.md) — Graph Protocol indexer for ERC-8004 agent events
 - [REST API](./api/overview.md) — Backend API reference
@@ -81,10 +87,14 @@ Assets progress through these states:
 | Swift (iOS) | `TAGITKit` | Available |
 | CLI | `@tagit/cli` | Available |
 
+### Hardware
+- [NTAG 424 DNA](./hardware/ntag-424-dna.md) — NFC chip specs, SUN authentication, NDEF structure
+
 ## Resources
 
 - [GitHub Organization](https://github.com/tagit-network)
 - [OP Sepolia Testnet](https://sepolia-optimism.etherscan.io)
+- [Deployment Reference](./contracts/deployment-reference.md) — Addresses, faucets, RPC endpoints
 - [Glossary](./glossary.md)
 
 ---
