@@ -1,8 +1,8 @@
 # TAGITOperationalTreasury — Developer Reference
 
-> **Task**: 2B. Build TAGITOperationalTreasury.sol + tests (ID: `3314e3e9-a2d3-81d3-bb3c-f725c55795a1`)
-> **Contracts PR**: [tagit-contracts #13](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/13)
-> **Docs PR**: [tagit-docs #10](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/10)
+> **Task**: 2D. Build treasury spend reporting dashboard (ID: `3314e3e9-a2d3-81ea-9636-df8cee04eb02`) — contracts layer; supersedes [`3314e3e9-a2d3-81d3`]
+> **Contracts PR**: [tagit-contracts #14](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/14) · [#13 (initial)](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/13)
+> **Docs PR**: [tagit-docs #11](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/11) · [#10 (initial)](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/10)
 > **Notion Wiki**: [TAGITOperationalTreasury — Feature Overview](https://www.notion.so/3334e3e9a2d38193ab20cd5975b937c2)
 > **tagit-docs MDX**: [Operational Treasury Reference](https://github.com/TAG-IT-NETWORK/tagit-docs/blob/main/docs/contracts/operational-treasury.mdx)
 
