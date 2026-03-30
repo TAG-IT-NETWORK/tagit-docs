@@ -6,7 +6,7 @@ Agent credibility bond mechanism for AI agents in the TAG IT Network ERC-8004 ag
 **Interface:** `src/interfaces/IReputationStaking.sol`
 **PR:** [tagit-contracts #7](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/7)
 **Notion:** [AI Agent Ambassador + Pre-Token System](https://www.notion.so/3304e3e9a2d3813a92a9dd5a154c6582) | [Feature Overview](https://www.notion.so/3334e3e9a2d38168b05bd5cddcb215c4)
-**tagit-docs PR:** [tagit-docs #17](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/17)
+**tagit-docs PR:** [tagit-docs #6](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/6)
 
 ---
 
