@@ -2,6 +2,7 @@
 
 > **Task**: 2C. Build wTAGStaking.sol + tests (ID: `3314e3e9-a2d3-81d0-b825-fb08caba938b`)
 > **Contracts PR**: [tagit-contracts #12](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/12)
+> **Docs PR**: [tagit-docs #9](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/9)
 > **Notion Wiki**: [TAGITStaking Locked — Investor Overview](https://www.notion.so/3334e3e9a2d3818d8a3ff730ba7451fd)
 > **tagit-docs**: [TAGITStaking Locked MDX Reference](https://github.com/TAG-IT-NETWORK/tagit-docs/blob/main/docs/token/tagit-staking-locked.mdx)
 
