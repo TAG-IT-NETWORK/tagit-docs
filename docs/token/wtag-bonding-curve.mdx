@@ -1,0 +1,284 @@
+---
+title: wTAGBondingCurve
+description: Linear bonding curve for wTAG token price discovery — automated market maker for buying and selling wTAG with ETH, with protocol fee accrual and emergency circuit-breaker
+---
+
+# wTAGBondingCurve
+
+An on-chain linear bonding curve that sets the price of wTAG tokens algorithmically. As more wTAG is purchased the price rises; as tokens are sold back the price falls. ETH flows in and out of the contract's reserve, ensuring every wTAG in circulation is backed.
+
+- **Contracts PR**: [tagit-contracts #11](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/11)
+- **Notion**: [wTAGBondingCurve — Feature Overview](https://www.notion.so/3334e3e9a2d381f99af3d6d4faf749d7)
+- **GitHub Wiki**: [wTAGBondingCurve Developer Reference](https://github.com/TAG-IT-NETWORK/tagit-docs/wiki/wTAGBondingCurve)
+
+## Contract Address
+
+| Network | Address | Status |
+|---------|---------|--------|
+| OP Sepolia | TBD | Pending deployment |
+| OP Mainnet | TBD | Pending |
+
+## Overview
+
+`wTAGBondingCurve` implements a **linear bonding curve** for wTAG price discovery. The instantaneous spot price is:
+
+```
+price(S) = initialPrice + (slope × S / PRECISION)
+```
+
+where `S` = `curveSupply` (tokens already sold through the curve) and `PRECISION = 1e18`.
+
+**Buy cost** for `N` tokens at supply `S`:
+
+```
+cost = P₀·N/PREC + slope·N·(2S + N) / (2·PREC²)
+```
+
+**Sell return** for `N` tokens at supply `S`:
+
+```
+return = P₀·N/PREC + slope·N·(2S − N) / (2·PREC²)
+```
+
+A protocol fee (`feeBps`, max 1,000 bps = 10%) is added on buys and deducted on sells, accruing in `accruedFees` for owner withdrawal.
+
+## Contract Details
+
+| Property | Value |
+|----------|-------|
+| **File** | `src/token/wTAGBondingCurve.sol` |
+| **Inherits** | ReentrancyGuard, Ownable, Pausable (OpenZeppelin) |
+| **License** | MIT |
+| **Solidity** | `^0.8.20` |
+| **Author** | TAG IT Network `<dev@tagit.network>` |
+
+## Constants
+
+| Constant | Value | Description |
+|----------|-------|-------------|
+| `PRECISION` | `1e18` | Fixed-point scale factor (18 decimals) |
+| `MAX_FEE_BPS` | `1000` | Maximum fee = 10% |
+| `MAX_SLOPE` | `1e12` | Upper bound on slope to prevent overflow |
+
+## State Variables
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `wtagToken` | `IERC20` (immutable) | The wTAG ERC-20 token traded on this curve |
+| `initialPrice` | `uint256` | Starting price per wTAG in wei when supply = 0 |
+| `slope` | `uint256` | Price increase per token-unit in wei |
+| `feeBps` | `uint256` | Protocol fee in basis points |
+| `curveSupply` | `uint256` | Total wTAG tokens sold through the curve |
+| `reserve` | `uint256` | ETH reserve backing the curve |
+| `accruedFees` | `uint256` | Protocol fees available for withdrawal (ETH) |
+
+## Constructor
+
+```solidity
+constructor(
+    address _wtagToken,
+    address _owner,
+    uint256 _initialPrice,
+    uint256 _slope,
+    uint256 _feeBps
+)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `_wtagToken` | `address` | wTAG ERC-20 token address |
+| `_owner` | `address` | Initial owner (multi-sig recommended) |
+| `_initialPrice` | `uint256` | Starting price in wei (must be > 0) |
+| `_slope` | `uint256` | Slope in wei (must be > 0, ≤ `MAX_SLOPE`) |
+| `_feeBps` | `uint256` | Protocol fee in bps (max `MAX_FEE_BPS` = 1,000) |
+
+The deploying address must pre-fund the contract with wTAG tokens before trades can execute.
+
+## Price Discovery Lifecycle
+
+```mermaid
+sequenceDiagram
+    participant Buyer
+    participant Curve as wTAGBondingCurve
+    participant Token as wTAG ERC-20
+
+    Buyer->>Curve: getBuyQuote(tokenAmount)
+    Curve-->>Buyer: (totalCost, fee)
+
+    Buyer->>Curve: buy{value: totalCost}(tokenAmount, maxCost)
+    Curve->>Curve: validate checks (slippage, balance)
+    Curve->>Curve: curveSupply += N; reserve += base; fees += fee
+    Curve->>Token: safeTransfer(buyer, tokenAmount)
+    Curve-->>Buyer: refund excess ETH
+    Curve-->>Buyer: emit Buy(buyer, amount, cost, fee)
+```
+
+## View Functions — Price Quotes
+
+### `getBuyQuote`
+
+```solidity
+function getBuyQuote(uint256 tokenAmount)
+    external view
+    returns (uint256 totalCost, uint256 fee)
+```
+
+Returns the total ETH cost (base + fee) and fee-only portion to buy `tokenAmount` wTAG at the current supply.
+
+### `getSellQuote`
+
+```solidity
+function getSellQuote(uint256 tokenAmount)
+    external view
+    returns (uint256 netReturn, uint256 fee)
+```
+
+Returns the net ETH return after fee deduction and the fee-only portion for selling `tokenAmount` wTAG.
+
+### `currentPrice`
+
+```solidity
+function currentPrice() external view returns (uint256 price)
+```
+
+Returns the current spot price per full wTAG token (1e18 units) in wei.
+
+## Trading Functions
+
+### `buy`
+
+```solidity
+function buy(uint256 tokenAmount, uint256 maxCost)
+    external payable
+    nonReentrant whenNotPaused
+```
+
+Buys `tokenAmount` wTAG tokens with ETH. Slippage protection via `maxCost`. Excess ETH is refunded.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tokenAmount` | `uint256` | Number of wTAG to buy (18-decimal units) |
+| `maxCost` | `uint256` | Maximum ETH willing to pay (wei) |
+
+Reverts: `ZeroAmount`, `SlippageExceeded`, `InsufficientPayment`, `InsufficientBalance`
+
+### `sell`
+
+```solidity
+function sell(uint256 tokenAmount, uint256 minReturn)
+    external
+    nonReentrant whenNotPaused
+```
+
+Sells `tokenAmount` wTAG back to the curve for ETH. Caller must first `approve` this contract. Slippage protection via `minReturn`.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tokenAmount` | `uint256` | Number of wTAG to sell (18-decimal units) |
+| `minReturn` | `uint256` | Minimum ETH expected (wei) |
+
+Reverts: `ZeroAmount`, `ExceedsCurveSupply`, `SlippageExceeded`
+
+## Admin Functions
+
+### `updateParams`
+
+```solidity
+function updateParams(uint256 _initialPrice, uint256 _slope, uint256 _feeBps)
+    external onlyOwner
+```
+
+Updates bonding curve parameters. Applies full validation (same as constructor). Only callable by owner.
+
+> **Note**: Parameters can only be changed while `curveSupply == 0` to protect existing participants.
+
+### `withdrawFees`
+
+```solidity
+function withdrawFees() external onlyOwner nonReentrant
+```
+
+Transfers all `accruedFees` to the owner. Reverts `NoFeesToWithdraw` if balance is zero.
+
+### `pause` / `unpause`
+
+```solidity
+function pause() external onlyOwner
+function unpause() external onlyOwner
+```
+
+Emergency circuit-breaker. While paused, `buy()` and `sell()` revert. View functions and `withdrawFees` remain accessible.
+
+## Events
+
+| Event | Signature | Description |
+|-------|-----------|-------------|
+| `Buy` | `Buy(address indexed buyer, uint256 tokenAmount, uint256 ethCost, uint256 fee)` | Emitted on every successful buy |
+| `Sell` | `Sell(address indexed seller, uint256 tokenAmount, uint256 ethReturn, uint256 fee)` | Emitted on every successful sell |
+| `FeesWithdrawn` | `FeesWithdrawn(address indexed to, uint256 amount)` | Emitted when owner withdraws protocol fees |
+| `ParamsUpdated` | `ParamsUpdated(uint256 newInitialPrice, uint256 newSlope, uint256 newFeeBps)` | Emitted when curve parameters are updated |
+
+## Custom Errors
+
+| Error | Description |
+|-------|-------------|
+| `ZeroAddress()` | Zero address provided |
+| `ZeroAmount()` | Zero token amount |
+| `ZeroInitialPrice()` | Initial price is zero |
+| `ZeroSlope()` | Slope is zero |
+| `FeeTooHigh(uint256 provided, uint256 maximum)` | Fee exceeds `MAX_FEE_BPS` |
+| `SlopeTooHigh(uint256 provided, uint256 maximum)` | Slope exceeds `MAX_SLOPE` |
+| `InsufficientPayment(uint256 required, uint256 provided)` | ETH sent < total cost |
+| `InsufficientBalance(uint256 required, uint256 available)` | Curve lacks wTAG tokens |
+| `ExceedsCurveSupply(uint256 requested, uint256 available)` | Selling more than `curveSupply` |
+| `ETHTransferFailed(address to, uint256 amount)` | Low-level ETH call failed |
+| `NoFeesToWithdraw()` | `accruedFees == 0` |
+| `SlippageExceeded(uint256 cost, uint256 maxCost)` | Cost/return outside slippage tolerance |
+
+## Security Model
+
+| Mechanism | Applied To | Purpose |
+|-----------|-----------|---------|
+| `ReentrancyGuard` | `buy`, `sell`, `withdrawFees` | Prevents re-entrancy via ETH callbacks |
+| `Pausable` | `buy`, `sell` | Emergency circuit-breaker |
+| `Ownable` | `updateParams`, `withdrawFees`, `pause/unpause` | Admin operations |
+| CEI pattern | All state-changing functions | State updates before external calls |
+| Slippage guard | `buy` (`maxCost`), `sell` (`minReturn`) | Front-running / sandwich protection |
+
+## Test Coverage
+
+The test suite (`test/token/wTAGBondingCurve.t.sol`, 664 lines) covers:
+
+| Category | Scenarios |
+|----------|-----------|
+| Constructor validation | 5 (zero address, zero owner, zero price, slope, fee) |
+| `getBuyQuote` / `getSellQuote` | Quote accuracy, zero-amount revert |
+| `buy` | Buy flow, fee accrual, excess refund, slippage revert, pause revert |
+| `sell` | Sell flow, fee accrual, slippage revert, pause revert |
+| Admin functions | `updateParams`, `withdrawFees`, `pause`, `unpause` — owner and non-owner |
+| Integration | Full buy→sell round-trip, multi-participant price rise |
+| Fuzz | Buy/sell round-trip (zero fee), fee < cost invariant, monotonic price increase |
+
+## TypeScript SDK Usage
+
+```typescript
+import { createPublicClient, createWalletClient, parseEther } from "viem";
+
+// Get a buy quote
+const [totalCost, fee] = await publicClient.readContract({
+  address: BONDING_CURVE_ADDRESS,
+  abi: wTAGBondingCurveAbi,
+  functionName: "getBuyQuote",
+  args: [parseEther("100")], // 100 wTAG
+});
+
+// Execute buy with 1% slippage tolerance
+const maxCost = (totalCost * 101n) / 100n;
+await walletClient.writeContract({
+  address: BONDING_CURVE_ADDRESS,
+  abi: wTAGBondingCurveAbi,
+  functionName: "buy",
+  args: [parseEther("100"), maxCost],
+  value: maxCost,
+});
+```
