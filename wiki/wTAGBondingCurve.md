@@ -3,6 +3,7 @@
 > **Task**: 2A. Build wTAGBondingCurve.sol + tests (ID: `3314e3e9-a2d3-8185-a32a-e6f17bf802af`)
 > **Contracts PR**: [tagit-contracts #11](https://github.com/TAG-IT-NETWORK/tagit-contracts/pull/11)
 > **Notion Wiki**: [wTAGBondingCurve — Investor Overview](https://www.notion.so/3334e3e9a2d381f99af3d6d4faf749d7)
+> **tagit-docs PR**: [tagit-docs #8](https://github.com/TAG-IT-NETWORK/tagit-docs/pull/8)
 > **tagit-docs**: [wTAGBondingCurve MDX Reference](https://github.com/TAG-IT-NETWORK/tagit-docs/blob/main/docs/token/wtag-bonding-curve.mdx)
 
 ---
