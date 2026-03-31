@@ -7,6 +7,7 @@ Rewards, customs integration, and recall management contract.
 | Network | Address | Status |
 |---------|---------|--------|
 | OP Sepolia | `0xe78DB7702FF5190DAc2F3E09213Ff84bF9efE32b` | ✅ LIVE |
+| Base Sepolia | `0xc359B42ebbEE5Ab1A6f733972A14e82342A0B53D` | ✅ LIVE (UUPS Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview

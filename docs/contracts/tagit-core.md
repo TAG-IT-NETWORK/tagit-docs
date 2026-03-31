@@ -12,6 +12,7 @@ Core asset management contract for Digital Twin NFTs.
 | Network | Address | Status |
 |---------|---------|--------|
 | OP Sepolia | `0x8bde22da889306d422802728cb98b6da42ed8e1a` | ✅ LIVE (UUPS Proxy) |
+| Base Sepolia | `0xAdBAc728205c91F2FfF3194Bf0cAf13457e32b68` | ✅ LIVE (UUPS Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview

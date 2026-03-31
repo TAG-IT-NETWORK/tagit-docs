@@ -14,6 +14,7 @@ BIDGES (Badge-based Identity for Decentralized Governance and Enterprise Securit
 | TAGITAccess | OP Sepolia | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | ✅ LIVE |
 | IdentityBadge | OP Sepolia | `0x26F2EBb84664EF1eF8554e15777EBEc6611256A6` | ✅ LIVE |
 | CapabilityBadge | OP Sepolia | `0x5e190F6Ebde4BD1e11a5566a1e81a933cdDf3505` | ✅ LIVE |
+| TAGITAccess | Base Sepolia | `0x0A729a8D75b896B30a34f96F2e6b7827523826D8` | ✅ LIVE |
 
 ## Overview
 

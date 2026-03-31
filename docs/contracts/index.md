@@ -157,6 +157,74 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 | TAGITBurner | TBD | — | 🔜 Pending |
 | TAGITVesting | TBD | — | 🔜 Pending |
 
+### Base Sepolia (Testnet) — Chain ID: 84532
+
+> **Last Updated:** March 30, 2026 | Full 24-contract stack | [Basescan](https://sepolia.basescan.org)
+
+#### Core & Access Control
+
+| Contract | Proxy / Address | Implementation | Status |
+|----------|----------------|----------------|--------|
+| TAGITCore | `0xAdBAc728205c91F2FfF3194Bf0cAf13457e32b68` | `0x2cb1E0ecE274217F214057c0a829582834Aeaf7f` | UUPS |
+| TimelockController | `0xe06e058e1ff18a17a0940C5a0202971bB0feB02a` | — | |
+| TAGITAccess | `0x0A729a8D75b896B30a34f96F2e6b7827523826D8` | — | |
+| IdentityBadge | `0xa8BbC7f95f5D979e8E9208bc627194384b257c24` | — | |
+| CapabilityBadge | `0x676f593c451E4dF2345026af891Acc92c4344455` | — | |
+
+#### Token & Governance
+
+| Contract | Proxy | Implementation | Status |
+|----------|-------|----------------|--------|
+| TAGITToken | `0x8D4486152f6C8ff24B4e5a1ACF71d05755983a5E` | `0xa14a34dd9D51C5DADC526EC9d95B86dBda8a3D30` | UUPS |
+| TAGITGovernor | `0x853848d52d6325f62799412A5aa866be15dfd711` | `0xa51f975F096814DBC1C33E8Ad3aBAa4C52032feB` | UUPS |
+| TAGITStaking | `0x40629Cf37077105576d9C53fa909Fd199e0A1285` | `0x3D0d271B8d99BFcb8EC76f2ef0cCB4916f7FA13b` | UUPS |
+
+#### NIST Contracts
+
+| Contract | Proxy | Implementation | Status |
+|----------|-------|----------------|--------|
+| TAGITRecovery | `0x5bA8335Daa18A8C1e531f96BB498A2d817Feab85` | `0x9de54f758326fE31ae98301F70620FD4a97D8753` | UUPS |
+| TAGITTreasury | `0xcA9c7FAD8c4FCFc342Ead99E1354633a9a8F8D42` | `0x48b5238600e6cc7fE05D806b978f059241b6472b` | ERC1967 |
+| TAGITPrograms | `0xc359B42ebbEE5Ab1A6f733972A14e82342A0B53D` | `0xDcB9CA7fEb9a4E9ce93E4eF9f46b65c0F9457Cec` | UUPS |
+| TAGITPaymaster | `0x065F3eD12D151DCE28E47964c19034b29DBb7ee2` | `0x683A530154468A9E830C47636acaC1A29570115F` | UUPS |
+
+#### Account Abstraction (ERC-4337)
+
+| Contract | Proxy / Address | Implementation | Status |
+|----------|----------------|----------------|--------|
+| TAGITAccount | `0xB3f757FCa307a7FebA5CA210Cd7D840EC69990e8` | — (singleton) | |
+| TAGITAccountFactory | `0xf7eFefc59EB154040Db4C9c2aD9417Ddb10b4936` | `0xFa7E212eEc6E9214c9dDE5bd29C9E1e4eF0894B6` | UUPS |
+
+#### Bridge & Agent Infrastructure
+
+| Contract | Proxy / Address | Implementation | Status |
+|----------|----------------|----------------|--------|
+| CCIPAdapter | `0x62AFdac497F8b7e8D9365cd98C84c23592EA9471` | `0x6a58eE8f2d50D981b1793868C550727B9c58FbA6` | UUPS |
+| TAGITAgentIdentity | `0x3fb24bb463e69cC7F64437B16CA872D08482c055` | — | |
+| TAGITAgentReputation | `0x590C96DF31C5d991d22B91436ed100AE9F269965` | — | |
+| TAGITAgentValidation | `0xeF4ED1b54501ed78b5f4E34c7ba416f012a14fB3` | — | |
+
+#### Robotics
+
+| Contract | Proxy | Implementation | Status |
+|----------|-------|----------------|--------|
+| RoboticAuthorizer | `0x38950034556e4DE9B9306b0d3d8563Bba7AcCeF0` | `0xe2E6e29fc99d13eb61fBE08f855814D5b4A549bc` | UUPS |
+
+#### Token Economics (First-Ever Deployment)
+
+| Contract | Proxy / Address | Implementation | Status |
+|----------|----------------|----------------|--------|
+| TAGITEmissions | `0xB07d2339CeA6aaCDC28582A513026f1E476878A5` | `0x8637905262196843bf669449C8846AF66ce124C0` | UUPS |
+| TAGITBurner | `0x4c08cBeCDaef4FC3F3a493d668dd23acBc1f1f84` | `0xA234bc5b6a07FE1f206ce972cf2EE53B42b6AAF5` | UUPS |
+| TAGITVesting | `0x52B77395Ebe1F805666F1278cdf121b816e7da8E` | — (non-upgradeable) | |
+| IntegrationFactory | `0x10891bb4B541e2498B034A5D5CA1e4C8e5309711` | — (non-upgradeable) | |
+
+#### Escrow (Previously Deployed)
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| VerificationEscrow | `0x4c9aACfcb64169E3BC187c227c4C0e0a5CFDA1cF` | ✅ Verified |
+
 ### OP Mainnet (Production)
 
 > Coming soon

@@ -7,6 +7,7 @@ Protocol treasury and fee distribution contract.
 | Network | Address | Status |
 |---------|---------|--------|
 | OP Sepolia | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE |
+| Base Sepolia | `0xcA9c7FAD8c4FCFc342Ead99E1354633a9a8F8D42` | ✅ LIVE (ERC1967 Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview

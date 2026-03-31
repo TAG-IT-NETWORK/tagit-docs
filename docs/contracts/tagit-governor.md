@@ -143,6 +143,7 @@ event ProposalExecuted(uint256 indexed proposalId);
 |---------|------|---------|
 | OP Sepolia | Proxy | `0x53F88a7fa2A7F2062A74c5FeB2Bab1Df29348DD8` |
 | OP Sepolia | Implementation | `0xFBbae8ED8EE66CDCf7b528106D66f5254d28E192` |
+| Base Sepolia | Proxy (UUPS) | `0x853848d52d6325f62799412A5aa866be15dfd711` |
 | OP Mainnet | — | Coming soon |
 
 > **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation. Uses UUPS proxy pattern.

@@ -12,6 +12,7 @@ AIRP (Asset Identity Recovery Protocol) contract for handling lost, stolen, and 
 | Network | Address | Status |
 |---------|---------|--------|
 | OP Sepolia | `0x6138a80c06A5e6a3CB6cc491A3a2c4DF4adD1600` | ✅ LIVE |
+| Base Sepolia | `0x5bA8335Daa18A8C1e531f96BB498A2d817Feab85` | ✅ LIVE (UUPS Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview

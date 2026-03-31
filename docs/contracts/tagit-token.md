@@ -112,6 +112,7 @@ interface ITAGITToken {
 |---------|------|---------|
 | OP Sepolia | Proxy | `0xEe8f9544f0fC0be05408F4d0fa557be99a1cED94` |
 | OP Sepolia | Implementation | `0xa6620502d99e00b65dB65daea5bf6fb29B937BC9` |
+| Base Sepolia | Proxy (UUPS) | `0x8D4486152f6C8ff24B4e5a1ACF71d05755983a5E` |
 | OP Mainnet | — | Coming soon |
 
 > **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation.

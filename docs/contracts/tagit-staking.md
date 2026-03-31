@@ -12,6 +12,7 @@ Enables token holders to stake TAGIT for rewards and enhanced governance power.
 | Network | Address | Status |
 |---------|---------|--------|
 | OP Sepolia | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
+| Base Sepolia | `0x40629Cf37077105576d9C53fa909Fd199e0A1285` | ✅ LIVE (UUPS Proxy) |
 | OP Mainnet | TBD | 🔜 Pending |
 
 ## Overview
