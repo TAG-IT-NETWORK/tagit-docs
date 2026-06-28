@@ -37,7 +37,7 @@ pnpm add @tagit/sdk
 | Robot Identity Badge       | IdentityBadge token ID in range 30-35                    |
 | Capability Badges          | CapabilityBadge tokens for permitted actions (120-124)   |
 | NFC Reader Hardware        | ISO 14443-4 compliant reader, power-limited to 5 cm      |
-| Network Access             | RPC endpoint for Arbitrum Sepolia (or target L2)         |
+| Network Access             | RPC endpoint for Base Sepolia (or target L2)             |
 | Oracle Access              | URL to the TAG IT NFC verification oracle                |
 
 ### 2.3 Badge Requirements by Action
@@ -59,10 +59,10 @@ import { privateKeyToAccount } from 'viem/accounts';
 const account = privateKeyToAccount(process.env.ROBOT_PRIVATE_KEY as `0x${string}`);
 
 const robotClient = createRobotAuthClient({
-  rpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+  rpcUrl: 'https://sepolia.base.org',
   oracleUrl: 'https://oracle.tagit.network',
   robotWallet: account,
-  chainId: 421614,
+  chainId: 84532,
 });
 ```
 
@@ -97,17 +97,17 @@ console.log(policy);
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import { arbitrumSepolia } from 'viem/chains';
+import { baseSepolia } from 'viem/chains';
 import { roboticAuthorizerAbi } from '@tagit/sdk/abi';
 
 const publicClient = createPublicClient({
-  chain: arbitrumSepolia,
+  chain: baseSepolia,
   transport: http(),
 });
 
 const [allowed, safetyClass, actionBitmask, zoneId, remainingRateLimit] =
   await publicClient.readContract({
-    address: '0x...RoboticAuthorizerAddress', // RoboticAuthorizer (separate from TAGITCore asset lifecycle at 0x2cb1...af7f)
+    address: '0x5c38684D87E826589eC5ED401d94C9671CAe9F40', // RoboticAuthorizer on Base Sepolia (separate from TAGITCore asset lifecycle at 0x3adC...1D1d)
     abi: roboticAuthorizerAbi,
     functionName: 'queryActionPolicy',
     args: [31n, 1042n, 0], // robotTokenId, assetTokenId, SCAN
@@ -371,10 +371,10 @@ import { privateKeyToAccount } from 'viem/accounts';
 // ---- Configuration ----
 
 const config = {
-  rpcUrl: process.env.RPC_URL ?? 'https://sepolia-rollup.arbitrum.io/rpc',
+  rpcUrl: process.env.RPC_URL ?? 'https://sepolia.base.org',
   oracleUrl: process.env.ORACLE_URL ?? 'https://oracle.tagit.network',
   robotPrivateKey: process.env.ROBOT_PRIVATE_KEY as `0x${string}`,
-  chainId: 421614,
+  chainId: 84532,
   robotTokenId: 31n,
 };
 

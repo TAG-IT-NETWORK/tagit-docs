@@ -45,18 +45,21 @@ flowchart TB
 
 ## Layer Details
 
-### 1. Execution Layer: TAGIT L2
+### 1. Execution Layer: Base
 
 | Property | Value |
 |----------|-------|
-| **Base** | OP Stack (Optimism) |
+| **Chain** | Base Sepolia (84532, testnet) · Base Mainnet planned (post-DAO) |
+| **Framework** | OP Stack (Superchain) |
 | **Consensus** | Optimistic Rollup |
 | **Block Time** | ~2 seconds |
 | **Gas Token** | ETH |
 | **Finality** | ~7 days (with L1 settlement) |
 
-**Why OP Stack?**
-- Battle-tested security model
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
+
+**Why Base?**
+- Battle-tested OP Stack security model
 - Superchain ecosystem compatibility
 - Low transaction costs
 - Fast confirmations
@@ -80,7 +83,7 @@ flowchart TB
 | Property | Value |
 |----------|-------|
 | **Role** | Final settlement & dispute resolution |
-| **Bridge** | Native OP Stack bridge |
+| **Bridge** | Native Base bridge (OP Stack) |
 | **Security** | Full Ethereum L1 security |
 
 ### 4. Interoperability: Chainlink CCIP

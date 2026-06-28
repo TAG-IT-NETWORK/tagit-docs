@@ -103,63 +103,88 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 ## Deployment Addresses
 
-### OP Sepolia (Testnet) — Chain ID: 11155420
+### Base Sepolia (Testnet) — Chain ID: 84532
 
-> **Last Updated:** February 27, 2026 | SEC-AUD-001 fully remediated | [Blockscout](https://optimism-sepolia.blockscout.com)
+> **Last Updated:** June 27, 2026 | Canonical chain migrated to Base Sepolia | [Basescan](https://sepolia.basescan.org)
+>
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
+>
+> Proxies are the consumer-facing addresses. Implementation addresses for UUPS proxies are read on-chain via each proxy on [Basescan](https://sepolia.basescan.org).
 
 #### Core Contracts
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITCore | `0x8bde22da889306d422802728cb98b6da42ed8e1a` | ✅ LIVE (UUPS Proxy) |
-| TAGITAccess | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | ✅ LIVE |
-| IdentityBadge | `0x26F2EBb84664EF1eF8554e15777EBEc6611256A6` | ✅ LIVE |
-| CapabilityBadge | `0x5e190F6Ebde4BD1e11a5566a1e81a933cdDf3505` | ✅ LIVE |
+| TAGITCore | `0x3adC7eFdB58Ae85483Eff5D4966D916185F31D1d` | ✅ LIVE (UUPS Proxy) |
+| TAGITAccess | `0xb56A1D91995C212342FaA843468F03521340A1D6` | ✅ LIVE |
+| IdentityBadge | `0xebdAC9A0663c02a7297681b078aaD893EF345030` | ✅ LIVE |
+| CapabilityBadge | `0xb05d22706B08A3F6409601de520cf7A6dbCB573d` | ✅ LIVE |
 
 #### NIST Phase 3 Contracts (ERC-1967 Proxies)
 
 | Contract | Proxy | Implementation | Status |
 |----------|-------|----------------|--------|
-| TAGITRecovery | `0x17c0af6B37aBD06587303f1695a06A668F8A5A8c` | `0x8d8a5300e8c5E8BaBebd73175954ce01a427CDCe` | ✅ LIVE (v1.1.0) |
-| TAGITPaymaster | `0x670DC1C7821E0A717CFf5Cc949B05EC01b532104` | `0x4339c46D63231063250834D9b3fa4E51FdB8026e` | ✅ LIVE |
-| TAGITTreasury | `0x018b5c4b5550Bcc0ffe53e2FD0a5D9d1046cad78` | `0xf6f5e2e03f6e28aE9Dc17bCc814a0cf758c887c9` | ✅ LIVE (redeployed) |
-| TAGITPrograms | `0x4d1007eB4823a5a13905A0361478C339421ce4C9` | `0x066FB866C0345115FA27a27cC704e8eaC61A565f` | ✅ LIVE (v1.1.0) |
-| TAGITStaking | `0xe500CDfbA693CE1f39A6F05CfB4614971370Ee93` | `0x12EE464e32a683f813fDb478e6C8e68E3d63d781` | ✅ LIVE |
+| TAGITRecovery | `0x6Bc3c69367E586810a3b317fA9F0406504E95866` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITPaymaster | `0x6fFfA92eFb419e812d5c9C9D0c1b1A0F5C6FFd1c` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITTreasury | `0xa4A3720d705334f409Dd24836Cc75D642125f759` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITPrograms | `0x62a3CF048E66Be0119F0CcD97eC964B726B9A982` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITStaking | `0xb22F5688559d07e3A12dBB89F0481B967407F267` | TBD (via proxy on Basescan) | ✅ LIVE |
 
 #### Account Abstraction (ERC-4337)
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITAccount | `0xC159FDec7a8fDc0d98571C89c342e28bB405e682` | ✅ LIVE |
-| TAGITAccountFactory | `0x8D27B612a9D3e45d51D2234B2f4e03dCC5ca844b` | ✅ LIVE |
+| TAGITAccount | `0x2160044C7c46B08a552361595E09e8C8DDD06E85` | ✅ LIVE |
+| TAGITAccountFactory | `0x3eD2C0e92f0E52dC68D04172Ad37Df4724893AD3` | ✅ LIVE |
 
 #### Cross-Chain Bridge
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| CCIPAdapter | `0x8dA6D7ffCD4cc0F2c9FfD6411CeD7C9c573C9E88` | ✅ LIVE |
+| CCIPAdapter | `0x5e190F6Ebde4BD1e11a5566a1e81a933cdDf3505` | ✅ LIVE |
 
 #### Agent Infrastructure (ERC-8004)
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITAgentIdentity | `0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D` | ✅ LIVE |
-| TAGITAgentReputation | `0x57CCa1974DFE29593FBD24fdAEE1cD614Bfd6E4a` | ✅ LIVE |
-| TAGITAgentValidation | `0x9806919185F98Bd07a64F7BC7F264e91939e86b7` | ✅ LIVE |
+| TAGITAgentIdentity | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | ✅ LIVE |
+| TAGITAgentReputation | `0x32be6C82A57d5bCe897538d7dA4109eA0eeB0aA1` | ✅ LIVE |
+| TAGITAgentValidation | `0x34766dBa7040C2c8817f1Ee1e448209826DD607e` | ✅ LIVE |
 
 #### Token & Governance Contracts
 
 | Contract | Proxy | Implementation | Status |
 |----------|-------|----------------|--------|
-| TAGITToken | `0xEe8f9544f0fC0be05408F4d0fa557be99a1cED94` | `0xa6620502d99e00b65dB65daea5bf6fb29B937BC9` | ✅ LIVE (UUPS) |
-| TAGITGovernor | `0x53F88a7fa2A7F2062A74c5FeB2Bab1Df29348DD8` | `0xFBbae8ED8EE66CDCf7b528106D66f5254d28E192` | ✅ LIVE (UUPS) |
-| TAGITEmissions | TBD | — | 🔜 Pending |
-| TAGITBurner | TBD | — | 🔜 Pending |
-| TAGITVesting | TBD | — | 🔜 Pending |
+| TAGITToken | `0x5f98B83cD7Aef769cc51D2FB739BA49D561170DE` | `0xa412b5C203f74E88f434C405e694528F04cACf59` | ✅ LIVE (UUPS) |
+| TAGITGovernor | `0xCF67Df870ECcbB7838c3Ab7876467c89d84DCe89` | TBD (via proxy on Basescan) | ✅ LIVE (UUPS) |
+| TAGITEmissions | `0x0672fcc5B753786c2Cd1805494fF094CB5d6e579` | — | ✅ LIVE |
+| TAGITBurner | `0xcB8abCe0770c499B789481f8C6c20fa0d6980D2A` | — | ✅ LIVE |
+| TAGITVesting | `0x7dd4c98a2aFE60eE06bA5c136dBeb7f93DD2699D` | — | ✅ LIVE |
 
-### OP Mainnet (Production)
+#### Wrapped Token (Base-only)
 
-> Coming soon
+| Contract | Address | Status |
+|----------|---------|--------|
+| wTAG | `0x746385e59aCB225779D64e74200e464a3f1C23d0` | ✅ LIVE |
+| wTAGStaking | `0xBd4c4848C9fF09B7955a193E3b96456344D9acBe` | ✅ LIVE |
+
+#### Robotics & Integration
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| RoboticAuthorizer | `0x5c38684D87E826589eC5ED401d94C9671CAe9F40` | ✅ LIVE |
+| IntegrationFactory | `0xd68919371c26700dDb8252aD1825Aa02a0381a86` | ✅ LIVE |
+
+#### Pending Deployment on Base
+
+| Contract | Address | Status |
+|----------|---------|--------|
+| VerificationEscrow | — | 🔜 Pending deployment on Base |
+| ReputationStaking | — | 🔜 Pending deployment on Base |
+
+### Base Mainnet (Production)
+
+> Planned (post-DAO) — not yet deployed.
 
 ## Access Control Model
 
@@ -212,7 +237,7 @@ forge test
 ### Deploy to Testnet
 
 ```bash
-forge script script/Deploy.s.sol --rpc-url op-sepolia --broadcast
+forge script script/Deploy.s.sol --rpc-url base-sepolia --broadcast
 ```
 
 ## Security

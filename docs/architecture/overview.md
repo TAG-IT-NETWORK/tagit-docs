@@ -29,7 +29,7 @@ flowchart TB
     end
 
     subgraph "Blockchain Layer"
-        I[TAGIT L2 - OP Stack]
+        I[TAGIT L2 - Base]
         J[Smart Contracts]
     end
 
@@ -79,7 +79,7 @@ flowchart TB
 
 | Component | Purpose | Network |
 |-----------|---------|---------|
-| **TAGIT L2** | OP Stack rollup | OP Sepolia (testnet), OP Mainnet (prod) |
+| **TAGIT L2** | Base (OP Stack) L2 | Base Sepolia (testnet), Base Mainnet (planned) |
 | **Smart Contracts** | 6 core + 3 agent modules | Solidity, Foundry |
 | **EigenDA** | Data availability | EigenLayer |
 
@@ -136,7 +136,7 @@ flowchart LR
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                   OP Sepolia                    │
+│                  Base Sepolia                   │
 │  ┌─────────────┐  ┌─────────────┐               │
 │  │ TAGITCore   │  │ TAGITAccess │  ...          │
 │  └─────────────┘  └─────────────┘               │
@@ -151,7 +151,7 @@ flowchart LR
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                   OP Mainnet                    │
+│             Base Mainnet (planned)              │
 │  ┌─────────────┐  ┌─────────────┐               │
 │  │ TAGITCore   │  │ TAGITAccess │  ...          │
 │  └─────────────┘  └─────────────┘               │

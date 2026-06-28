@@ -6,8 +6,8 @@ Rewards, customs integration, and recall management contract.
 
 | Network | Address | Status |
 |---------|---------|--------|
-| OP Sepolia | `0xe78DB7702FF5190DAc2F3E09213Ff84bF9efE32b` | ✅ LIVE |
-| OP Mainnet | TBD | 🔜 Pending |
+| Base Sepolia | `0x62a3CF048E66Be0119F0CcD97eC964B726B9A982` | ✅ LIVE |
+| Base Mainnet | TBD | 🔜 Planned (post-DAO) |
 
 ## Overview
 

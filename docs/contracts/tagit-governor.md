@@ -141,9 +141,9 @@ event ProposalExecuted(uint256 indexed proposalId);
 
 | Network | Type | Address |
 |---------|------|---------|
-| OP Sepolia | Proxy | `0x53F88a7fa2A7F2062A74c5FeB2Bab1Df29348DD8` |
-| OP Sepolia | Implementation | `0xFBbae8ED8EE66CDCf7b528106D66f5254d28E192` |
-| OP Mainnet | — | Coming soon |
+| Base Sepolia | Proxy | `0xCF67Df870ECcbB7838c3Ab7876467c89d84DCe89` |
+| Base Sepolia | Implementation | TBD (read on-chain via proxy on Basescan) |
+| Base Mainnet | — | Planned (post-DAO) |
 
 > **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation. Uses UUPS proxy pattern.
 
@@ -152,7 +152,7 @@ event ProposalExecuted(uint256 indexed proposalId);
 | Contract | Role |
 |----------|------|
 | TAGITToken | Voting power source (IVotes) |
-| TimelockController | Execution delay (`0x1B2bdd6f0a3C9127397dE51C36Dc237b097410a8`) |
+| TimelockController | Execution delay (`0xfdA2478dB73064eF770f4e5E5b97BC83801126e1`) |
 | TAGITAccess | Permission checks for proposal creation |
 | TAGITStaking | Stake threshold validation |
 
