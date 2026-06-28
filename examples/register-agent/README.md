@@ -15,7 +15,7 @@ The agent registration flow creates a soulbound ERC-721 identity for an AI agent
 - Node.js 18+
 - An Ethereum wallet with **KYC_L1** identity badge (via BIDGES)
 - The wallet must **not** hold a GOV_MIL capability badge (defense guard)
-- OP Sepolia ETH for gas fees
+- Base Sepolia ETH for gas fees
 - A separate wallet for the agent's operational use
 
 ## Installation
@@ -30,7 +30,7 @@ Create a `.env` file:
 
 ```env
 PRIVATE_KEY=your_deployer_private_key
-OP_SEPOLIA_RPC_URL=https://sepolia.optimism.io
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 AGENT_WALLET=0x_your_agent_operational_wallet
 AGENT_URI=ipfs://QmYourAgentMetadata
 ```

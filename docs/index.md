@@ -42,7 +42,7 @@ flowchart LR
 
 | Layer | Component | Purpose |
 |-------|-----------|---------|
-| **L2** | TAGIT L2 (OP Stack) | Fast, low-cost transactions |
+| **L2** | Base (OP Stack L2) | Fast, low-cost transactions |
 | **DA** | EigenDA | Data availability |
 | **Settlement** | Ethereum | Security & finality |
 | **Interop** | Chainlink CCIP | Cross-chain messaging |
@@ -84,7 +84,7 @@ Assets progress through these states:
 ## Resources
 
 - [GitHub Organization](https://github.com/tagit-network)
-- [OP Sepolia Testnet](https://sepolia-optimism.etherscan.io)
+- [Base Sepolia Testnet](https://sepolia.basescan.org)
 - [Glossary](./glossary.md)
 
 ---

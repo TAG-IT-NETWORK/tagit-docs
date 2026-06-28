@@ -8,8 +8,8 @@
 import { ethers } from 'ethers';
 import 'dotenv/config';
 
-// TAGITAgentValidation on OP Sepolia
-const AGENT_VALIDATION_ADDRESS = '0x9806919185F98Bd07a64F7BC7F264e91939e86b7';
+// TAGITAgentValidation on Base Sepolia
+const AGENT_VALIDATION_ADDRESS = '0x34766dBa7040C2c8817f1Ee1e448209826DD607e';
 
 // Minimal ABI for validation
 const AgentValidationABI = [
@@ -38,8 +38,8 @@ const STATUS_NAMES: Record<number, string> = {
 const AGENT_ID = BigInt(process.env.AGENT_ID || '1');
 
 async function main() {
-  // Connect to OP Sepolia
-  const provider = new ethers.JsonRpcProvider(process.env.OP_SEPOLIA_RPC_URL);
+  // Connect to Base Sepolia
+  const provider = new ethers.JsonRpcProvider(process.env.BASE_SEPOLIA_RPC_URL);
   const requester = new ethers.Wallet(process.env.REQUESTER_PRIVATE_KEY!, provider);
   const validator = new ethers.Wallet(process.env.VALIDATOR_PRIVATE_KEY!, provider);
 

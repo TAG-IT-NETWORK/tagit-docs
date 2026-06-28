@@ -193,7 +193,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 const adminAccount = privateKeyToAccount(process.env.ADMIN_PRIVATE_KEY as `0x${string}`);
 
 const client = createAgentClient({
-  rpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+  rpcUrl: 'https://sepolia.base.org',
   account: adminAccount,
 });
 
@@ -567,10 +567,10 @@ unwatch();
 
 ```typescript
 import { createPublicClient, http, parseAbiItem } from 'viem';
-import { arbitrumSepolia } from 'viem/chains';
+import { baseSepolia } from 'viem/chains';
 
 const client = createPublicClient({
-  chain: arbitrumSepolia,
+  chain: baseSepolia,
   transport: http(),
 });
 

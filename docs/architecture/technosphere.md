@@ -206,13 +206,15 @@ sequenceDiagram
 
 ## Deployed Contracts
 
-### OP Sepolia (Testnet) — Chain ID: 11155420
+### Base Sepolia (Testnet) — Chain ID: 84532
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITAgentIdentity | `0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D` | Verified |
-| TAGITAgentReputation | `0x57CCa1974DFE29593FBD24fdAEE1cD614Bfd6E4a` | Verified |
-| TAGITAgentValidation | `0x9806919185F98Bd07a64F7BC7F264e91939e86b7` | Verified |
+| TAGITAgentIdentity | `0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9` | Verified |
+| TAGITAgentReputation | `0x32be6C82A57d5bCe897538d7dA4109eA0eeB0aA1` | Verified |
+| TAGITAgentValidation | `0x34766dBa7040C2c8817f1Ee1e448209826DD607e` | Verified |
+
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
 
 ### Sage — Agent #1
 

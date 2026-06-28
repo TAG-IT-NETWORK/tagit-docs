@@ -7,7 +7,7 @@
 
 ## Your Mission
 
-Update and expand documentation to match the current MVP state (OP Sepolia testnet).
+Update and expand documentation to match the current MVP state (Base Sepolia testnet).
 
 ---
 
@@ -15,7 +15,7 @@ Update and expand documentation to match the current MVP state (OP Sepolia testn
 
 ### 1. ~~Contract Address Update~~ ✅ DONE (Feb 5, 2026)
 **File:** `docs/contracts/index.md`
-**Completed:** All 12 live OP Sepolia addresses added. Individual contract docs updated with address sections.
+**Completed:** All 12 live Base Sepolia addresses added. Individual contract docs updated with address sections.
 
 ### 2. Create Security Section
 **Create:** `docs/security/` folder with:
@@ -93,7 +93,7 @@ TAG IT Network is a **Web3 supply-chain authentication platform** using NFC-boun
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
 │  │  TAGIT L2   │  │   EigenDA   │  │     CCIP Interop        │  │
-│  │  (OP Stack) │  │     (DA)    │  │   (Cross-chain)         │  │
+│  │  (Base L2)  │  │     (DA)    │  │   (Cross-chain)         │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
 ├─────────────────────────────────────────────────────────────────┤
 │                    Ethereum Settlement Layer                    │
@@ -109,9 +109,11 @@ TAG IT Network is a **Web3 supply-chain authentication platform** using NFC-boun
 
 | Environment | Network | Purpose |
 |-------------|---------|---------|
-| **Dev** | OP Sepolia | Local development + testing |
-| **Stage** | OP Sepolia | Production-like integration testing |
-| **Prod** | OP Mainnet | Live deployment (future) |
+| **Dev** | Base Sepolia | Local development + testing |
+| **Stage** | Base Sepolia | Production-like integration testing |
+| **Prod** | Base Mainnet | Live deployment (planned, post-DAO) |
+
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
 
 ---
 
@@ -122,7 +124,7 @@ TAG IT Network is a **Web3 supply-chain authentication platform** using NFC-boun
 | Repo | Purpose | Key Outputs |
 |------|---------|-------------|
 | `tagit-contracts` | All smart contracts | Solidity, ABIs, deploy scripts |
-| `tagit-l2` | OP Stack rollup infrastructure | Chain config, sequencer |
+| `tagit-l2` | Base (OP Stack) chain config & infra | Chain config, sequencer |
 | `tagit-bridge` | CCIP cross-chain adapters | Bridge contracts, relayers |
 | `tagit-services` | Backend APIs + AI orchestrator | REST/GraphQL APIs |
 | `tagit-indexer` | Event indexing (Graph/Goldsky) | Subgraphs, queries |
@@ -389,8 +391,8 @@ Use task files in `tasks/` for repeatable documentation patterns:
 |----------|----------|
 | Notion Wiki | TAG IT Network Workspace |
 | GitHub Org | github.com/tagit-network |
-| Testnet Explorer | sepolia-optimism.etherscan.io |
-| Faucets | OP Sepolia, Alchemy, QuickNode |
+| Testnet Explorer | sepolia.basescan.org |
+| Faucets | Base Sepolia, Alchemy, QuickNode |
 
 ---
 
@@ -417,6 +419,7 @@ Use task files in `tasks/` for repeatable documentation patterns:
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-06-27 | v3.2.0 | Canonical chain migrated to Base Sepolia (84532); OP Sepolia + Arbitrum Sepolia deprecated (history in tagit-contracts) |
 | 2026-02-05 | v3.1.0 | Contract addresses updated for all 12 live OP Sepolia contracts |
 | 2026-01-02 | v3.0.0 | Federated multi-repo edition, 15-contract architecture |
 | 2025-12-11 | v1.0.0 | Initial CLAUDE.md for tagit-docs |

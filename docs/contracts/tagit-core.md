@@ -11,8 +11,10 @@ Core asset management contract for Digital Twin NFTs.
 
 | Network | Address | Status |
 |---------|---------|--------|
-| OP Sepolia | `0x8bde22da889306d422802728cb98b6da42ed8e1a` | ✅ LIVE (UUPS Proxy) |
-| OP Mainnet | TBD | 🔜 Pending |
+| Base Sepolia | `0x3adC7eFdB58Ae85483Eff5D4966D916185F31D1d` | ✅ LIVE (UUPS Proxy) |
+| Base Mainnet | TBD | 🔜 Planned (post-DAO) |
+
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
 
 ## Overview
 
@@ -26,10 +28,10 @@ As of T20 (February 24, 2026), TAGITCore uses a **UUPS proxy pattern** (ERC-1967
 |----------|-------|
 | **Standard** | ERC-721 + Extensions (UUPS Proxy) |
 | **Inherits** | ERC721Upgradeable, UUPSUpgradeable, Initializable, ReentrancyGuardUpgradeable, PausableUpgradeable |
-| **Proxy** | `0x8bde22da889306d422802728cb98b6da42ed8e1a` |
-| **Implementation** | `0x92c8e84a32d24b26b5cf07d9a8ced4da8c055192` |
-| **TimelockController** | `0x1b2bdd6f0a3c9127397de51c36dc237b097410a8` |
-| **Gnosis Safe** | `0xAaA33C556C9c97a5430D180A1f72e8cf0fe0354e` |
+| **Proxy** | `0x3adC7eFdB58Ae85483Eff5D4966D916185F31D1d` |
+| **Implementation** | `0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D` |
+| **TimelockController** | `0xfdA2478dB73064eF770f4e5E5b97BC83801126e1` |
+| **Gnosis Safe** | TBD (Base governance multisig pending) |
 | **License** | MIT |
 | **Solidity** | ^0.8.20 |
 

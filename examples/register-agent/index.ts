@@ -8,8 +8,8 @@
 import { ethers } from 'ethers';
 import 'dotenv/config';
 
-// TAGITAgentIdentity on OP Sepolia
-const AGENT_IDENTITY_ADDRESS = '0xA7f34FD595eBc397Fe04DcE012dbcf0fbbD2A78D';
+// TAGITAgentIdentity on Base Sepolia
+const AGENT_IDENTITY_ADDRESS = '0x0611FE60f6E37230bDaf04c5F2Ac2dc9012130a9';
 
 // Minimal ABI for registration
 const AgentIdentityABI = [
@@ -28,8 +28,8 @@ const AGENT_WALLET = process.env.AGENT_WALLET!;
 const AGENT_URI = process.env.AGENT_URI || 'ipfs://QmAgentMetadata';
 
 async function main() {
-  // Connect to OP Sepolia
-  const provider = new ethers.JsonRpcProvider(process.env.OP_SEPOLIA_RPC_URL);
+  // Connect to Base Sepolia
+  const provider = new ethers.JsonRpcProvider(process.env.BASE_SEPOLIA_RPC_URL);
   const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
   const agentIdentity = new ethers.Contract(AGENT_IDENTITY_ADDRESS, AgentIdentityABI, signer);
 

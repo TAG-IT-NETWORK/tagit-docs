@@ -24,10 +24,12 @@ CCIPAdapter enables TAG IT Network to communicate with other blockchains, allowi
 
 | Chain | Chain Selector | Status |
 |-------|----------------|--------|
+| Base | `15971525489660198786` | ✅ Active (primary / home chain) |
 | Ethereum | `5009297550715157269` | Active |
-| Polygon | `4051577828743386545` | Active |
-| Arbitrum | `4949039107694359620` | Active |
-| Base | `15971525489660198786` | Coming Soon |
+| Polygon | `4051577828743386545` | Deprecated (archived 2026-06-27) |
+| Arbitrum | `4949039107694359620` | Deprecated (archived 2026-06-27) |
+
+> Archived: OP Sepolia + Arbitrum Sepolia deployments deprecated 2026-06-27 (history in tagit-contracts).
 
 ## Contract Interface
 

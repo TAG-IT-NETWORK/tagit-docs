@@ -160,7 +160,7 @@ Short-range wireless technology used in TAG IT for physical asset authentication
 
 **Optimism Stack**
 
-The modular rollup framework used to build TAGIT L2. Provides Ethereum-equivalent security with lower costs.
+The modular rollup framework underpinning Base, the L2 where TAG IT contracts are deployed. Provides Ethereum-equivalent security with lower costs.
 
 ---
 
@@ -234,7 +234,7 @@ A reputation algorithm where recent feedback carries more weight than older feed
 
 ### TAGIT L2
 
-The Layer 2 blockchain built on OP Stack where TAG IT smart contracts are deployed. Settles to Ethereum for security.
+The Layer 2 blockchain (Base) where TAG IT smart contracts are deployed. Built on the OP Stack and settles to Ethereum for security.
 
 ---
 

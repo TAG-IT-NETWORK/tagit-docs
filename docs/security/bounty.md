@@ -13,7 +13,7 @@ TAG IT Network's vulnerability disclosure and bounty program.
 
 | Asset | Description |
 |-------|-------------|
-| Smart Contracts | All deployed contracts on OP Sepolia/Mainnet |
+| Smart Contracts | All deployed contracts on Base Sepolia/Mainnet |
 | API | api.tagit.network |
 | Web Apps | dashboard.tagit.network, verify.tagit.network |
 | Mobile SDKs | @tagit/sdk, network.tagit:sdk, TAGITKit |

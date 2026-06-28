@@ -17,7 +17,7 @@ The validation flow proves an agent meets quality standards through independent 
 - A registered agent on TAGITAgentIdentity (see [Register Agent](../register-agent/))
 - **Requester** wallet with KYC_L1 identity badge
 - **Validator** wallet(s) with AGENT_VALIDATOR capability badge
-- OP Sepolia ETH for gas fees
+- Base Sepolia ETH for gas fees
 
 ## Installation
 
@@ -32,7 +32,7 @@ Create a `.env` file:
 ```env
 REQUESTER_PRIVATE_KEY=your_requester_private_key
 VALIDATOR_PRIVATE_KEY=your_validator_private_key
-OP_SEPOLIA_RPC_URL=https://sepolia.optimism.io
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 AGENT_ID=1
 ```
 
