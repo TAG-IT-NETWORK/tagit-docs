@@ -175,12 +175,12 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 | RoboticAuthorizer | `0x5c38684D87E826589eC5ED401d94C9671CAe9F40` | ✅ LIVE |
 | IntegrationFactory | `0xd68919371c26700dDb8252aD1825Aa02a0381a86` | ✅ LIVE |
 
-#### Pending Deployment on Base
+#### Verification & Agent Bond
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| VerificationEscrow | — | 🔜 Pending deployment on Base |
-| ReputationStaking | — | 🔜 Pending deployment on Base |
+| VerificationEscrow | [`0x4c9aACfcb64169E3BC187c227c4C0e0a5CFDA1cF`](https://sepolia.basescan.org/address/0x4c9aACfcb64169E3BC187c227c4C0e0a5CFDA1cF) | ✅ LIVE |
+| ReputationStaking (Agent Credibility Bond) | [`0x4154af74DA2B3a98096317100296966Ade15574A`](https://sepolia.basescan.org/address/0x4154af74DA2B3a98096317100296966Ade15574A) | ✅ LIVE |
 
 ### Base Mainnet (Production)
 
