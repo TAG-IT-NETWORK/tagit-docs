@@ -1,131 +1,144 @@
 ---
 title: SDK Overview
-description: Official SDKs for TAG IT Network integration
+description: What client tooling exists for TAG IT Network today, and what does not
 ---
 
 # SDK Overview
 
-Official SDKs for integrating TAG IT Network into your applications.
+**Status, in one line:** there is no installable TAG IT SDK for any language today. The
+supported way to read TAG IT data is a direct contract call over a public RPC, which works
+from any language without a package, a key, or a signup.
 
-## Available SDKs
+## What exists
 
-| Platform | Package | Documentation |
-|----------|---------|---------------|
-| JavaScript/TypeScript | `@tagit/sdk` | [View](./javascript.md) |
-| Kotlin (Android) | `network.tagit:sdk` | [View](./kotlin.md) |
-| Swift (iOS) | `TagItSDK` | [View](./swift.md) |
+| Platform | Package | Status |
+|----------|---------|--------|
+| Direct contract read (any language) | none needed | **Works today.** See below. |
+| JavaScript / TypeScript | `@tagit/sdk` | **Not published** to npm — build from source. See [JavaScript](./javascript.md). |
+| Kotlin (Android) | — | **Does not exist.** No such SDK has ever been built or released. |
+| Swift (iOS) | — | **Does not exist.** No such SDK has ever been built or released. |
 
-## Features
+> **Do not run `npm install @tagit/sdk`.** The package is not published (the registry returns
+> 404), and the `@tagit` npm scope is owned by an unrelated third party. Installing from that
+> scope would pull a stranger's code, not ours.
 
-All SDKs provide:
+There is no Kotlin artifact and no Swift package:
 
-- **Asset Management** — Create, read, update assets
-- **Verification** — NFC challenge-response verification
-- **Programs** — Reward program integration
-- **Events** — Real-time event subscriptions
-- **Offline Support** — Cached data for offline access
+- The Gradle coordinate `network.tagit:sdk` does not exist — nothing is published to Maven
+  Central under that group.
+- The Swift module `TagItSDK` does not exist, and neither does the CocoaPods pod of the
+  same name.
+- The repository `tagit-swift` does not exist under any TAG IT org — the GitHub API
+  returns 404.
 
-## Quick Comparison
+If you have seen any of those referenced, they were describing products that have never
+been built. For mobile, call the contract directly with a native Ethereum library (web3j on
+Android, web3.swift on iOS) or use the HTTP endpoints listed below.
 
-| Feature | JavaScript | Kotlin | Swift |
-|---------|------------|--------|-------|
-| Asset CRUD | Yes | Yes | Yes |
-| Verification | Yes | Yes | Yes |
-| NFC Reading | No* | Yes | Yes |
-| Programs | Yes | Yes | Yes |
-| WebSockets | Yes | Yes | Yes |
-| Offline Cache | Yes | Yes | Yes |
+## Start here: read an asset with no SDK
 
-*JavaScript SDK requires native NFC bridge for mobile apps.
+Every asset's owner and lifecycle state is public on Base Sepolia. This needs no package,
+no API key, and no account.
 
-## Installation
+`TAGITCore` on Base Sepolia (chain ID 84532):
+`0x3aDc7EFDb58Ae85483eFf5D4966D916185f31d1D`
 
-### JavaScript
+### With `cast` (Foundry)
 
 ```bash
-npm install @tagit/sdk
+cast call 0x3aDc7EFDb58Ae85483eFf5D4966D916185f31d1D \
+  "getAsset(uint256)(address,uint64,uint8,uint8,uint16)" 1 \
+  --rpc-url https://sepolia.base.org
 ```
 
-### Kotlin
-
-```kotlin
-dependencies {
-    implementation("network.tagit:sdk:1.0.0")
-}
-```
-
-### Swift
-
-```swift
-// Package.swift
-dependencies: [
-    .package(url: "https://github.com/tagit-network/tagit-swift.git", from: "1.0.0")
-]
-```
-
-## Basic Usage
-
-### JavaScript
+### With viem
 
 ```typescript
-import { TagIt } from '@tagit/sdk';
+import { createPublicClient, http } from "viem";
+import { baseSepolia } from "viem/chains";
 
-const tagit = new TagIt({ apiKey: process.env.TAGIT_API_KEY });
+const client = createPublicClient({ chain: baseSepolia, transport: http() });
 
-// Get an asset
-const asset = await tagit.assets.get(123n);
-console.log('Asset:', asset);
+const abi = [{
+  type: "function", name: "getAsset", stateMutability: "view",
+  inputs: [{ name: "tokenId", type: "uint256" }],
+  outputs: [
+    { name: "assetOwner", type: "address" },
+    { name: "timestamp", type: "uint64" },
+    { name: "state", type: "uint8" },
+    { name: "flags", type: "uint8" },
+    { name: "reserved", type: "uint16" },
+  ],
+}] as const;
 
-// Verify an asset
-const result = await tagit.verify(123n, challenge, response);
-console.log('Verified:', result.verified);
+const [assetOwner, timestamp, state] = await client.readContract({
+  address: "0x3aDc7EFDb58Ae85483eFf5D4966D916185f31d1D",
+  abi,
+  functionName: "getAsset",
+  args: [1n],
+});
+
+const STATES = ["NONE", "MINTED", "BOUND", "ACTIVATED", "CLAIMED", "FLAGGED", "RECYCLED"];
+console.log("owner:", assetOwner);
+console.log("state:", STATES[state], `(${state})`);
+console.log("updated:", new Date(Number(timestamp) * 1000).toISOString());
 ```
 
-### Kotlin
+Both samples above were run against the live contract and returned:
 
-```kotlin
-val tagit = TagIt.Builder()
-    .apiKey(BuildConfig.TAGIT_API_KEY)
-    .build()
-
-// Get an asset
-val asset = tagit.assets.get(123)
-println("Asset: $asset")
-
-// Verify an asset
-val result = tagit.verify(123, challenge, response)
-println("Verified: ${result.verified}")
+```
+owner: 0x458B4d0c3a55006965Fd13D6af7B8509De51Cb3D
+state: RECYCLED (6)
+updated: 2026-05-26T16:19:34.000Z
 ```
 
-### Swift
+### Lifecycle states
 
-```swift
-let tagit = TagIt(apiKey: Config.tagitApiKey)
+`getAsset` returns `state` as a `uint8`:
 
-// Get an asset
-let asset = try await tagit.assets.get(id: 123)
-print("Asset: \(asset)")
+| Value | State |
+|-------|-------|
+| 0 | `NONE` — asset does not exist |
+| 1 | `MINTED` — NFT created, no tag bound |
+| 2 | `BOUND` — NFC tag cryptographically linked |
+| 3 | `ACTIVATED` — QA passed, ready for distribution |
+| 4 | `CLAIMED` — owned by an end consumer |
+| 5 | `FLAGGED` — lost/stolen/recall initiated |
+| 6 | `RECYCLED` — end of life, permanently retired |
 
-// Verify an asset
-let result = try await tagit.verify(tokenId: 123, challenge: challenge, response: response)
-print("Verified: \(result.verified)")
+> **Note:** the contracts are deployed to Base Sepolia testnet and are **unaudited**. Do not
+> rely on them for production or custody decisions.
+
+## HTTP endpoints
+
+These are the complete set of live, callable HTTP endpoints. There is no `/v1` REST API.
+
+| Endpoint | Notes |
+|----------|-------|
+| `GET https://api.tagit.network/health` | Returns `200` with a JSON status object. |
+| `POST https://api.tagit.network/verify` | Returns `402` with an [x402](https://x402.org) payment envelope. Payment required; no API-key auth. |
+| `GET https://verify.tagit.network/api/verify` | Requires `picc` and `cmac` query parameters from a real NTAG 424 DNA tap. |
+| `GET https://verify.tagit.network/api/dpp/{tokenId}` | Same tap-gated parameters; returns a W3C Verifiable Credential digital product passport. |
+
+Human-readable pages: `verify.tagit.network/asset/{tokenId}`, `/tag/{uid}`,
+`/01/{gtin}/21/{serial}`, and `/sun`.
+
+The `picc` and `cmac` values are produced by the chip's SUN (Secure Unique NFC) message
+during a physical tap. They cannot be constructed by hand, so a verdict of `verified: true`
+cannot be obtained without hardware. The endpoint itself is live and answers — invented
+parameters are parsed and rejected on their merits:
+
+```console
+$ curl -s "https://verify.tagit.network/api/verify?picc=00000000000000000000000000000000&cmac=0000000000000000"
+{"verified":false,"reason":"unexpected PICC tag 0xba","chain":{"id":84532,"name":"Base Sepolia"}}
 ```
 
-## Error Handling
+Omitting the parameters returns `400 {"verified":false,"error":"missing picc or cmac query
+params"}`. A route that genuinely does not exist returns a `404` HTML page instead — that is
+how to tell the two apart.
 
-All SDKs throw/return consistent error types:
+## Next steps
 
-| Error | Description |
-|-------|-------------|
-| `TagItError.unauthorized` | Invalid API key |
-| `TagItError.notFound` | Resource not found |
-| `TagItError.validationError` | Invalid input |
-| `TagItError.networkError` | Network connectivity issue |
-| `TagItError.serverError` | Server-side error |
-
-## Next Steps
-
-- [JavaScript SDK](./javascript.md) — Full JS/TS documentation
-- [Kotlin SDK](./kotlin.md) — Full Android documentation
-- [Swift SDK](./swift.md) — Full iOS documentation
-- [API Reference](../api/overview.md) — REST API documentation
+- [JavaScript SDK](./javascript.md) — building the unpublished TypeScript client from source
+- [SDK API Reference](./sdk-api-reference.md) — full method list for that client
+- [Contracts](../contracts/index.md) — the contracts you can call directly

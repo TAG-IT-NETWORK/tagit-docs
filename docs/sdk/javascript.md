@@ -1,240 +1,142 @@
 ---
 title: JavaScript SDK
-description: Official JavaScript/TypeScript SDK for TAG IT Network
+description: The unpublished TypeScript client — what it does, and how to build it from source
 ---
 
 # JavaScript SDK
 
-Complete reference for the official TAG IT JavaScript/TypeScript SDK.
+> **This package is not published.** `npm install @tagit/sdk` does not work: the registry
+> returns 404 for `@tagit/sdk`, and the `@tagit` npm scope is owned by an unrelated third
+> party. Do not install from that scope — you would be pulling a stranger's code. The only
+> supported way to use this client today is to build it from source.
 
-## Installation
+> **It is an agent-layer client only.** It talks to the ERC-8004 agent
+> identity/reputation/validation contracts. It does **not** do product registration, asset
+> verification, or ownership transfer. For asset reads, call `TAGITCore` directly — see
+> [SDK Overview](./overview.md).
+
+## Build from source
 
 ```bash
-npm install @tagit/sdk
+git clone https://github.com/TAG-IT-NETWORK/tagit-sdk.git
+cd tagit-sdk
+npm install
+npm run build
 ```
 
-## Quick Start
+Requires Node.js ≥ 20. This produces `dist/`. To consume it from another project on the
+same machine, reference it by path (`npm install /path/to/tagit-sdk`) or use `npm link`.
+There is no registry install path.
+
+## The default chain is deprecated
+
+`createAgentClient()` defaults to **OP Sepolia (11155420)**. That deployment was
+**deprecated on 2026-06-27** in favour of **Base Sepolia (84532)**. If you do not pass a
+chain explicitly, you will silently read from the deprecated deployment.
+
+Always pass the chain:
 
 ```typescript
-import { TagIt } from '@tagit/sdk';
+import { createAgentClient } from "@tagit/sdk"; // not published — build from source
+import { baseSepolia } from "viem/chains";
 
-const tagit = new TagIt({
-  apiKey: process.env.TAGIT_API_KEY,
-  network: 'testnet'
+const client = createAgentClient({
+  chain: baseSepolia,
+  rpcUrl: "https://sepolia.base.org",
 });
-
-// Verify an asset
-const result = await tagit.verify(12345n);
-console.log('Verified:', result.verified);
 ```
+
+The bundled CLI commands (`register`, `info`, `feedback`, `validate`) hardcode chain ID
+`11155420` and therefore still target the deprecated deployment. Treat the CLI as
+deprecated alongside it.
 
 ## Configuration
 
 ```typescript
-import { TagIt } from '@tagit/sdk';
-
-const tagit = new TagIt({
-  // Required
-  apiKey: 'your-api-key',
-
-  // Optional
-  network: 'testnet',        // 'mainnet' | 'testnet'
-  timeout: 30000,            // Request timeout in ms
-  retries: 3,                // Retry attempts
-  logging: true,             // Debug logging
-  baseUrl: 'https://...',    // Custom API URL
-});
+createAgentClient(config?: AgentClientConfig)
 ```
 
-## Assets
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `chain` | `Chain` | OP Sepolia (deprecated) | Viem chain definition |
+| `rpcUrl` | `string` | the chain's default RPC | Custom RPC endpoint |
+| `privateKey` | `` `0x${string}` `` | — | Enables write methods |
+| `publicClient` | `PublicClient` | — | Pre-built viem public client; overrides `chain`/`rpcUrl` |
+| `walletClient` | `WalletClient` | — | Pre-built viem wallet client; overrides `privateKey` |
 
-### Get Asset
+There is no `apiKey` option. The client is an RPC client and does not authenticate against
+a TAG IT server.
+
+## What the client exposes
+
+`createAgentClient()` returns an object with these properties:
+
+| Property | Contract | Purpose |
+|----------|----------|---------|
+| `identity` | `TAGITAgentIdentity` | Register and query agent identities |
+| `reputation` | `TAGITAgentReputation` | Feedback and reputation summaries |
+| `validation` | `TAGITAgentValidation` | Validation requests and responses |
+| `staking` | `ReputationStaking` | Stake-backed reputation |
+| `events` | — | Contract event watchers |
+| `publicClient` | — | The underlying viem public client |
+| `walletClient` | — | The underlying viem wallet client (only when configured) |
+
+Write methods are typed as `Partial` — they exist at runtime only when a `privateKey` or
+`walletClient` is supplied. Reading without one is fine; calling a write method without one
+is not.
+
+> **Note:** `staking` points at `ReputationStaking`, whose address is
+> `0x0000000000000000000000000000000000000000` on every currently registered chain. No
+> staking contract is deployed, so those calls will not work against a real deployment.
+
+## Example: read an agent
 
 ```typescript
-const asset = await tagit.assets.get(123n);
+import { createAgentClient } from "@tagit/sdk"; // not published — build from source
+import { baseSepolia } from "viem/chains";
 
-console.log('Token ID:', asset.tokenId);
-console.log('State:', asset.state);
-console.log('Owner:', asset.owner);
-console.log('Metadata:', asset.metadata);
-```
-
-### List Assets
-
-```typescript
-const { assets, pagination } = await tagit.assets.list({
-  state: 'ACTIVATED',
-  owner: '0x123...',
-  page: 1,
-  limit: 20
-});
-
-for (const asset of assets) {
-  console.log(asset.tokenId, asset.state);
-}
-```
-
-### Create Asset
-
-```typescript
-const { tokenId, txHash } = await tagit.assets.create({
-  to: '0x123...',
-  metadata: {
-    name: 'Product Name',
-    brand: 'Brand',
-    sku: 'SKU-123'
-  }
+const client = createAgentClient({
+  chain: baseSepolia,
+  rpcUrl: "https://sepolia.base.org",
 });
 
-console.log('Created:', tokenId);
+const agent = await client.identity.getAgent(1n);
+console.log("registrant:", agent.registrant);
+console.log("wallet:", agent.wallet);
+console.log("active:", agent.active);
 ```
 
-### Bind Asset
+## Example: write
 
 ```typescript
-const result = await tagit.assets.bind(123n, {
-  chipId: '0xabc...',
-  signature: '0xdef...'
+const client = createAgentClient({
+  chain: baseSepolia,
+  rpcUrl: "https://sepolia.base.org",
+  privateKey: process.env.PRIVATE_KEY as `0x${string}`,
 });
 
-console.log('Bound:', result.state === 'BOUND');
+// Write methods are optional at the type level — guard before calling.
+if (!client.identity.register) throw new Error("no wallet configured");
+
+const txHash = await client.identity.register(/* see API reference for arguments */);
+console.log("tx:", txHash);
 ```
 
-## Verification
+## Also exported
 
-### Full Verification Flow
+- **A2A client** — `A2AClient`, `A2AClientPool`, `fetchAgentCard`, `parseSSEStream` for
+  agent-to-agent task messaging over JSON-RPC and SSE.
+- **Contract readers/writers** — `createWTagReader`, `createWTagWriter`,
+  `createVoucherReader`, `createVoucherWriter`, `createAgentReader`, `createAgentWriter`.
+- **ABIs** — `agentIdentityAbi`, `agentReputationAbi`, `agentValidationAbi`, `wtagAbi`,
+  `voucherAbi`.
+- **Addresses** — `getAddresses(chainId)`.
+- **Errors** — `SdkError`, `ContractError`, `ValidationError`.
+- **Zod schemas** — `addressSchema`, `agentIdSchema`, `ratingSchema`, and others.
 
-```typescript
-// 1. Generate challenge
-const { challengeId, challenge, expiresAt } = await tagit.verify.createChallenge(123n);
+Full signatures are in the [SDK API Reference](./sdk-api-reference.md).
 
-// 2. Get response from NFC chip (platform-specific)
-const response = await nfcChip.sign(challenge);
+## Next steps
 
-// 3. Submit verification
-const result = await tagit.verify.submit({
-  challengeId,
-  tokenId: 123n,
-  response
-});
-
-if (result.verified) {
-  console.log('Asset is authentic!');
-  console.log('Owner:', result.asset.owner);
-} else {
-  console.log('Verification failed:', result.reason);
-}
-```
-
-### Simple Verification
-
-```typescript
-// One-step verification (challenge/response handled internally)
-const result = await tagit.verify(123n, challenge, response);
-console.log('Verified:', result.verified);
-```
-
-## Programs
-
-### List Programs
-
-```typescript
-const programs = await tagit.programs.list({ active: true });
-
-for (const program of programs) {
-  console.log(program.name, program.type);
-}
-```
-
-### Enroll
-
-```typescript
-const enrollment = await tagit.programs.enroll('prog_123');
-console.log('Enrolled:', enrollment.enrollmentId);
-```
-
-### Get Progress
-
-```typescript
-const progress = await tagit.programs.getProgress('prog_123');
-
-console.log('Points:', progress.points);
-console.log('Level:', progress.level);
-console.log('Claimable rewards:', progress.claimableRewards);
-```
-
-### Claim Reward
-
-```typescript
-const claim = await tagit.programs.claim('prog_123', 'rew_1');
-console.log('Claimed:', claim.rewardName);
-```
-
-## Events
-
-### Subscribe to Events
-
-```typescript
-const unsubscribe = tagit.events.subscribe('asset.verified', (event) => {
-  console.log('Asset verified:', event.tokenId);
-  console.log('By:', event.verifier);
-});
-
-// Later: unsubscribe
-unsubscribe();
-```
-
-### Event Types
-
-| Event | Description |
-|-------|-------------|
-| `asset.minted` | New asset created |
-| `asset.bound` | Asset bound to chip |
-| `asset.verified` | Asset verification |
-| `asset.transferred` | Ownership changed |
-| `asset.flagged` | Asset flagged |
-
-## Error Handling
-
-```typescript
-import { TagIt, TagItError, ErrorCode } from '@tagit/sdk';
-
-try {
-  const asset = await tagit.assets.get(123n);
-} catch (error) {
-  if (error instanceof TagItError) {
-    switch (error.code) {
-      case ErrorCode.NOT_FOUND:
-        console.log('Asset not found');
-        break;
-      case ErrorCode.UNAUTHORIZED:
-        console.log('Invalid API key');
-        break;
-      default:
-        console.log('Error:', error.message);
-    }
-  }
-}
-```
-
-## TypeScript Types
-
-```typescript
-import type {
-  Asset,
-  AssetState,
-  VerificationResult,
-  Program,
-  ProgramProgress
-} from '@tagit/sdk';
-
-const asset: Asset = await tagit.assets.get(123n);
-const state: AssetState = asset.state; // 'MINTED' | 'BOUND' | 'ACTIVATED' | ...
-```
-
-## Next Steps
-
-- [SDK Overview](./overview.md) — All SDKs
-- [Kotlin SDK](./kotlin.md) — Android documentation
-- [Swift SDK](./swift.md) — iOS documentation
-- [API Reference](../api/overview.md) — REST API
+- [SDK Overview](./overview.md) — the no-SDK path, and what exists per platform
+- [SDK API Reference](./sdk-api-reference.md) — complete method list
