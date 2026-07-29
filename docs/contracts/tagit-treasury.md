@@ -6,7 +6,7 @@ Protocol treasury and fee distribution contract.
 
 | Network | Address | Status |
 |---------|---------|--------|
-| Base Sepolia | `0xa4A3720d705334f409Dd24836Cc75D642125f759` | ✅ LIVE |
+| Base Sepolia | `0xa4a3720d705334f409DD24836CC75d642125f759` | ✅ LIVE |
 | Base Mainnet | TBD | 🔜 Planned (post-DAO) |
 
 ## Overview

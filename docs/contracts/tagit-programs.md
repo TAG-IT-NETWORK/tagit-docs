@@ -6,7 +6,7 @@ Rewards, customs integration, and recall management contract.
 
 | Network | Address | Status |
 |---------|---------|--------|
-| Base Sepolia | `0x62a3CF048E66Be0119F0CcD97eC964B726B9A982` | ✅ LIVE |
+| Base Sepolia | `0x62a3CF048E66BE0119F0ccD97Ec964B726B9a982` | ✅ LIVE |
 | Base Mainnet | TBD | 🔜 Planned (post-DAO) |
 
 ## Overview

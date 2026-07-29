@@ -115,7 +115,7 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| TAGITCore | `0x3adC7eFdB58Ae85483Eff5D4966D916185F31D1d` | ✅ LIVE (UUPS Proxy) |
+| TAGITCore | `0x3aDc7EFDb58Ae85483eFf5D4966D916185f31d1D` | ✅ LIVE (UUPS Proxy) |
 | TAGITAccess | `0xb56A1D91995C212342FaA843468F03521340A1D6` | ✅ LIVE |
 | IdentityBadge | `0xebdAC9A0663c02a7297681b078aaD893EF345030` | ✅ LIVE |
 | CapabilityBadge | `0xb05d22706B08A3F6409601de520cf7A6dbCB573d` | ✅ LIVE |
@@ -124,18 +124,18 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 | Contract | Proxy | Implementation | Status |
 |----------|-------|----------------|--------|
-| TAGITRecovery | `0x6Bc3c69367E586810a3b317fA9F0406504E95866` | TBD (via proxy on Basescan) | ✅ LIVE |
-| TAGITPaymaster | `0x6fFfA92eFb419e812d5c9C9D0c1b1A0F5C6FFd1c` | TBD (via proxy on Basescan) | ✅ LIVE |
-| TAGITTreasury | `0xa4A3720d705334f409Dd24836Cc75D642125f759` | TBD (via proxy on Basescan) | ✅ LIVE |
-| TAGITPrograms | `0x62a3CF048E66Be0119F0CcD97eC964B726B9A982` | TBD (via proxy on Basescan) | ✅ LIVE |
-| TAGITStaking | `0xb22F5688559d07e3A12dBB89F0481B967407F267` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITRecovery | `0x6BC3C69367E586810A3B317fA9F0406504e95866` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITPaymaster | `0x6fFFa92efb419E812d5c9C9D0c1B1a0f5c6fFd1C` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITTreasury | `0xa4a3720d705334f409DD24836CC75d642125f759` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITPrograms | `0x62a3CF048E66BE0119F0ccD97Ec964B726B9a982` | TBD (via proxy on Basescan) | ✅ LIVE |
+| TAGITStaking | `0xB22F5688559D07e3a12DBB89f0481b967407F267` | TBD (via proxy on Basescan) | ✅ LIVE |
 
 #### Account Abstraction (ERC-4337)
 
 | Contract | Address | Status |
 |----------|---------|--------|
 | TAGITAccount | `0x2160044C7c46B08a552361595E09e8C8DDD06E85` | ✅ LIVE |
-| TAGITAccountFactory | `0x3eD2C0e92f0E52dC68D04172Ad37Df4724893AD3` | ✅ LIVE |
+| TAGITAccountFactory | `0x3ed2c0E92F0e52dC68d04172aD37df4724893aD3` | ✅ LIVE |
 
 #### Cross-Chain Bridge
 
@@ -155,10 +155,10 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 | Contract | Proxy | Implementation | Status |
 |----------|-------|----------------|--------|
-| TAGITToken | `0x5f98B83cD7Aef769cc51D2FB739BA49D561170DE` | `0xa412b5C203f74E88f434C405e694528F04cACf59` | ✅ LIVE (UUPS) |
-| TAGITGovernor | `0xCF67Df870ECcbB7838c3Ab7876467c89d84DCe89` | TBD (via proxy on Basescan) | ✅ LIVE (UUPS) |
-| TAGITEmissions | `0x0672fcc5B753786c2Cd1805494fF094CB5d6e579` | — | ✅ LIVE |
-| TAGITBurner | `0xcB8abCe0770c499B789481f8C6c20fa0d6980D2A` | — | ✅ LIVE |
+| TAGITToken | `0x5f98B83cD7Aef769cc51D2FB739BA49D561170DE` | `0xA412b5C203F74e88F434C405E694528f04CaCf59` | ✅ LIVE (UUPS) |
+| TAGITGovernor | `0xCF67DF870EccBB7838c3ab7876467c89d84dce89` | TBD (via proxy on Basescan) | ✅ LIVE (UUPS) |
+| TAGITEmissions | `0x0672fcC5b753786C2cD1805494fF094CB5d6E579` | — | ✅ LIVE |
+| TAGITBurner | `0xCB8AbCe0770C499B789481F8c6C20Fa0d6980d2a` | — | ✅ LIVE |
 | TAGITVesting | `0x7dd4c98a2aFE60eE06bA5c136dBeb7f93DD2699D` | — | ✅ LIVE |
 
 #### Wrapped Token (Base-only)
@@ -172,7 +172,7 @@ See [Technosphere Architecture](../architecture/technosphere.md) for the ERC-800
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| RoboticAuthorizer | `0x5c38684D87E826589eC5ED401d94C9671CAe9F40` | ✅ LIVE |
+| RoboticAuthorizer | `0x5C38684d87e826589Ec5Ed401D94C9671caE9f40` | ✅ LIVE |
 | IntegrationFactory | `0xd68919371c26700dDb8252aD1825Aa02a0381a86` | ✅ LIVE |
 
 #### Verification & Agent Bond

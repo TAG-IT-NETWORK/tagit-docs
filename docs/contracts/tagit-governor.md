@@ -141,7 +141,7 @@ event ProposalExecuted(uint256 indexed proposalId);
 
 | Network | Type | Address |
 |---------|------|---------|
-| Base Sepolia | Proxy | `0xCF67Df870ECcbB7838c3Ab7876467c89d84DCe89` |
+| Base Sepolia | Proxy | `0xCF67DF870EccBB7838c3ab7876467c89d84dce89` |
 | Base Sepolia | Implementation | TBD (read on-chain via proxy on Basescan) |
 | Base Mainnet | — | Planned (post-DAO) |
 
