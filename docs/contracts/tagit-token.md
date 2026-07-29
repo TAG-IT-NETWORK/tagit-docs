@@ -111,7 +111,7 @@ interface ITAGITToken {
 | Network | Type | Address |
 |---------|------|---------|
 | Base Sepolia | Proxy | `0x5f98B83cD7Aef769cc51D2FB739BA49D561170DE` |
-| Base Sepolia | Implementation | `0xa412b5C203f74E88f434C405e694528F04cACf59` |
+| Base Sepolia | Implementation | `0xA412b5C203F74e88F434C405E694528f04CaCf59` |
 | Base Mainnet | — | Planned (post-DAO) |
 
 > **Deployed:** February 27, 2026 as part of SEC-AUD-001 remediation.

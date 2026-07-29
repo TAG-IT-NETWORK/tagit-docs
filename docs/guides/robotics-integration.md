@@ -107,7 +107,7 @@ const publicClient = createPublicClient({
 
 const [allowed, safetyClass, actionBitmask, zoneId, remainingRateLimit] =
   await publicClient.readContract({
-    address: '0x5c38684D87E826589eC5ED401d94C9671CAe9F40', // RoboticAuthorizer on Base Sepolia (separate from TAGITCore asset lifecycle at 0x3adC...1D1d)
+    address: '0x5C38684d87e826589Ec5Ed401D94C9671caE9f40', // RoboticAuthorizer on Base Sepolia (separate from TAGITCore asset lifecycle at 0x3adC...1D1d)
     abi: roboticAuthorizerAbi,
     functionName: 'queryActionPolicy',
     args: [31n, 1042n, 0], // robotTokenId, assetTokenId, SCAN

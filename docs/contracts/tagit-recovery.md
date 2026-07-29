@@ -11,7 +11,7 @@ AIRP (Asset Identity Recovery Protocol) contract for handling lost, stolen, and 
 
 | Network | Address | Status |
 |---------|---------|--------|
-| Base Sepolia | `0x6Bc3c69367E586810a3b317fA9F0406504E95866` | ✅ LIVE |
+| Base Sepolia | `0x6BC3C69367E586810A3B317fA9F0406504e95866` | ✅ LIVE |
 | Base Mainnet | TBD | 🔜 Planned (post-DAO) |
 
 ## Overview
