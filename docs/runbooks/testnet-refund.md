@@ -9,9 +9,9 @@ description: Operator procedure for refunding USDC on failed testnet sales
 
 ## When to run
 
-A sale reaches `status = 'refund_due'` when the buyer's USDC payment to the sale treasury was verified on-chain but the subsequent `claim()` could not complete (e.g. claim tx reverted, token no longer claimable, relayer failure after payment verification). The buyer has paid; the asset was not delivered. The operator returns the funds manually.
+`refund_due` rows are written **automatically** by the stale-listing settle path (`staleListingPath` in `tagit-services/src/sale/sale-relayer.ts`): when a verified USDC payment arrives against a listing whose captured owner no longer owns the token (transferred away since LIST), settle responds `409 LISTING_STALE`, auto-delists the listing, and records the consumed payment as a sales row with `status = 'refund_due'`. The buyer has paid; the asset cannot be delivered from that listing — the operator returns the funds manually using this runbook.
 
-> **Implementation note (as of 2026-08):** `refund_due` and `refunded` exist in the `sale_status` enum (`tagit-services/src/sale/schema.ts`), and the `sales` table has `refund_tx_hash`, but no code path yet writes `status='refund_due'` automatically — flagging a sale for refund is currently itself a manual step after triaging a failed settle.
+`claim()` failures do **not** write `refund_due` — they mark the sales row `status = 'failed'`, and a settle retry by the **same buyer for the same token resumes settlement with that row** (the claim is retried; on success the sale settles as normal). A retry is the FIRST remedy for a failed claim; only escalate a `failed` row to `refund_due` manually after triage shows retries cannot succeed (e.g. the token is no longer claimable).
 
 ## Prerequisites
 

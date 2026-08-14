@@ -83,7 +83,7 @@ const jcs = canonicalize(parseTagitMetaDoc(normalizeDoc(doc)));  // RFC 8785
 const hash = keccak256(toBytes(jcs));                            // UTF-8 → keccak256
 ```
 
-A publish-time confusable scan additionally flags (never blocks) any single word mixing Latin with Cyrillic/Greek codepoints — a mixed-script brand hashes differently from its Latin lookalike, so homoglyph spoofs cannot collide with genuine documents.
+The confusable scan is wired into publish as a **non-blocking lint**: `publishMetadata` runs `confusableScan` (`src/metadata/canonical.ts`) over the doc's free-text fields (`name`, `description`, `tagit.brand`, `tagit.model`, `tagit.category`), and any single word mixing Latin with Cyrillic/Greek codepoints is flagged for review — a structured warning is logged and the flagged field paths are returned as `flaggedFields` in the publish result. Publishing **never blocks** on a flag and the canonical hash is unaffected. A mixed-script brand still hashes differently from its Latin lookalike, so homoglyph spoofs cannot collide with genuine documents.
 
 ## Golden vectors
 
