@@ -23,53 +23,44 @@ stateDiagram-v2
     FLAGGED --> RECYCLED: resolve() - decommission
 ```
 
-## 1. Minting Flow
+## 1. Minting & Metadata Flow
 
-Creating a new Digital Twin NFT.
+Creating a new Digital Twin is **DB-first**: the catalog row exists before any chain call, and the on-chain anchor comes last. The pipeline is mint → bind → publish → anchor, and reads are served from the last-anchored version.
 
 ```mermaid
 sequenceDiagram
     participant Brand
     participant API as API Gateway
-    participant L2 as TAGIT L2
+    participant DB as Catalog DB
     participant Core as TAGITCore
-    participant Indexer
+    participant Worker as Anchor Worker
 
-    Brand->>API: POST /assets/mint
-    API->>API: Validate API Key
-    API->>L2: Submit mint tx
-    L2->>Core: mint(metadata)
-    Core->>Core: Create NFT
-    Core-->>L2: AssetMinted event
-    L2-->>Indexer: Index event
-    Indexer-->>API: Confirm indexed
+    Brand->>API: POST mint (mintRequestId, docDraft)
+    API->>DB: Insert catalog_items row (status=mint_pending)
+    Note over DB: Row keyed by placeholder tokenId<br/>derived from mintRequestId
+    API->>Core: mint(to, draftHash) via serialized tx queue
+    Core-->>API: AssetMinted event (real tokenId)
+    API->>DB: Update row: tokenId, status=minted
     API-->>Brand: { tokenId, txHash }
+
+    Brand->>API: bind tag (tokenId, tagHash)
+    Note over API: Publish requires a bound tag<br/>(anchor-after-bind)
+
+    Brand->>API: publish metadata doc
+    API->>API: Assemble template + overrides + input,<br/>NFC-normalize, validate, JCS-canonicalize
+    API->>DB: Insert item_metadata_versions row<br/>(monotonic version, anchor_status=pending)
+    Worker->>DB: Sweep pending versions (after grace window)
+    Worker->>Core: updateMetadataHash(tokenId, jcsHash)
+    Worker->>DB: anchor_status=confirmed
 ```
 
-### Request
+### Key properties
 
-```json
-POST /api/v1/assets/mint
-{
-  "metadata": {
-    "name": "Product XYZ",
-    "sku": "SKU-12345",
-    "manufacturer": "Brand Co",
-    "manufactureDate": "2025-01-15"
-  }
-}
-```
-
-### Response
-
-```json
-{
-  "tokenId": "12345",
-  "txHash": "0x...",
-  "state": "MINTED",
-  "createdAt": "2025-01-15T10:30:00Z"
-}
-```
+- **DB-first mint** — the `catalog_items` row (status `mint_pending`) is written before any chain interaction, keyed by a caller-supplied `mintRequestId`. Retries with the same id are idempotent; the reconciler finalizes rows whose tx outcome was unknown at submit time.
+- **Anchor-after-bind** — publishing a metadata version requires the item to have a bound `tagHash` (a backfill escape hatch exists for legacy migration).
+- **Publish pipeline** — each publish deep-merges template fields, item overrides, and the request doc, then NFC-normalizes, validates against the strict `tagit-meta/1` schema, JCS-canonicalizes (RFC 8785), and keccak256-hashes. Identical docs are idempotent; new docs insert a monotonic `item_metadata_versions` row with `anchor_status='pending'`.
+- **Anchoring** — the anchor worker sends `updateMetadataHash(tokenId, newHash)` through the serialized relayer queue after a cancellable grace window (reassign support), with a periodic DB sweep as the source of truth across restarts. A reconciler drift sweep compares on-chain `metadataHash(tokenId)` with the latest confirmed version.
+- **Last-anchored serving** — public reads serve the last *anchored* (confirmed) metadata version; a newer pending version is not served as verified until its hash is on-chain. See [Metadata Schema](./metadata-schema.md) for the tri-state verification semantics.
 
 ## 2. Binding Flow
 
@@ -210,5 +201,6 @@ sequenceDiagram
 ## Related
 
 - [Architecture Overview](./overview.md)
+- [Metadata Schema (tagit-meta/1)](./metadata-schema.md)
 - [TAGITCore Contract](../contracts/tagit-core.md)
 - [API Reference](../api/overview.md)
