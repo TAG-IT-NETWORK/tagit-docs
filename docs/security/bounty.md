@@ -1,11 +1,26 @@
 ---
-title: Bug Bounty
-description: Vulnerability disclosure and bug bounty program
+title: Vulnerability Disclosure
+description: How to report a security vulnerability in TAG IT Network
 ---
 
-# Bug Bounty Program
+# Vulnerability Disclosure
 
-TAG IT Network's vulnerability disclosure and bounty program.
+How to report a security vulnerability in TAG IT Network, and what we do with it.
+
+> **There is no bug bounty programme. We do not pay for reports today.**
+>
+> Revisions of this page before 2026-08-24 advertised paid tiers — up to $50,000 for
+> Critical, and a "Bounty Payment, 14 days after fix" — and asked reporters for an
+> Ethereum address. **No such programme has ever existed and none of those figures were
+> ever funded.** That was our error, it was public, and we are correcting it here rather
+> than deleting the page. If you sent us a report while that text was up, say so and we
+> will talk to you directly.
+>
+> `tagit-contracts/SECURITY.md` is the authoritative policy and has always said the same
+> thing this page now says. Where the two ever disagree, SECURITY.md wins.
+>
+> If a paid programme is launched before mainnet, it will be announced in SECURITY.md
+> first.
 
 ## Scope
 
@@ -13,10 +28,21 @@ TAG IT Network's vulnerability disclosure and bounty program.
 
 | Asset | Description |
 |-------|-------------|
-| Smart Contracts | All deployed contracts on Base Sepolia/Mainnet |
-| API | api.tagit.network |
-| Web Apps | dashboard.tagit.network, verify.tagit.network |
-| Mobile SDKs | @tagit/sdk, network.tagit:sdk, TAGITKit |
+| Smart Contracts | Deployed contracts on Base Sepolia (chain 84532) — see [contract index](../contracts/index.md) |
+| API | `api.tagit.network` — `/health` and `/verify` |
+| Verification service | `verify.tagit.network` — `/api/verify`, `/api/dpp/*`, and the public asset/tag pages |
+| SDK source | [tagit-sdk](https://github.com/TAG-IT-NETWORK/tagit-sdk) — source only; not published to any registry |
+
+> **Not in scope because they do not exist.** Earlier revisions of this page listed all
+> three as bounty targets:
+>
+> - `dashboard.tagit.network` does not exist — the host does not resolve.
+> - The Kotlin coordinate `network.tagit:sdk` does not exist — nothing is published to
+>   Maven Central under that group.
+> - The Swift packages `TAGITKit` and `TagItSDK` do not exist, and no `tagit-swift`
+>   repository exists under any TAG IT org.
+>
+> Do not spend time probing them.
 
 ### Out of Scope
 
@@ -29,7 +55,10 @@ TAG IT Network's vulnerability disclosure and bounty program.
 
 ## Severity Levels
 
-### Critical (Up to $50,000)
+We use these to prioritise our own work and to tell you how we assessed your report.
+They carry no payment.
+
+### Critical
 
 - Direct theft of user funds
 - Permanent loss of assets
@@ -41,7 +70,7 @@ TAG IT Network's vulnerability disclosure and bounty program.
 - Manipulating asset ownership without authorization
 - Breaking cryptographic primitives
 
-### High ($10,000 - $25,000)
+### High
 
 - Theft requiring user interaction
 - Temporary DoS of critical services
@@ -53,7 +82,7 @@ TAG IT Network's vulnerability disclosure and bounty program.
 - SQL injection exposing user data
 - Unauthorized role assignment
 
-### Medium ($2,500 - $10,000)
+### Medium
 
 - Limited information disclosure
 - Temporary service disruption
@@ -64,7 +93,7 @@ TAG IT Network's vulnerability disclosure and bounty program.
 - Bypassing rate limits
 - Session fixation
 
-### Low ($500 - $2,500)
+### Low
 
 - Minor issues with limited impact
 - Best practice violations
@@ -78,23 +107,27 @@ TAG IT Network's vulnerability disclosure and bounty program.
 
 ### 1. Report
 
-Submit via: **security@tagit.network**
+Submit via: **info@tagit.network**
 
 Include:
 - Detailed description
 - Steps to reproduce
 - Proof of concept (if applicable)
 - Impact assessment
-- Your Ethereum address (for payment)
+- How you want to be credited — name, handle, organisation, or not at all
 
 ### 2. Review
 
-| Stage | Timeline |
-|-------|----------|
-| Acknowledgment | 24 hours |
-| Initial Assessment | 72 hours |
-| Fix Development | Varies |
-| Bounty Payment | 14 days after fix |
+| Stage | Target |
+|-------|--------|
+| Acknowledgement | 72 hours — a human confirms receipt and gives you a tracking reference |
+| Initial triage | 7 calendar days — we reproduce it or tell you we could not, with our severity assessment and reasoning |
+| Fix or plan | 30 days for Critical/High; 90 days for Medium/Low |
+| Public disclosure | by mutual agreement, default 90 days after triage |
+
+These are commitments, not measurements. If we miss one we will tell you we missed it
+rather than go quiet. The full version, including safe harbour, is in
+[SECURITY.md](https://github.com/TAG-IT-NETWORK/tagit-contracts/blob/main/SECURITY.md).
 
 ### 3. Disclosure
 
@@ -126,17 +159,31 @@ Researchers acting in good faith are protected from legal action when:
 - Not disrupting services
 - Reporting promptly
 
-## Hall of Fame
+## Credit
+
+We cannot pay, so we are careful about the one thing we can give.
+
+Confirmed reports are added to
+[KNOWN-ISSUES.md](https://github.com/TAG-IT-NETWORK/tagit-contracts/blob/main/KNOWN-ISSUES.md)
+with attribution, in the same public document where we disclose the defects we found
+ourselves. Tell us how you want to be credited — name, handle, organisation, or not at
+all. If you would rather not be named, say so and we will write it up without you.
 
 | Researcher | Finding | Severity | Date |
 |------------|---------|----------|------|
-| *Coming soon* | - | - | - |
+| *None yet* | - | - | - |
 
 ## Contact
 
-- **Email:** security@tagit.network
-- **PGP Key:** [Download](https://tagit.network/.well-known/security.txt)
-- **Response Time:** 24 hours
+- **Email:** info@tagit.network — monitored, and the address to use.
+- **`security@tagit.network` is not currently reliable.** It was published here and in
+  every repo SECURITY.md, and we have confirmed reports of it bouncing. Use
+  `info@tagit.network` instead. `disclosure@` and `emergency@` have appeared in older
+  documentation and have never existed at all.
+- **PGP Key:** not yet published. There is no `security.txt` — every
+  `.well-known/security.txt` under the tagit.network domains returns 404 as of
+  2026-07-27. Request the key by email.
+- **Response time:** 72 hours to acknowledge.
 
 ## Related
 
