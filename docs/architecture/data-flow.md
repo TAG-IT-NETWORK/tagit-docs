@@ -187,6 +187,85 @@ sequenceDiagram
     API-->>Operator: { flagged: true }
 ```
 
+## 6. Owner-Signed Action Flow (App → Services → Relayer → Chain)
+
+New in September 2026: the person holding the physical item can flag, list,
+delist, recycle, or cancel a scheduled recycle directly from the TAG IT app —
+no gas, no separate transaction signed by the owner. The owner's wallet signs a
+short message; a relayer executes on-chain on the owner's behalf after
+checking that signature against the current on-chain owner.
+
+```mermaid
+sequenceDiagram
+    participant Owner
+    participant App as TAG IT App
+    participant Services as tagit-services
+    participant Relayer
+    participant Core as TAGITCore
+    participant Reconciler as Reconciler sweep
+
+    Owner->>App: Tap "Report lost / List / Recycle"
+    App->>App: Biometric/passcode prompt
+    App->>App: Sign owner-action message (EIP-191)
+    App->>Services: POST /api/v1/assets/:tokenId/owner-actions
+    Services->>Services: Verify signature + 15-min window + replay check
+    Services->>Core: ownerOf(tokenId)
+    Core-->>Services: current owner
+    Services->>Services: Reject if signer != owner (403 NOT_OWNER)
+
+    alt flag / list / delist
+        Services->>Relayer: execute now
+        Relayer->>Core: flag(tokenId) [FLAGGER capability]
+        Core-->>Relayer: StateChanged → FLAGGED
+        Services-->>App: { status: "executed" }
+    else recycle
+        Services->>Services: Schedule executeAt = now + grace (24h default)
+        Services-->>App: { status: "scheduled", executeAt }
+        Note over Reconciler: Owner can cancel-recycle before executeAt
+        Reconciler->>Core: ownerOf(tokenId) — re-check before executing
+        Reconciler->>Core: recycle(tokenId) [RECYCLER capability]
+        Core-->>Reconciler: StateChanged → RECYCLED
+    end
+```
+
+The relayer's key — not the owner's — holds the on-chain `FLAGGER`/`RECYCLER`
+capabilities; the owner's signature is what authorizes the relayer to act on
+that specific token. See [TAGITCore](../contracts/tagit-core.md) and
+[Threat Model](../security/threat-model.md).
+
+Verified-owner ratings ([API Overview](../api/overview.md)) follow the same
+signed-message pattern but never reach the chain — the signature only gates a
+database write, checked once against `ownerOf` at submit time.
+
+## 7. Recycling Bin Flow (Planned, Not Built)
+
+Design for an unattended drop-off bin — **not implemented yet**. A Raspberry Pi
+would run `tagit-nfc-bridge` headless against an ACS ACR1252U reader. When an
+item is dropped in the bin, the bin daemon reads the chip's SUN URL (the same
+`picc`/`cmac` mirror used by [NFC Binding](../hardware/nfc-binding.md)) and
+posts it to services, signed with the bin's own agent key rather than an
+owner's wallet.
+
+```mermaid
+sequenceDiagram
+    participant Owner
+    participant Bin as Recycling bin (planned)
+    participant Chip as NTAG 424 DNA
+    participant Services as tagit-services (planned)
+    participant Core as TAGITCore
+
+    Owner->>Bin: Drop item
+    Bin->>Chip: Read SUN mirror (picc, cmac)
+    Bin->>Services: POST /api/v1/agents/recycling/drop { binId, picc, cmac } [signed with bin key]
+    Services->>Services: Verify SUN — counter must advance (proves physical presence)
+    Services->>Services: Resolve tag → tokenId
+    Services->>Core: recycle(tokenId) via relayer
+    Services-->>Owner: Notify recycled
+```
+
+See [Recycling Bin (Planned)](../hardware/readers.md) and
+[Recycling Bin Walkthrough (Planned)](../guides/recycling-bin.md).
+
 ## Event Types
 
 | Event | Emitted By | Data |

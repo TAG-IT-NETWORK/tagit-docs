@@ -180,6 +180,32 @@ flowchart TB
 - Real-time monitoring and alerts
 - Capability-based (not hierarchical) access
 
+### 7. Owner-Signed Actions (September 2026)
+
+Threat model for the app flow that lets an owner flag, list, delist, or
+recycle their asset without an API key — see
+[API Overview](../api/overview.md) and
+[Data Flow](../architecture/data-flow.md).
+
+| STRIDE | Threat | Mitigation |
+|--------|--------|------------|
+| **S**poofing | Attacker submits an action as if from the owner | EIP-191 signature verified against the message, then the signer is checked against `ownerOf(tokenId)` on-chain — a valid signature from a non-owner is still rejected (`403 NOT_OWNER`) |
+| **T**ampering | Attacker alters `params` after the owner signed (e.g. changes the resale price) | The signed message embeds `params-sha256`, a hash of the canonical params JSON; services rebuilds the message from the validated params before verifying, so a mismatched digest fails signature verification |
+| **R**epudiation | Owner later denies requesting an action | The full signed message and signature are stored per action row, not just the outcome |
+| Replay | Attacker resubmits a captured signed request | The signed `ts` must be within a 15-minute window, and `(tokenId, action, ts)` is unique — a duplicate or stale request is rejected |
+| **D**enial of Service | Flooding the public endpoint | 10 requests/minute per IP on the public `POST` routes |
+| Stolen phone | Whoever holds the device — not necessarily the true owner — can trigger a signed action | `recycle` is never immediate: it is scheduled with a grace period (default 24h) during which the true owner can `cancel-recycle`; a wrongful `flag` is cleared through the existing resolve quorum in the admin console, not through this endpoint |
+| Message-shape confusion | A malicious page tricks the app's wallet into signing something else that gets replayed here | The app's signer only produces messages in the fixed owner-action shape (`TAG IT owner action` / `token:` / `action:` / `params-sha256:` / `ts:`) — it refuses to sign anything else |
+
+**Countermeasures:**
+- Signature + on-chain `ownerOf` check on every write
+- Params digest inside the signed message (tamper-evident)
+- Full message + signature retained per action (audit trail)
+- 15-minute signing window and per-`(tokenId, action, ts)` replay uniqueness
+- Per-IP rate limiting on the public endpoints
+- Grace period + owner cancellation for the irreversible action (recycle)
+- Signer scope fence in the mobile app restricts it to the owner-action message shape
+
 ## Risk Matrix
 
 ```

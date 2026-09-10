@@ -185,6 +185,13 @@ Must be current owner or approved.
 function transfer(uint256 tokenId, address to) external;
 ```
 
+> **Note (September 2026):** the deployed function is `transferAsset(uint256
+> tokenId, address to)`, not `transfer`. It stays **owner-gated, not
+> capability-gated** — any owner can resell their own `CLAIMED` asset directly,
+> with no relayer or capability badge involved. This is separate from the
+> owner-actions app flow below (flag / list / delist / recycle), which routes
+> through the relayer — direct resale is the one owner action that does not.
+
 ---
 
 ### flag
@@ -207,6 +214,44 @@ Requires `CAP_FLAG` capability.
 ```solidity
 function flag(uint256 tokenId, bytes32 reason) external;
 ```
+
+> **Note (September 2026):** when an owner reports an item lost or stolen from
+> the TAG IT app, this is the function the relayer calls on their behalf — the
+> app owner never calls `flag` directly. The relayer's key holds
+> `FLAGGER_CAPABILITY` (and `RECYCLER_CAPABILITY`, `RESOLVER_CAPABILITY`); the
+> owner's off-chain signature is what authorizes it to act on that specific
+> token. See [API Overview](../api/overview.md) and
+> [Data Flow](../architecture/data-flow.md).
+
+---
+
+### recycle
+
+Permanently deactivates an asset. Terminal — cannot be undone.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `tokenId` | `uint256` | Asset token ID |
+
+#### Access Control
+
+Requires `RECYCLER_CAPABILITY`.
+
+#### Solidity
+
+```solidity
+function recycle(uint256 tokenId) external;
+```
+
+#### Calling it
+
+As of September 2026, the owner-actions app flow is the main caller: an owner
+requests recycling from the app, it is scheduled with a grace period
+(`OWNER_RECYCLE_GRACE_MS`, default 24h, cancellable), and the relayer calls
+this function once the grace period elapses, after re-checking on-chain
+ownership. See [API Overview](../api/overview.md).
 
 ---
 
