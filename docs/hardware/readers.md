@@ -152,6 +152,23 @@ Certified readers have been tested for:
 
 Contact [partners@tagit.network](mailto:partners@tagit.network) for certification.
 
+## Recycling Bin (Planned)
+
+Not built yet — this is a design, not a deployed reader. An unattended
+drop-off bin: a Raspberry Pi would run `tagit-nfc-bridge` headless against an
+ACS ACR1252U reader — the same reader listed under Fixed Readers above, here
+embedded in the bin instead of sitting on a desktop. On a drop, the bin daemon
+reads the chip's SUN mirror (`picc`/`cmac`, the same values validated in
+Step 2 above from a desktop tap) and posts it to services, signed with the
+bin's own agent key — not an owner's wallet. The rolling SUN counter must have
+advanced since the last read, which is what proves a physical tap happened
+rather than a replayed value. Services then resolves the tag to a token,
+recycles it through the relayer, and notifies the owner.
+
+See [Data Flow](../architecture/data-flow.md) for the full sequence and
+[Recycling Bin Walkthrough (Planned)](../guides/recycling-bin.md) for the
+end-to-end design.
+
 ## Related
 
 - [NFC Binding Protocol](./nfc-binding.md)

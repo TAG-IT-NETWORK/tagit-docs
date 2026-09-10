@@ -136,6 +136,19 @@ Asset lifecycle state indicating the asset is frozen due to fraud, dispute, or r
 
 ---
 
+## G
+
+### Grace Period
+
+The 24-hour default window (`OWNER_RECYCLE_GRACE_MS`) between an owner
+requesting a recycle from the app and the relayer executing it. The owner can
+cancel at any point during the window; once it elapses, a reconciler sweep
+re-checks on-chain ownership and executes the recycle.
+
+**See also**: [Owner Action](#owner-action), [Recycling Bin](#recycling-bin)
+
+---
+
 ## M
 
 ### Minted
@@ -178,6 +191,19 @@ The mobile scanner application for verifying assets via NFC. Available for iOS a
 
 ---
 
+### Owner Action
+
+A signed request an asset's current on-chain owner makes from the TAG IT app —
+flag (report lost/stolen), list or delist for resale, recycle, or cancel a
+pending recycle — without needing an API key or a relayer credential. The
+owner's wallet signs a canonical message; services checks the signature
+against the current on-chain owner, then a relayer executes the change.
+Introduced September 2026.
+
+**See also**: [Grace Period](#grace-period), [Verified-Owner Rating](#verified-owner-rating)
+
+---
+
 ## P
 
 ### PQC
@@ -211,6 +237,17 @@ A non-transferable NFT (following ERC-5192 principles) that permanently binds to
 ### Recycled
 
 Terminal asset lifecycle state. Asset is permanently deactivated and cannot be recovered.
+
+---
+
+### Recycling Bin
+
+**Planned, not built.** An unattended drop-off point — a Raspberry Pi plus an
+ACR1252U reader running `tagit-nfc-bridge` headless — that reads an item's SUN
+mirror on drop, verifies the rolling counter advanced (proving a physical
+tap), and recycles the matching token through the relayer.
+
+**See also**: [Grace Period](#grace-period), [NTAG 424 DNA](./hardware/ntag-424-dna.md)
 
 ---
 
@@ -250,4 +287,16 @@ The process of authenticating an asset by:
 
 ---
 
-*Last updated: 2026-02-16*
+### Verified-Owner Rating
+
+A product rating that only the wallet currently holding an asset's token can
+submit — proven the same way as an [Owner Action](#owner-action), by signing a
+canonical message that services checks against `ownerOf(tokenId)` on-chain.
+One rating per owner per token; a later submission replaces the earlier one.
+Shown on the asset's verification page.
+
+**See also**: [Owner Action](#owner-action)
+
+---
+
+*Last updated: 2026-09-10*
